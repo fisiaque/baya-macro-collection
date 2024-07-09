@@ -51,6 +51,7 @@ status.StartMonitoring := 0
 status.DiscordUpdate := 5
 status.UpdateTime := A_TickCount
 status.UpdateRepeated := 0
+status.LoopSkip := A_TickCount
 
 autoFarmArray := ["Albinaurics", "Bird"]
 logArray := ["Stop Macro", "Close Game", "Shutdown PC", "Do Nothing"]
@@ -176,11 +177,27 @@ ExitFunc(ExitReason, ExitCode) {
         }
     }
 }
+WaitForNextCome() {
+    while !ImageSearch(&FoundX, &FoundY, 0, 800, 800, 1080, "*50 " images.Next) {
+        if A_TickCount - status.LoopSkip >= 30000 { ; skips loop after 30 seconds
+            status.LoopSkip := A_TickCount
+            break
+        }
+    }
+}
+
+WaitForNextGone() {
+    while ImageSearch(&FoundX, &FoundY, 0, 800, 800, 1080, "*50 " images.Next) {
+        if A_TickCount - status.LoopSkip >= 30000 { ; skips loop after 30 seconds
+            status.LoopSkip := A_TickCount
+            break
+        }
+    }
+}
 
 WaitLoading() {
-    Loop{
-        Sleep 1000
-    } until !ImageSearch(&FoundX, &FoundY, 0, 800, 800, 1080, "*50 " images.Next)
+    WaitForNextCome()
+    WaitForNextGone()
 }
 
 ResetGrace() {
@@ -217,8 +234,6 @@ ResetGrace() {
     Send("{Blind}{Enter Down}")
     Sleep 20
     Send("{Blind}{Enter Up}")
-
-    Sleep 1000
 }
 
 GoToAlbinaurics() {
@@ -366,7 +381,6 @@ CheckDied() {
             if data.LogMethod = "Shutdown PC" {
                 Notify("Returning to Desktop to Avoid Data Corrupting...`n(Process will take around 1 minute to finalize, you will be notified with the results)")
 
-                Sleep 10000
                 WaitLoading()
 
                 ReturnToDesktop()
@@ -374,11 +388,11 @@ CheckDied() {
                 Sleep 60000 ; sleeps for 60 seconds for elden ring to fully close
 
                 if WinExist("ELDEN RING™") {
-                    Notify("☒")
+                    Notify(":negative_squared_cross_mark:")
 
                     WinClose
                 } else {
-                    Notify("☑")
+                    Notify(":white_check_mark:")
                 }
                   
                 Notify("<@" data.DiscordUserId "> Shutting Down PC NOW!")
@@ -390,7 +404,6 @@ CheckDied() {
             if data.LogMethod = "Close Game" {
                 Notify("Returning to Desktop to Avoid Data Corrupting...`n(Process will take around 1 minute to finalize, you will be notified with the results)")
 
-                Sleep 10000
                 WaitLoading()
 
                 ReturnToDesktop()
@@ -398,11 +411,11 @@ CheckDied() {
                 Sleep 60000 ; sleeps for 60 seconds for elden ring to fully close
 
                 if WinExist("ELDEN RING™") {
-                    Notify("☒")
+                    Notify(":negative_squared_cross_mark:")
 
                     WinClose
                 } else {
-                    Notify("☑")
+                    Notify(":white_check_mark:")
                 }
 
                 ExitApp
