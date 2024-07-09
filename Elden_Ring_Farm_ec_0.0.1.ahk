@@ -53,14 +53,14 @@ status.UpdateTime := A_TickCount
 status.UpdateRepeated := 0
 
 autoFarmArray := ["Albinaurics", "Bird"]
-logArray := ["Do Nothing", "Close Game", "Shutdown PC", "Stop Macro"]
+logArray := ["Stop Macro", "Close Game", "Shutdown PC", "Do Nothing"]
 optionArray := ["Yes", "No"]
 
-data.AutoFarmMethod := "Bird"
-data.LogMethod := "Do Nothing"
+data.AutoFarmMethod := "Albinaurics"
+data.LogMethod := "Stop Macro"
 data.DiscordUserId := ""
 data.DiscordWebhookURL := ""
-data.DiscordTrack := "No"
+data.DiscordTrack := "Yes"
 
 ; #post-set
 TraySetIcon(images.Icon) 
@@ -466,7 +466,7 @@ CaptureRunes() {
 }
 
 UpdateStatsToDiscord() {
-    if data.DiscordWebhookURL != "" {
+    if data.DiscordWebhookURL != "" and data.DiscordTrack = "Yes" {
         if status.StartMonitoring != 1 {
             status.StartMonitoring := 1 ; Monitor Started
     
