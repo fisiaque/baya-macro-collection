@@ -1,7 +1,9 @@
 ﻿#Requires AutoHotkey v2.0
 #SingleInstance Force
+#MaxThreadsPerHotkey 2
 
 #Include misc.ahk
+#Include CaptureScreen.ahk
 
 SendMode 'Event'
 CoordMode "Pixel", "Window"
@@ -21,6 +23,10 @@ if !(FileExist(A_Temp "\.baya_icon.ico")) {
 if !(FileExist(A_Temp "\.settings.png")) {
     FileInstall "C:\Users\ofhaq\Documents\.elden_ring\.imgs\.settings.png", A_Temp "\.settings.png", 1
 } 
+;next
+if !(FileExist(A_Temp "\.next.png")) {
+    FileInstall "C:\Users\ofhaq\Documents\.elden_ring\.imgs\.next.png", A_Temp "\.next.png", 1
+} 
 
 ; objects
 directories := Object()
@@ -35,12 +41,19 @@ directories.Images := "C:\Users\ofhaq\Documents\.elden_ring\.imgs\"
 images.Icon := A_Temp "\.baya_icon.ico" or directories.Images ".baya_icon.ico"
 
 images.Settings := A_Temp "\.settings.png" or directories.Images ".settings.png"
+images.Next := A_Temp "\.next.png" or directories.Images ".next.png"
 
 ; variables
 status.Ready := 0
+status.ScreenCapturing := 0
+status.MaxCaptureRunesRetry := 3
+status.StartMonitoring := 0
+status.DiscordUpdate := 5
+status.UpdateTime := A_TickCount
+status.UpdateRepeated := 0
 
 autoFarmArray := ["Albinaurics", "Bird"]
-logArray := ["Do Nothing", "Close Game", "Shutdown PC"]
+logArray := ["Do Nothing", "Close Game", "Shutdown PC", "Stop Macro"]
 optionArray := ["Yes", "No"]
 
 data.AutoFarmMethod := "Bird"
@@ -165,11 +178,9 @@ ExitFunc(ExitReason, ExitCode) {
 }
 
 WaitLoading() {
-    while !PixelSearch(&_, &_, 959, 134, 960, 135, 0xA5A38B, 3) {
-        Sleep 250
-    }
-
-    Sleep 500
+    Loop{
+        Sleep 1000
+    } until !ImageSearch(&FoundX, &FoundY, 0, 800, 800, 1080, "*50 " images.Next)
 }
 
 ResetGrace() {
@@ -206,6 +217,8 @@ ResetGrace() {
     Send("{Blind}{Enter Down}")
     Sleep 20
     Send("{Blind}{Enter Up}")
+
+    Sleep 1000
 }
 
 GoToAlbinaurics() {
@@ -305,6 +318,7 @@ AutoAlbinaurics() {
         ResetGrace()
         WaitLoading()
         GoToAlbinaurics()
+        UpdateStatsToDiscord()
     }
 }
 AutoBird() {
@@ -312,6 +326,7 @@ AutoBird() {
         ResetGrace()
         WaitLoading()
         GoToBird()
+        UpdateStatsToDiscord()
     }
 }
 
@@ -344,100 +359,162 @@ ReturnToDesktop() {
 }
 
 CheckDied() {
-    if PixelSearch(&_, &_, 162, 51, 163, 52, 0x9A8422, 3) or PixelSearch(&_, &_, 162, 51, 163, 52, 0x100A0F, 3) { 
-        try {
-            objParam := { content  : "<@" data.DiscordUserId "> You have Died!"
-                , username         : "Baya's Macro 🖱️⌨️"
-                , avatar_url       : "https://i.imgur.com/rTHyKfI.png"
-            }
-
-            Webhook(data.DiscordWebhookURL, objParam) 
-        }
+    if PixelSearch(&_, &_, 157, 48, 163, 56, 0x9A8422, 3) or ImageSearch(&FoundX, &FoundY, 0, 800, 800, 1080, "*50 " images.Next) { 
+        Notify("<@" data.DiscordUserId "> `nYou have Died!`nEnding Baya's Macro: Elden Ring Edition Momentarily...")
 
         if data.LogMethod != "Do Nothing" {
             if data.LogMethod = "Shutdown PC" {
-                try {
-                    objParam := { content  : "Returning to Desktop to Avoid Data Corrupting...`n(Process will take around 1 minute to finalize)"
-                        , username         : "Baya's Macro 🖱️⌨️"
-                        , avatar_url       : "https://i.imgur.com/rTHyKfI.png"
-                    }
-            
-                    Webhook(data.DiscordWebhookURL, objParam) 
-                }
+                Notify("Returning to Desktop to Avoid Data Corrupting...`n(Process will take around 1 minute to finalize, you will be notified with the results)")
+
+                Sleep 10000
+                WaitLoading()
 
                 ReturnToDesktop()
 
                 Sleep 60000 ; sleeps for 60 seconds for elden ring to fully close
 
                 if WinExist("ELDEN RING™") {
-                    try {
-                        objParam := { content  : "FAIL"
-                            , username         : "Baya's Macro 🖱️⌨️"
-                            , avatar_url       : "https://i.imgur.com/rTHyKfI.png"
-                        }
-        
-                        Webhook(data.DiscordWebhookURL, objParam) 
-                    }
+                    Notify("☒")
 
                     WinClose
                 } else {
-                    try {
-                        objParam := { content  : "SUCCESS"
-                            , username         : "Baya's Macro 🖱️⌨️"
-                            , avatar_url       : "https://i.imgur.com/rTHyKfI.png"
-                        }
-        
-                        Webhook(data.DiscordWebhookURL, objParam) 
-                    }
+                    Notify("☑")
                 }
-                    
-                try {
-                    objParam := { content  : "<@" data.DiscordUserId "> Shutting Down PC NOW!"
-                        , username         : "Baya's Macro 🖱️⌨️"
-                        , avatar_url       : "https://i.imgur.com/rTHyKfI.png"
-                    }
-    
-                    Webhook(data.DiscordWebhookURL, objParam) 
-                }
+                  
+                Notify("<@" data.DiscordUserId "> Shutting Down PC NOW!")
 
                 Shutdown 9
+
+                ExitApp
             }
             if data.LogMethod = "Close Game" {
-                try {
-                    objParam := { content  : "Returning to Desktop to Avoid Data Corrupting...`n(Process will take around 1 minute to finalize)"
-                        , username         : "Baya's Macro 🖱️⌨️"
-                        , avatar_url       : "https://i.imgur.com/rTHyKfI.png"
-                    }
-            
-                    Webhook(data.DiscordWebhookURL, objParam) 
-                }
+                Notify("Returning to Desktop to Avoid Data Corrupting...`n(Process will take around 1 minute to finalize, you will be notified with the results)")
+
+                Sleep 10000
+                WaitLoading()
 
                 ReturnToDesktop()
 
                 Sleep 60000 ; sleeps for 60 seconds for elden ring to fully close
 
                 if WinExist("ELDEN RING™") {
-                    try {
-                        objParam := { content  : "FAIL"
-                            , username         : "Baya's Macro 🖱️⌨️"
-                            , avatar_url       : "https://i.imgur.com/rTHyKfI.png"
-                        }
-        
-                        Webhook(data.DiscordWebhookURL, objParam) 
-                    }
+                    Notify("☒")
 
                     WinClose
                 } else {
-                    try {
-                        objParam := { content  : "SUCCESS"
-                            , username         : "Baya's Macro 🖱️⌨️"
-                            , avatar_url       : "https://i.imgur.com/rTHyKfI.png"
-                        }
-        
-                        Webhook(data.DiscordWebhookURL, objParam) 
-                    }
+                    Notify("☑")
                 }
+
+                ExitApp
             }
+            if data.LogMethod = "Stop Macro" {
+                Notify("Macro will be stopped now`nCollect your lost runes!")
+
+                ExitApp
+            }
+        }
+    }
+}
+
+Notify(text) {
+    try {
+        objParam := { content  : text
+            , username         : "Baya's Macro 🖱️⌨️"
+            , avatar_url       : "https://i.imgur.com/rTHyKfI.png"
+        }
+
+        Webhook(data.DiscordWebhookURL, objParam) 
+    }
+}
+
+CaptureRunes() {
+    if status.ScreenCapturing != 1 {
+        status.ScreenCapturing := 1
+
+        try {
+            tried := 0
+        
+            while !ImageSearch(&FoundX, &FoundY, 38, 773, 137, 872, "*50 " images.Settings) and tried < status.MaxCaptureRunesRetry {
+                Send("{Blind}{Esc Down}")
+                Sleep 20
+                Send("{Blind}{Esc Up}")
+
+                Sleep 500
+
+                tried += 1
+            }
+        
+            if ImageSearch(&FoundX, &FoundY, 38, 773, 137, 872, "*50 " images.Settings) {
+                outfile := A_Temp "\.runes.png"
+                CaptureScreen( "1672, 1017, 1869, 1052", 0, outfile)
+
+                Sleep 500
+            } 
+            
+            Send("{Blind}{Esc Down}")
+            Sleep 20
+            Send("{Blind}{Esc Up}")
+        }
+        catch as e  {
+            status.ScreenCapturing := 0
+
+            CaptureRunes()
+        } else {
+            status.ScreenCapturing := 0
+        }
+    }
+}
+
+UpdateStatsToDiscord() {
+    if data.DiscordWebhookURL != "" {
+        if status.StartMonitoring != 1 {
+            status.StartMonitoring := 1 ; Monitor Started
+    
+            ; ss
+            CaptureRunes()
+            
+            try {
+                TimeString := FormatTime(, "dddd MMMM d, yyyy hh:mm:ss tt")
+
+                contentText := "**Monitoring Started**`n➼  *Total Repeat:* __indefinite__`n➼  *Interval:* __every " status.DiscordUpdate " minutes__`n➼  *Tracked Stat:* __Runes__`n➼  *Tracked Time:* __" TimeString "__"
+
+                objParam := { content  : contentText
+                    , username         : "Baya's Macro 🖱️⌨️"
+                    , avatar_url       : "https://i.imgur.com/rTHyKfI.png"
+                    , file             : [A_Temp "\.runes.png"]
+                }
+        
+                Webhook(data.DiscordWebhookURL, objParam)
+            }
+             
+            
+            if FileExist(A_Temp "\.runes.png") {
+                FileDelete A_Temp "\.runes.png"
+            }
+        } else if A_TickCount - status.UpdateTime >= (status.DiscordUpdate * 60000) {
+            status.UpdateTime := A_TickCount
+            status.UpdateRepeated += 1
+        
+            ; ss
+            CaptureRunes()
+    
+            try {
+                TimeString := FormatTime(, "dddd MMMM d, yyyy hh:mm:ss tt")
+
+                contentText := "**Interval Report**`n➼  *Repeated:* __" status.UpdateRepeated "__`n➼  *Interval:* __every " status.DiscordUpdate " minutes__`n➼  *Tracked Stat:* __Runes__`n➼  *Tracked Time:* __" TimeString "__"
+
+                objParam := { content  : contentText
+                    , username         : "Baya's Macro 🖱️⌨️"
+                    , avatar_url       : "https://i.imgur.com/rTHyKfI.png"
+                    , file             : [A_Temp "\.runes.png"]
+                }
+                        
+                Webhook(data.DiscordWebhookURL, objParam) 
+            }
+                 
+            if FileExist(A_Temp "\.runes.png") {
+                FileDelete A_Temp "\.runes.png"
+            }            
         }
     }
 }
@@ -450,6 +527,7 @@ SC01B:: ; #]
 }
 
 #HotIf WinActive("ELDEN RING™")
+
 ;play/pause
 SC01A:: ;#[ 
 {
@@ -459,6 +537,8 @@ SC01A:: ;#[
         toggle := !toggle  
 
         if (toggle != 0) { ; # PLAY
+            UpdateStatsToDiscord()
+
             if data.AutoFarmMethod = "Albinaurics" {
                 AutoAlbinaurics()
             } else if data.AutoFarmMethod = "Bird" {
