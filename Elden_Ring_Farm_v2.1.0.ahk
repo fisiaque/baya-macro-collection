@@ -199,6 +199,8 @@ WaitForNextCome() {
         if A_TickCount - LoopSkip >= 30000 { ; skips loop after 30 seconds
             break
         }
+
+        Sleep 100
     }
 }
 
@@ -209,6 +211,8 @@ WaitForNextGone() {
         if A_TickCount - LoopSkip >= 30000 { ; skips loop after 30 seconds
             break
         }
+
+        Sleep 100
     }
 
     Sleep 2000
