@@ -48,7 +48,6 @@ status.Ready := 0
 status.ScreenCapturing := 0
 status.MaxCaptureRunesRetry := 3
 status.StartMonitoring := 0
-status.DiscordUpdate := 5
 status.UpdateTime := A_TickCount
 status.UpdateRepeated := 0
 status.PID := ""
@@ -62,26 +61,33 @@ data.LogMethod := "Stop Macro"
 data.DiscordUserId := ""
 data.DiscordWebhookURL := ""
 data.DiscordTrack := "Yes"
+data.DiscordInterval := 5
 
 ; #post-set
 TraySetIcon(images.Icon) 
 
 ; #get-data
 if (FileExist(A_WorkingDir "\Baya's Macro Settings.ini")) {
-    settingsString := IniRead(A_WorkingDir "\Baya's Macro Settings.ini", "Settings", A_ComputerName)
+    try {
+        settingsString := IniRead(A_WorkingDir "\Baya's Macro Settings.ini", "Settings", A_ComputerName)
 
-    settings := StrSplit(settingsString, "|")  
-
-    data.AutoFarmMethod := settings[1]
-    data.LogMethod := settings[2]
-    data.DiscordUserId := settings[3]
-    data.DiscordWebhookURL := settings[4]
-    data.DiscordTrack := settings[5]
+        settings := StrSplit(settingsString, "|")  
+    
+        data.AutoFarmMethod := settings[1]
+        data.LogMethod := settings[2]
+        data.DiscordUserId := settings[3]
+        data.DiscordWebhookURL := settings[4]
+        data.DiscordTrack := settings[5]
+        data.DiscordInterval := settings[6]
+    } catch as e {
+        FileDelete(A_WorkingDir "\Baya's Macro Settings.ini")
+    }
 }
 
 ; #create-gui
 myGui := Gui(, "Baya's Macro: Elden Ring Edition")
 myGui.Opt("+AlwaysOnTop")
+myGui.SetFont(, "Verdana")
 
 myGui.AddGroupBox("Center xm5 ym+10 Section w140 h150", "Auto-Farm")
 myGui.Add("Text","Center xs+10 ys+20 w120", "Which Auto Farming Method?")
@@ -90,17 +96,20 @@ myGui.AddDropDownList("Center w120 vAutoFarmMethod Choose" GetArrayValueIndex(au
 myGui.Add("Text","Center w120", "Auto Log?")
 myGui.AddDropDownList("Center w120 vLogMethod Choose" GetArrayValueIndex(logArray, data.LogMethod), logArray)
 
-myGui.AddButton("Center xs+50", "Save Settings").OnEvent("Click", StartUserInput)
+myGui.AddButton("Center xs+0", "Save Settings").OnEvent("Click", StartUserInput)
 
-myGui.AddGroupBox("Center xm+160 ym+10 Section w140 h175", "Discord Settings")
-myGui.Add("Text","Center xs+10 ys+20 w120", "UserId")
-myGui.AddEdit("Center w120 vDiscordUserId r1", data.DiscordUserId)
-myGui.Add("Text","Center w120", "Webhook URL")
-myGui.AddEdit("Center w120 vDiscordWebhookURL r1", data.DiscordWebhookURL)
+myGui.AddGroupBox("Center xm+160 ym+10 Section w260 h175", "Discord Settings")
+myGui.Add("Text","Center xs+10 ys+20 w240", "UserId")
+myGui.AddEdit("Center w240 vDiscordUserId r1", data.DiscordUserId)
+myGui.Add("Text","Center w240", "Webhook URL")
+myGui.AddEdit("Center w240 vDiscordWebhookURL r1", data.DiscordWebhookURL)
 myGui.Add("Text","Center w120", "Track Runes?")
 myGui.AddDropDownList("Center w120 vDiscordTrack Choose" GetArrayValueIndex(optionArray, data.DiscordTrack), optionArray)
+myGui.Add("Text","Center xs+133 ys+111 w120", "Intervals (mins)")
+myGui.AddEdit("Center w120")
+myGui.AddUpDown("vDiscordInterval Range5-60", data.DiscordInterval)
 
-myGui.AddButton("Center xs+35 ys+160 w75 h20", "Test Ping").OnEvent("Click", TestUserPing)
+myGui.AddButton("Center xs+90 ys+160 w75 h20", "Test Ping").OnEvent("Click", TestUserPing)
 
 myGui.Show
 
@@ -128,7 +137,7 @@ StartUserInput(*)
         inputs.DiscordWebhookURL := ""
     }
 
-    settingsString := inputs.AutoFarmMethod "|" inputs.LogMethod "|" inputs.DiscordUserId "|" inputs.DiscordWebhookURL "|" inputs.DiscordTrack 
+    settingsString := inputs.AutoFarmMethod "|" inputs.LogMethod "|" inputs.DiscordUserId "|" inputs.DiscordWebhookURL "|" inputs.DiscordTrack "|" inputs.DiscordInterval 
 
     IniWrite settingsString, A_WorkingDir "\Baya's Macro Settings.ini", "Settings", A_ComputerName
 
@@ -139,6 +148,7 @@ StartUserInput(*)
     data.DiscordUserId := settings[3]
     data.DiscordWebhookURL := settings[4]
     data.DiscordTrack := settings[5]
+    data.DiscordInterval := settings[6]
 
     status.Ready := 1
 }
@@ -171,8 +181,12 @@ TestUserPing(*) {
 
 ; functions
 ExitFunc(ExitReason, ExitCode) {
+    if FileExist(A_Temp "\.runes.png") {
+        FileDelete A_Temp "\.runes.png"
+    }   
+
     for name, file in images.OwnProps() {
-        if InStr(file, "\AppData\Local\Temp\") and (name "*png" or name "*ico") {
+        if InStr(file, "\AppData\Local\Temp\") and FileExist(file) {
             FileDelete file
         }
     }
@@ -289,7 +303,7 @@ GoToAlbinaurics() {
 
 GoToBird() {
     Send("{Blind}{Numpad4 Down}")
-    Sleep 500
+    Sleep 460
     Send("{Blind}{Numpad4 Up}")
 
     CheckDied()
@@ -314,6 +328,8 @@ GoToBird() {
     Sleep 20
     Send("{Blind}{MButton Up}")
 
+    Sleep 250
+    
     CheckDied()
 
     Send("{Blind}{f Down}")
@@ -495,7 +511,7 @@ UpdateStatsToDiscord() {
             try {
                 TimeString := FormatTime(, "dddd MMMM d, yyyy hh:mm:ss tt")
 
-                contentText := "**Monitoring Started**`n➼  *Total Repeat:* __indefinite__`n➼  *Interval:* __every " status.DiscordUpdate " minutes__`n➼  *Tracked Stat:* __Runes__`n➼  *Tracked Time:* __" TimeString "__"
+                contentText := "**Monitoring Started**`n➼  *Total Repeat:* __indefinite__`n➼  *Interval:* __every " data.DiscordInterval " minutes__`n➼  *Farming Method:* __" data.AutoFarmMethod "__`n➼  *Tracked Time:* __" TimeString "__"
 
                 objParam := { content  : contentText
                     , username         : "Baya's Macro 🖱️⌨️"
@@ -510,7 +526,7 @@ UpdateStatsToDiscord() {
             if FileExist(A_Temp "\.runes.png") {
                 FileDelete A_Temp "\.runes.png"
             }
-        } else if A_TickCount - status.UpdateTime >= (status.DiscordUpdate * 60000) {
+        } else if A_TickCount - status.UpdateTime >= (data.DiscordInterval * 60000) {
             status.UpdateTime := A_TickCount
             status.UpdateRepeated += 1
         
@@ -520,7 +536,7 @@ UpdateStatsToDiscord() {
             try {
                 TimeString := FormatTime(, "dddd MMMM d, yyyy hh:mm:ss tt")
 
-                contentText := "**Interval Report**`n➼  *Repeated:* __" status.UpdateRepeated "__`n➼  *Interval:* __every " status.DiscordUpdate " minutes__`n➼  *Tracked Stat:* __Runes__`n➼  *Tracked Time:* __" TimeString "__"
+                contentText := "**Interval Report**`n➼  *Repeated:* __" status.UpdateRepeated "__`n➼  *Interval:* __every " data.DiscordInterval " minutes__`n➼  *Farming Method:* __" data.AutoFarmMethod "__`n➼  *Tracked Time:* __" TimeString "__"
 
                 objParam := { content  : contentText
                     , username         : "Baya's Macro 🖱️⌨️"
