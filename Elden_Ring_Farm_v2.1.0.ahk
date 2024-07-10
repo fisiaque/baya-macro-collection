@@ -27,6 +27,10 @@ if !(FileExist(A_Temp "\.settings.png")) {
 if !(FileExist(A_Temp "\.next.png")) {
     FileInstall "C:\Users\ofhaq\Documents\.elden_ring\.imgs\.next.png", A_Temp "\.next.png", 1
 } 
+;compass_circle
+if !(FileExist(A_Temp "\.compass_circle.png")) {
+    FileInstall "C:\Users\ofhaq\Documents\.elden_ring\.imgs\.compass_circle.png", A_Temp "\.compass_circle.png", 1
+} 
 
 ; objects
 directories := Object()
@@ -42,6 +46,7 @@ images.Icon := A_Temp "\.baya_icon.ico" or directories.Images ".baya_icon.ico"
 
 images.Settings := A_Temp "\.settings.png" or directories.Images ".settings.png"
 images.Next := A_Temp "\.next.png" or directories.Images ".next.png"
+images.CompassCircle := A_Temp "\.compass_circle.png" or directories.Images ".compass_circle.png"
 
 ; variables
 status.Ready := 0
@@ -197,6 +202,7 @@ WaitForNextCome() {
 
     while !ImageSearch(&FoundX, &FoundY, 0, 800, 800, 1080, "*50 " images.Next) {
         if A_TickCount - LoopSkip >= 30000 { ; skips loop after 30 seconds
+            Notify("Skipped Waiting for Loading Screen to Show")
             break
         }
 
@@ -209,6 +215,7 @@ WaitForNextGone() {
 
     while ImageSearch(&FoundX, &FoundY, 0, 800, 800, 1080, "*50 " images.Next) {
         if A_TickCount - LoopSkip >= 30000 { ; skips loop after 30 seconds
+            Notify("Skipped Waiting for Loading Screen to End")
             break
         }
 
@@ -224,15 +231,23 @@ WaitLoading() {
 }
 
 ResetGrace() {
-    Send("{Blind}{m Down}")
-    Sleep 20
-    Send("{Blind}{m Up}")
+    LoopSkip := A_TickCount
 
-    CheckDied()
+    while !ImageSearch(&FoundX, &FoundY, 1787, 83, 1822, 117, "*50 " images.CompassCircle) {
+        if A_TickCount - LoopSkip >= 30000 { ; skips loop after 30 seconds
+            Notify("<@" data.DiscordUserId "> Cannot open map... `nTried for 30 seconds, closing Baya's Macro!")
 
-    Sleep 350
+            ExitApp
+        }
 
-    CheckDied()
+        Send("{Blind}{m Down}")
+        Sleep 20
+        Send("{Blind}{m Up}")
+
+        CheckDied()
+
+        Sleep 350
+    }
 
     Send("{Blind}{f Down}")
     Sleep 20
@@ -371,31 +386,37 @@ AutoBird() {
 }
 
 ReturnToDesktop() {
-    if !ImageSearch(&FoundX, &FoundY, 38, 773, 137, 872, "*50 " images.Settings) {
+    LoopSkip := A_TickCount
+
+    while !ImageSearch(&FoundX, &FoundY, 38, 773, 137, 872, "*50 " images.Settings) {
+        if A_TickCount - LoopSkip >= 30000 { ; skips loop after 30 seconds
+            Notify("<@" data.DiscordUserId "> Cannot find settings... `nTried for 30 seconds, closing Baya's Macro!")
+
+            ExitApp
+        }
+
         Send("{Blind}{Esc Down}")
         Sleep 20
         Send("{Blind}{Esc Up}")
 
         Sleep 250
     }
-    
-    if ImageSearch(&FoundX, &FoundY, 38, 773, 137, 872, "*50 " images.Settings) {
-        MovingMouse(FoundX, FoundY, "left", 2)
 
-        Sleep 250
+    MovingMouse(FoundX, FoundY, "left", 2)
 
-        Send("{Blind}{z Down}")
-        Sleep 20
-        Send("{Blind}{z Up}")
+    Sleep 250
 
-        Sleep 250
+    Send("{Blind}{z Down}")
+    Sleep 20
+    Send("{Blind}{z Up}")
 
-        MovingMouse(1161, 745, "left", 2)
+    Sleep 250
 
-        Sleep 250
+    MovingMouse(1161, 745, "left", 2)
 
-        MovingMouse(748, 569, "left", 2)
-    }
+    Sleep 250
+
+    MovingMouse(748, 569, "left", 2)
 }
 
 CheckDied() {
