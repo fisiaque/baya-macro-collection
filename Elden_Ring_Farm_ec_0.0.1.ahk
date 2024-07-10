@@ -51,7 +51,7 @@ status.StartMonitoring := 0
 status.DiscordUpdate := 5
 status.UpdateTime := A_TickCount
 status.UpdateRepeated := 0
-status.LoopSkip := A_TickCount
+status.PID := ""
 
 autoFarmArray := ["Albinaurics", "Bird"]
 logArray := ["Stop Macro", "Close Game", "Shutdown PC", "Do Nothing"]
@@ -172,27 +172,32 @@ TestUserPing(*) {
 ; functions
 ExitFunc(ExitReason, ExitCode) {
     for name, file in images.OwnProps() {
-        if InStr(file, "\AppData\Local\Temp\") {
+        if InStr(file, "\AppData\Local\Temp\") and (name "*png" or name "*ico") {
             FileDelete file
         }
     }
 }
+
 WaitForNextCome() {
+    LoopSkip := A_TickCount
+
     while !ImageSearch(&FoundX, &FoundY, 0, 800, 800, 1080, "*50 " images.Next) {
-        if A_TickCount - status.LoopSkip >= 30000 { ; skips loop after 30 seconds
-            status.LoopSkip := A_TickCount
+        if A_TickCount - LoopSkip >= 30000 { ; skips loop after 30 seconds
             break
         }
     }
 }
 
 WaitForNextGone() {
+    LoopSkip := A_TickCount
+
     while ImageSearch(&FoundX, &FoundY, 0, 800, 800, 1080, "*50 " images.Next) {
-        if A_TickCount - status.LoopSkip >= 30000 { ; skips loop after 30 seconds
-            status.LoopSkip := A_TickCount
+        if A_TickCount - LoopSkip >= 30000 { ; skips loop after 30 seconds
             break
         }
     }
+
+    Sleep 2000
 }
 
 WaitLoading() {
@@ -284,26 +289,26 @@ GoToAlbinaurics() {
 
 GoToBird() {
     Send("{Blind}{Numpad4 Down}")
-    Sleep 475
+    Sleep 500
     Send("{Blind}{Numpad4 Up}")
 
     CheckDied()
 
     Send("{Blind}{w Down}")
-    Sleep 1750
+    Sleep 1800
     Send("{Blind}{w Up}")
 
     CheckDied()
 
+    Send("{Blind}{Numpad4 Down}")
+    Sleep 50
+    Send("{Blind}{Numpad4 Up}")
+
     Send("{Blind}{Numpad2 Down}")
-    Sleep 250
+    Sleep 300
     Send("{Blind}{Numpad2 Up}")
 
     CheckDied()
-
-    Send("{Blind}{Numpad4 Down}")
-    Sleep 45
-    Send("{Blind}{Numpad4 Up}")
 
     Send("{Blind}{MButton Down}")
     Sleep 20
@@ -374,10 +379,11 @@ ReturnToDesktop() {
 }
 
 CheckDied() {
-    if PixelSearch(&_, &_, 157, 48, 163, 56, 0x9A8422, 3) or ImageSearch(&FoundX, &FoundY, 0, 800, 800, 1080, "*50 " images.Next) { 
+    if PixelSearch(&_, &_, 157, 48, 163, 56, 0x9A8422, 3) { 
         Notify("<@" data.DiscordUserId "> `nYou have Died!`nEnding Baya's Macro: Elden Ring Edition Momentarily...")
 
         if data.LogMethod != "Do Nothing" {
+
             if data.LogMethod = "Shutdown PC" {
                 Notify("Returning to Desktop to Avoid Data Corrupting...`n(Process will take around 1 minute to finalize, you will be notified with the results)")
 
@@ -385,7 +391,7 @@ CheckDied() {
 
                 ReturnToDesktop()
 
-                Sleep 60000 ; sleeps for 60 seconds for elden ring to fully close
+                ProcessWaitClose(status.PID, 60)
 
                 if WinExist("ELDEN RING™") {
                     Notify(":negative_squared_cross_mark:")
@@ -408,7 +414,7 @@ CheckDied() {
 
                 ReturnToDesktop()
 
-                Sleep 60000 ; sleeps for 60 seconds for elden ring to fully close
+                ProcessWaitClose(status.PID, 60)
 
                 if WinExist("ELDEN RING™") {
                     Notify(":negative_squared_cross_mark:")
@@ -544,6 +550,8 @@ SC01B:: ; #]
 ;play/pause
 SC01A:: ;#[ 
 {
+    status.PID := WinGetPID("ELDEN RING™")
+
     if status.Ready != 0 {
         static toggle := 0
 
