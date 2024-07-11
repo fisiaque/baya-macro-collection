@@ -1,7 +1,4 @@
 ﻿#Requires AutoHotkey v2.0
-#SingleInstance Force
-#MaxThreadsPerHotkey 2
-
 #Include misc.ahk
 #Include CaptureScreen.ahk
 
@@ -121,9 +118,15 @@ myGui.AddUpDown("vDiscordInterval Range5-60", data.DiscordInterval)
 
 myGui.AddButton("Center xs+90 ys+160 w75 h20", "Test Ping").OnEvent("Click", TestUserPing)
 
+myGui.OnEvent("Close", GuiClose)
+
 myGui.Show
 
 ;settings
+GuiClose(*) {
+    ExitApp
+}
+
 StartUserInput(*)
 {
     inputs := myGui.Submit()
@@ -308,8 +311,6 @@ ResetGrace() {
         Sleep 20
         Send("{Blind}{m Up}")
 
-        CheckDied()
-
         Sleep 350
     }
 
@@ -317,21 +318,13 @@ ResetGrace() {
     Sleep 20
     Send("{Blind}{f Up}")
 
-    CheckDied()
-
     Sleep 350
-
-    CheckDied()
 
     Send("{Blind}{Enter Down}")
     Sleep 20
     Send("{Blind}{Enter Up}")
 
-    CheckDied()
-
     Sleep 350
-
-    CheckDied()
 
     Send("{Blind}{Enter Down}")
     Sleep 20
@@ -349,8 +342,6 @@ GoToAlbinaurics() {
     Sleep 225
     Send("{Blind}{Numpad4 Up}")
 
-    CheckDied()
-
     Send("{Blind}{w Down}")
     Sleep 2000
     Send("{Blind}{w Up}")
@@ -365,15 +356,7 @@ GoToAlbinaurics() {
     Sleep 20
     Send("{Blind}{f Up}")
 
-    CheckDied()
-
-    Sleep 3000
-
-    CheckDied()
-
-    Sleep 3000
-
-    CheckDied()
+    Sleep 6000
 }
 
 GoToBird() {
@@ -381,13 +364,9 @@ GoToBird() {
     Sleep 460
     Send("{Blind}{Numpad4 Up}")
 
-    CheckDied()
-
     Send("{Blind}{w Down}")
     Sleep 1800
     Send("{Blind}{w Up}")
-
-    CheckDied()
 
     Send("{Blind}{Numpad4 Down}")
     Sleep 50
@@ -397,31 +376,19 @@ GoToBird() {
     Sleep 300
     Send("{Blind}{Numpad2 Up}")
 
-    CheckDied()
-
     Send("{Blind}{MButton Down}")
     Sleep 20
     Send("{Blind}{MButton Up}")
 
     Sleep 250
     
-    CheckDied()
-
     Send("{Blind}{f Down}")
     Sleep 250
     Send("{Blind}{Click Left}")
     Sleep 250
     Send("{Blind}{f Up}")
 
-    CheckDied()
-
-    Sleep 3000
-
-    CheckDied()
-
-    Sleep 3000
-
-    CheckDied
+    Sleep 6000
 }
 
 GoToSkeleton() {
@@ -728,41 +695,19 @@ UpdateStatsToDiscord() {
     }
 }
 
-; hotkeys
-;stops
-SC01B::ExitApp ; #]
-
-F1:: {
-    
-
-}
-
-#HotIf WinActive("ELDEN RING™")
-
-;play/pause
-SC01A:: ;#[ 
-{
-    status.PID := WinGetPID("ELDEN RING™")
-
-    if status.Ready != 0 {
-        static toggle := 0
-
-        toggle := !toggle  
-
-        if (toggle != 0) { ; # PLAY
-            if data.AutoFarmMethod = "Albinaurics" {
-                UpdateStatsToDiscord()
-                AutoAlbinaurics()
-            } else if data.AutoFarmMethod = "Bird" {
-                UpdateStatsToDiscord()
-                AutoBird()
-            } else if data.AutoFarmMethod = "Skel-Band(Pilgrimage Church)" {
-                AutoSkeleton()
-            }
-        } else if (toggle != 1) { ; # PAUSE
-            Reload
-        }
-    
+; HANDLER ________________________________________________________________
+;retrieve
+RetrievePID() {
+    if WinExist("ELDEN RING™") {
+        status.PID := WinGetPID("ELDEN RING™")
+        return status.PID
     }
 }
 
+RetrieveReady() {
+    return status.Ready
+}
+
+RetrieveAutoFarmMethod() {
+    return data.AutoFarmMethod
+}
