@@ -36,11 +36,6 @@ ExitFunc(ExitReason, ExitCode) {
 }
 
 ; hotkeys
-;test
-F1::{
-    Test()
-}
-
 ;stops
 SC01B::{ ; #]
     ExitApp
@@ -60,25 +55,15 @@ SC01A:: ;#[
         toggle := !toggle  
 
         if (toggle != 0) { ; # PLAY
-            SoundBeep(750)
-
-            BlockInput "MouseMove" 
-
-            ; checks
-            SetTimer CheckDied, 1000 ; check if died every second
-
-            ; start monitoring
-            AutoFarmMethod := RetrieveAutoFarmMethod()
-
-            if AutoFarmMethod = "Albinaurics" {
-                UpdateStatsToDiscord()
-            } else if AutoFarmMethod = "Bird" {
-                UpdateStatsToDiscord()
-            }
-
-            FarmLoop()
+            Initialize()
         } else if (toggle != 1) { ; # PAUSE
+            BlockInput "MouseMoveOff"
+
             Reload
         }
     }
 }
+
+; checks
+SetTimer CheckWindow, 1000 ; checks window every second
+SetTimer CheckDied, 1000 ; check if died every second

@@ -85,6 +85,7 @@ images.ok := A_Temp "\.ok.png" or directories.Images ".ok.png"
 images.x1 := A_Temp "\.x1.png" or directories.Images ".x1.png"
 
 ; variables
+status.Running := 0
 status.Ready := 0
 status.ScreenCapturing := 0
 status.MaxCaptureRunesRetry := 3
@@ -125,6 +126,8 @@ if (FileExist(A_WorkingDir "\Baya's Macro Settings.ini")) {
     } catch as e {
         FileDelete(A_WorkingDir "\Baya's Macro Settings.ini")
     }
+} else {
+    Run "https://github.com/fiziaque/BayaMacro/wiki/Basics#how-to-start-bayas-macro"
 }
 
 ; #create-gui
@@ -633,91 +636,93 @@ ReturnToDesktop() {
 }
 
 CheckDied() {
-    if PixelSearch(&_, &_, 157, 48, 163, 56, 0x9A8422, 3) { 
-        FarmLoopStop()
-        
-        status.Died := 1
-
-        Notify("<@" data.DiscordUserId "> `nYou have Died!`nEnding Baya's Macro: Elden Ring Edition Momentarily...")
-
-        if data.LogMethod != "Do Nothing" {
-            if data.LogMethod = "Shutdown PC" {
-                Notify("Returning to Desktop to Avoid Data Corrupting...`n(Process will take around 1 minute to finalize, you will be notified with the results)")
-
+    if status.Running != 0 { 
+        if PixelSearch(&_, &_, 157, 48, 163, 56, 0x9A8422, 3) { 
+            FarmLoopStop()
+            
+            status.Died := 1
+    
+            Notify("<@" data.DiscordUserId "> `nYou have Died!`nEnding Baya's Macro: Elden Ring Edition Momentarily...")
+    
+            if data.LogMethod != "Do Nothing" {
+                if data.LogMethod = "Shutdown PC" {
+                    Notify("Returning to Desktop to Avoid Data Corrupting...`n(Process will take around 1 minute to finalize, you will be notified with the results)")
+    
+                    WaitLoading()
+    
+                    if status.RetrievedRune = 1 {
+                        status.RetrievedRune := 0
+    
+                        Notify(":moneybag: :o:")
+                    } else {
+                        Notify(":moneybag: :x:")
+                    }
+    
+                    ReturnToDesktop()
+    
+                    ProcessWaitClose(status.PID, 60)
+    
+                    if WinExist("ELDEN RING™") {
+                        Notify(":negative_squared_cross_mark:")
+    
+                        WinClose
+                    } else {
+                        Notify(":white_check_mark:")
+                    }
+                      
+                    Notify("<@" data.DiscordUserId "> Shutting Down PC NOW!")
+    
+                    Shutdown 9
+    
+                    ExitApp
+                }
+                if data.LogMethod = "Close Game" {
+                    Notify("Returning to Desktop to Avoid Data Corrupting...`n(Process will take around 1 minute to finalize, you will be notified with the results)")
+    
+                    WaitLoading()
+    
+                    if status.RetrievedRune = 1 {
+                        status.RetrievedRune := 0
+    
+                        Notify(":moneybag: :o:")
+                    } else {
+                        Notify(":moneybag: :x:")
+                    }
+    
+                    ReturnToDesktop()
+    
+                    ProcessWaitClose(status.PID, 60)
+    
+                    if WinExist("ELDEN RING™") {
+                        Notify(":negative_squared_cross_mark:")
+    
+                        WinClose
+                    } else {
+                        Notify(":white_check_mark:")
+                    }
+    
+                    ExitApp
+                }
+                if data.LogMethod = "Stop Macro" {
+                    Notify("Macro will soon be stopped`nAttempting to collect your lost runes...")
+    
+                    WaitLoading()
+    
+                    if status.RetrievedRune = 1 {
+                        status.RetrievedRune := 0
+    
+                        Notify(":moneybag: :o:")
+                    } else {
+                        Notify(":moneybag: :x:")
+                    }
+                    
+                    ExitApp
+                }
+            } else{
                 WaitLoading()
-
-                if status.RetrievedRune = 1 {
-                    status.RetrievedRune := 0
-
-                    Notify(":moneybag: :o:")
-                } else {
-                    Notify(":moneybag: :x:")
-                }
-
-                ReturnToDesktop()
-
-                ProcessWaitClose(status.PID, 60)
-
-                if WinExist("ELDEN RING™") {
-                    Notify(":negative_squared_cross_mark:")
-
-                    WinClose
-                } else {
-                    Notify(":white_check_mark:")
-                }
-                  
-                Notify("<@" data.DiscordUserId "> Shutting Down PC NOW!")
-
-                Shutdown 9
-
-                ExitApp
+    
+                FarmLoop()
             }
-            if data.LogMethod = "Close Game" {
-                Notify("Returning to Desktop to Avoid Data Corrupting...`n(Process will take around 1 minute to finalize, you will be notified with the results)")
-
-                WaitLoading()
-
-                if status.RetrievedRune = 1 {
-                    status.RetrievedRune := 0
-
-                    Notify(":moneybag: :o:")
-                } else {
-                    Notify(":moneybag: :x:")
-                }
-
-                ReturnToDesktop()
-
-                ProcessWaitClose(status.PID, 60)
-
-                if WinExist("ELDEN RING™") {
-                    Notify(":negative_squared_cross_mark:")
-
-                    WinClose
-                } else {
-                    Notify(":white_check_mark:")
-                }
-
-                ExitApp
-            }
-            if data.LogMethod = "Stop Macro" {
-                Notify("Macro will soon be stopped`nAttempting to collect your lost runes...")
-
-                WaitLoading()
-
-                if status.RetrievedRune = 1 {
-                    status.RetrievedRune := 0
-
-                    Notify(":moneybag: :o:")
-                } else {
-                    Notify(":moneybag: :x:")
-                }
-                
-                ExitApp
-            }
-        } else{
-            WaitLoading()
-
-            FarmLoop()
         }
     }
 }
@@ -860,6 +865,49 @@ UpdateStatsToDiscord() {
     }
 }
 
+CheckWindow() {
+    if status.Running != 0 {
+        if WinExist("ELDEN RING™") {
+            WinGetClientPos &X, &Y, &W, &H, "ELDEN RING™"
+    
+            if (W != 1920 && H != 1080) or (X != 0 && Y != 0) {
+                Notify("Make sure Display is at 1920w by 1080h & Game is in 'Fullscreen' or 'Borderless Fullscreen'")
+                Run "https://github.com/fiziaque/BayaMacro/wiki/Baya's-Macro:-Elden-Ring-Edition-Setup"
+                ExitApp
+            }
+        } else {
+            ExitApp
+        }
+    }
+}
+
+Initialize() {
+    status.Running := 1
+
+    SoundBeep(750)
+
+    BlockInput "MouseMove"
+
+    ; start monitoring
+    AutoFarmMethod := RetrieveAutoFarmMethod()
+
+    if AutoFarmMethod = "Albinaurics" {
+        UpdateStatsToDiscord()
+    } else if AutoFarmMethod = "Bird" {
+        UpdateStatsToDiscord()
+    }
+
+    FarmLoop()
+}
+
+Terminate() {
+    status.Running := 0
+
+    BlockInput "MouseMoveOff"
+
+    Reload
+}
+
 ; HANDLER ________________________________________________________________
 ;retrieve
 RetrievePID() {
@@ -875,8 +923,4 @@ RetrieveReady() {
 
 RetrieveAutoFarmMethod() {
     return data.AutoFarmMethod
-}
-
-Test() {
-
 }
