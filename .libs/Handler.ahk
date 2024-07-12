@@ -1,18 +1,9 @@
 ﻿#Requires AutoHotkey v2.0
-#SingleInstance Force
-#MaxThreadsPerHotkey 2
-
 #Include misc.ahk
 #Include CaptureScreen.ahk
 
-SendMode 'Event'
 CoordMode "Pixel", "Window"
 CoordMode "Mouse", "Window"
-
-SetKeyDelay 0 50
-
-Persistent
-OnExit ExitFunc
 
 ; fileinstall
 ;icon
@@ -35,7 +26,38 @@ if !(FileExist(A_Temp "\.compass_circle.png")) {
 if !(FileExist(A_Temp "\.x1.png")) {
     FileInstall "C:\Users\ofhaq\Documents\.elden_ring\.imgs\.x1.png", A_Temp "\.x1.png", 1
 } 
-
+;retrieve
+if !(FileExist(A_Temp "\.retrieve.png")) {
+    FileInstall "C:\Users\ofhaq\Documents\.elden_ring\.imgs\.retrieve.png", A_Temp "\.retrieve.png", 1
+} 
+;switch
+if !(FileExist(A_Temp "\.switch.png")) {
+    FileInstall "C:\Users\ofhaq\Documents\.elden_ring\.imgs\.switch.png", A_Temp "\.switch.png", 1
+} 
+;sites
+if !(FileExist(A_Temp "\.sites.png")) {
+    FileInstall "C:\Users\ofhaq\Documents\.elden_ring\.imgs\.sites.png", A_Temp "\.sites.png", 1
+} 
+;ok
+if !(FileExist(A_Temp "\.ok.png")) {
+    FileInstall "C:\Users\ofhaq\Documents\.elden_ring\.imgs\.ok.png", A_Temp "\.ok.png", 1
+} 
+;exit
+if !(FileExist(A_Temp "\.exit.png")) {
+    FileInstall "C:\Users\ofhaq\Documents\.elden_ring\.imgs\.exit.png", A_Temp "\.exit.png", 1
+} 
+;quit_game
+if !(FileExist(A_Temp "\.quit_game.png")) {
+    FileInstall "C:\Users\ofhaq\Documents\.elden_ring\.imgs\.quit_game.png", A_Temp "\.quit_game.png", 1
+} 
+;return
+if !(FileExist(A_Temp "\.return.png")) {
+    FileInstall "C:\Users\ofhaq\Documents\.elden_ring\.imgs\.return.png", A_Temp "\.return.png", 1
+} 
+;yes
+if !(FileExist(A_Temp "\.yes.png")) {
+    FileInstall "C:\Users\ofhaq\Documents\.elden_ring\.imgs\.yes.png", A_Temp "\.yes.png", 1
+} 
 ; objects
 directories := Object()
 images := Object()
@@ -51,6 +73,15 @@ images.Icon := A_Temp "\.baya_icon.ico" or directories.Images ".baya_icon.ico"
 images.Settings := A_Temp "\.settings.png" or directories.Images ".settings.png"
 images.Next := A_Temp "\.next.png" or directories.Images ".next.png"
 images.CompassCircle := A_Temp "\.compass_circle.png" or directories.Images ".compass_circle.png"
+images.Retrieve := A_Temp "\.retrieve.png" or directories.Images ".retrieve.png"
+images.Switch := A_Temp "\.switch.png" or directories.Images ".switch.png"
+images.Sites := A_Temp "\.sites.png" or directories.Images ".sites.png"
+
+images.yes := A_Temp "\.yes.png" or directories.Images ".yes.png"
+images.return := A_Temp "\.return.png" or directories.Images ".return.png"
+images.quit := A_Temp "\.quit_game.png" or directories.Images ".quit_game.png"
+images.exit := A_Temp "\.exit.png" or directories.Images ".exit.png"
+images.ok := A_Temp "\.ok.png" or directories.Images ".ok.png"
 images.x1 := A_Temp "\.x1.png" or directories.Images ".x1.png"
 
 ; variables
@@ -61,6 +92,8 @@ status.StartMonitoring := 0
 status.UpdateTime := A_TickCount
 status.UpdateRepeated := 0
 status.PID := ""
+status.Died := 0
+status.RetrievedRune := 0
 
 autoFarmArray := ["Albinaurics", "Bird", "Skel-Band(Pilgrimage Church)"]
 logArray := ["Stop Macro", "Close Game", "Shutdown PC", "Do Nothing"]
@@ -121,9 +154,15 @@ myGui.AddUpDown("vDiscordInterval Range5-60", data.DiscordInterval)
 
 myGui.AddButton("Center xs+90 ys+160 w75 h20", "Test Ping").OnEvent("Click", TestUserPing)
 
+myGui.OnEvent("Close", GuiClose)
+
 myGui.Show
 
 ;settings
+GuiClose(*) {
+    ExitApp
+}
+
 StartUserInput(*)
 {
     inputs := myGui.Submit()
@@ -202,75 +241,86 @@ Unbind() {
     Send("{Blind}{Numpad6 Up}")
 
     Send("{Blind}{LShift Up}")
+
+    Send("{Blind}{MButton Up}")
 }
 
-ExitFunc(ExitReason, ExitCode) {
-    Unbind()
+OpenMap() {
+    LoopSkip := A_TickCount
 
-    if FileExist(A_Temp "\.runes.png") {
-        FileDelete A_Temp "\.runes.png"
-    }   
-
-    for name, file in images.OwnProps() {
-        if InStr(file, "\AppData\Local\Temp\") and FileExist(file) {
-            FileDelete file
-        }
+    while !ImageSearch(&_, &_, 1787, 83, 1822, 117, "*100 " images.CompassCircle) and A_TickCount - LoopSkip <= 3500 {
+        Send("{Blind}{m Down}")
+        Sleep 20
+        Send("{Blind}{m Up}")
+    
+        Sleep 400
     }
+}
+
+TravelAccept() {
+    LoopSkip := A_TickCount
+
+    if ImageSearch(&FoundX, &FoundY, 244, 126, 411, 160, "*100 " images.Sites) and A_TickCount - LoopSkip <= 3500  {
+        Send("{Blind}{Enter Down}")
+        Sleep 20
+        Send("{Blind}{Enter Up}")
+
+        Sleep 400
+    }
+}
+
+RestAtGrace() {
+    LoopSkip := A_TickCount
+
+    while !ImageSearch(&FoundX, &FoundY, 244, 126, 411, 160, "*100 " images.Sites) and A_TickCount - LoopSkip <= 3500 {
+        Send("{Blind}{f Down}")
+        Sleep 20
+        Send("{Blind}{f Up}")
+
+        Sleep 400
+    }
+
+    if ImageSearch(&FoundX, &FoundY, 679, 571, 819, 599, "*100 " images.ok) {
+        MovingMouse(FoundX, FoundY, "Left", 2)
+    } else {
+        TravelAccept()
+        TravelAccept()
+    }
+}
+
+GoBack() {
+    Send("{Blind}{Esc Down}")
+    Sleep 20
+    Send("{Blind}{Esc Up}")
+            
+    Sleep 400
 }
 
 WaitForNextCome() {
     LoopSkip := A_TickCount
     Tried := 1
 
-    while !ImageSearch(&FoundX, &FoundY, 0, 800, 800, 1080, "*50 " images.Next) {
+    while !ImageSearch(&_, &_, 0, 800, 800, 1080, "*100 " images.Next) {
         Sleep 100
 
         if A_TickCount - LoopSkip >= 2000 and Tried != 1 {
-            Send("{Blind}{Esc Down}")
-            Sleep 20
-            Send("{Blind}{Esc Up}")
-            
-            Sleep 350
+            GoBack()
         }
         
         Tried := 0
 
-        if ImageSearch(&FoundX, &FoundY, 38, 773, 137, 872, "*50 " images.Settings) {
-            Send("{Blind}{Esc Down}")
-            Sleep 20
-            Send("{Blind}{Esc Up}")
+        if ImageSearch(&_, &_, 38, 773, 137, 872, "*100 " images.Settings) {
+            GoBack()
 
-            Sleep 350
-
-            Send("{Blind}{m Down}")
-            Sleep 20
-            Send("{Blind}{m Up}")
-
-            Sleep 350
+            OpenMap()
 
             LoopSkip := A_TickCount
 
             Tried := 1
         }
 
-        if ImageSearch(&FoundX, &FoundY, 1787, 83, 1822, 117, "*50 " images.CompassCircle) {
-            Send("{Blind}{f Down}")
-            Sleep 20
-            Send("{Blind}{f Up}")
-
-            Sleep 350
-
-            Send("{Blind}{Enter Down}")
-            Sleep 20
-            Send("{Blind}{Enter Up}")
-
-            Sleep 350
-
-            Send("{Blind}{Enter Down}")
-            Sleep 20
-            Send("{Blind}{Enter Up}")
-
-            Sleep 350
+        if ImageSearch(&_, &_, 1787, 83, 1822, 117, "*100 " images.CompassCircle) {
+            RestAtGrace()
 
             LoopSkip := A_TickCount
 
@@ -282,7 +332,7 @@ WaitForNextCome() {
 WaitForNextGone() {
     LoopSkip := A_TickCount
 
-    while ImageSearch(&FoundX, &FoundY, 0, 800, 800, 1080, "*50 " images.Next) and A_TickCount - LoopSkip < 5000 { ; skips loop after 5 seconds
+    while ImageSearch(&_, &_, 0, 800, 800, 1080, "*100 " images.Next) and A_TickCount - LoopSkip < 5000 { ; skips loop after 5 seconds
         Sleep 100
     }
 
@@ -292,88 +342,39 @@ WaitForNextGone() {
 WaitLoading() {
     WaitForNextCome()
     WaitForNextGone()
-}
-
-ResetGrace() {
-    LoopSkip := A_TickCount
-
-    while !ImageSearch(&FoundX, &FoundY, 1787, 83, 1822, 117, "*50 " images.CompassCircle) {
-        if A_TickCount - LoopSkip >= 30000 { ; skips loop after 30 seconds
-            Notify("<@" data.DiscordUserId "> Cannot open map... `nTried for 30 seconds, closing Baya's Macro!")
-
-            ExitApp
-        }
-
-        Send("{Blind}{m Down}")
-        Sleep 20
-        Send("{Blind}{m Up}")
-
-        CheckDied()
-
-        Sleep 350
-    }
-
-    Send("{Blind}{f Down}")
-    Sleep 20
-    Send("{Blind}{f Up}")
-
-    CheckDied()
-
-    Sleep 350
-
-    CheckDied()
-
-    Send("{Blind}{Enter Down}")
-    Sleep 20
-    Send("{Blind}{Enter Up}")
-
-    CheckDied()
-
-    Sleep 350
-
-    CheckDied()
-
-    Send("{Blind}{Enter Down}")
-    Sleep 20
-    Send("{Blind}{Enter Up}")
+    RetrieveRunes()
 }
 
 GoToAlbinaurics() {
-    Send("{Blind}{LShift Down}") ; start sprinting
-
-    Send("{Blind}{w Down}")
-    Sleep 1500
-    Send("{Blind}{w Up}")
-
     Send("{Blind}{Numpad4 Down}")
-    Sleep 225
+    Sleep 35
     Send("{Blind}{Numpad4 Up}")
 
-    CheckDied()
-
     Send("{Blind}{w Down}")
-    Sleep 2000
-    Send("{Blind}{w Up}")
+    Sleep 20
+    Send("{Blind}{LShift Down}") ; start sprinting
+    Sleep 2200
 
+    Send("{Blind}{Numpad4 Down}")
+    Sleep 275
+    Send("{Blind}{Numpad4 Up}")
+
+    Sleep 1000
+
+    Send("{Blind}{w Up}")
     Send("{Blind}{LShift Up}") ; stop sprinting
 
     Send("{Blind}{Numpad2 Down}")
-    Sleep 75
+    Sleep 150
     Send("{Blind}{Numpad2 Up}")
+
+    Sleep 300
 
     Send("{Blind}{f Down}")
     Sleep 20
     Send("{Blind}{f Up}")
 
-    CheckDied()
-
-    Sleep 3000
-
-    CheckDied()
-
-    Sleep 3000
-
-    CheckDied()
+    Sleep 6000
 }
 
 GoToBird() {
@@ -381,13 +382,9 @@ GoToBird() {
     Sleep 460
     Send("{Blind}{Numpad4 Up}")
 
-    CheckDied()
-
     Send("{Blind}{w Down}")
     Sleep 1800
     Send("{Blind}{w Up}")
-
-    CheckDied()
 
     Send("{Blind}{Numpad4 Down}")
     Sleep 50
@@ -397,31 +394,19 @@ GoToBird() {
     Sleep 300
     Send("{Blind}{Numpad2 Up}")
 
-    CheckDied()
-
     Send("{Blind}{MButton Down}")
     Sleep 20
     Send("{Blind}{MButton Up}")
 
-    Sleep 250
+    Sleep 350
     
-    CheckDied()
-
     Send("{Blind}{f Down}")
     Sleep 250
     Send("{Blind}{Click Left}")
     Sleep 250
     Send("{Blind}{f Up}")
 
-    CheckDied()
-
-    Sleep 3000
-
-    CheckDied()
-
-    Sleep 3000
-
-    CheckDied
+    Sleep 6000
 }
 
 GoToSkeleton() {
@@ -491,56 +476,92 @@ GoToSkeleton() {
 
         LoopSkip := A_TickCount
 
-        while !ImageSearch(&FoundX, &FoundY, 1489, 818, 1909, 882, "*50 " images.x1) and A_TickCount - LoopSkip < 1500 {
+        while !ImageSearch(&_, &_, 1489, 818, 1909, 882, "*100 " images.x1) and A_TickCount - LoopSkip < 1500 {
             Sleep 100
         }
 
-        if ImageSearch(&FoundX, &FoundY, 1489, 818, 1909, 882, "*50 " images.x1) {
+        if ImageSearch(&_, &_, 1489, 818, 1909, 882, "*100 " images.x1) {
             MsgBox "ITEM COLLECTED"
         }
         
     }
 }
 
-AutoAlbinaurics() {
-    Loop {
-        ResetGrace()
+FarmAlbinaurics() {
+    if status.Died != 1 {
+        OpenMap()
         WaitLoading()
-        GoToAlbinaurics()
+    }
 
-        status.UpdateRepeated += 1
+    status.Died := 0
+    
+    GoToAlbinaurics()
 
-        UpdateStatsToDiscord()
+    status.UpdateRepeated += 1
+
+    UpdateStatsToDiscord()
+
+    SetTimer FarmAlbinaurics, -1000
+}
+FarmBird() {
+    if status.Died != 1 {
+        OpenMap()
+        WaitLoading()
+    }
+
+    status.Died := 0
+    
+    GoToBird()
+
+    status.UpdateRepeated += 1
+
+    UpdateStatsToDiscord()
+
+    SetTimer FarmBird, -1000
+}
+FarmSkeleton() {
+    if status.Died != 1 {
+        OpenMap()
+        WaitLoading()
+    }
+
+    status.Died := 0
+    
+    GoToSkeleton()
+
+    status.UpdateRepeated += 1
+
+    SetTimer FarmSkeleton, -1000
+}
+
+FarmLoop() {
+    if data.AutoFarmMethod = "Albinaurics" {
+        SetTimer FarmAlbinaurics, -1000
+    } else if data.AutoFarmMethod = "Bird" {
+        SetTimer FarmBird, -1000
+    } else if data.AutoFarmMethod = "Skel-Band(Pilgrimage Church)" {
+        SetTimer FarmSkeleton, -1000
     }
 }
-AutoBird() {
-    Loop {
-        ResetGrace()
-        WaitLoading()
-        GoToBird()
 
-        status.UpdateRepeated += 1
-
-        UpdateStatsToDiscord()
+FarmLoopStop() {
+    if data.AutoFarmMethod = "Albinaurics" {
+        SetTimer FarmAlbinaurics, 0
+    } else if data.AutoFarmMethod = "Bird" {
+        SetTimer FarmBird, 0
+    } else if data.AutoFarmMethod = "Skel-Band(Pilgrimage Church)" {
+        SetTimer FarmSkeleton, 0
     }
-}
 
-AutoSkeleton() {
-    Loop {
-        ResetGrace()
-        WaitLoading()
-        GoToSkeleton()
-
-        status.UpdateRepeated += 1
-    }
+    Unbind()
 }
 
 ReturnToDesktop() {
     LoopSkip := A_TickCount
 
-    while !ImageSearch(&FoundX, &FoundY, 38, 773, 137, 872, "*50 " images.Settings) {
-        if A_TickCount - LoopSkip >= 30000 { ; skips loop after 30 seconds
-            Notify("<@" data.DiscordUserId "> Cannot find settings... `nTried for 30 seconds, closing Baya's Macro!")
+    while !ImageSearch(&SettingsX, &SettingsY, 38, 773, 137, 872, "*100 " images.Settings) {
+        if A_TickCount - LoopSkip >= 10000 { ; skips loop after 10 seconds
+            Notify("<@" data.DiscordUserId "> Cannot find settings... `nTried for 10 seconds, closing Baya's Macro!")
 
             ExitApp
         }
@@ -552,33 +573,86 @@ ReturnToDesktop() {
         Sleep 250
     }
 
-    MovingMouse(FoundX, FoundY, "left", 2)
+    LoopSkip := A_TickCount ; reset timer
 
-    Sleep 250
+    while !ImageSearch(&ExitX, &ExitY, 1161, 166, 1219, 219, "*100 " images.exit) {
+        if A_TickCount - LoopSkip >= 10000 { ; skips loop after 10 seconds
+            Notify("<@" data.DiscordUserId "> Cannot find exit button... `nTried for 10 seconds, closing Baya's Macro!")
 
-    Send("{Blind}{z Down}")
-    Sleep 20
-    Send("{Blind}{z Up}")
+            ExitApp
+        }
 
-    Sleep 250
+        MovingMouse(SettingsX, SettingsY, "left", 2)
 
-    MovingMouse(1161, 745, "left", 2)
+        Sleep 250
+    }
 
-    Sleep 250
+    LoopSkip := A_TickCount ; reset timer
 
-    MovingMouse(748, 569, "left", 2)
+    while !ImageSearch(&_, &_, 590, 729, 1328, 767, "*100 " images.quit) or !ImageSearch(&_, &_, 590, 729, 1328, 767, "*100 " images.return) {
+        if A_TickCount - LoopSkip >= 10000 { ; skips loop after 10 seconds
+            Notify("<@" data.DiscordUserId "> Cannot find 'Quit Game/Return To Desktop' buttons... `nTried for 10 seconds, closing Baya's Macro!")
+
+            ExitApp
+        }
+
+        MovingMouse(ExitX, ExitY, "Left", 0)
+
+        Sleep 250
+    }
+
+    LoopSkip := A_TickCount ; reset timer
+
+    while !ImageSearch(&_, &_, 669, 557, 806, 588, "*100 " images.yes) {
+        if A_TickCount - LoopSkip >= 10000 { ; skips loop after 10 seconds
+            Notify("<@" data.DiscordUserId "> Cannot find 'YES' button... `nTried for 10 seconds, closing Baya's Macro!")
+
+            ExitApp
+        }
+
+        MovingMouse(1169, 742, "Left", 2)
+
+        Sleep 250
+    }
+
+    LoopSkip := A_TickCount ; reset timer
+
+    while ImageSearch(&YesX, &YesY, 669, 557, 806, 588, "*100 " images.yes) {
+        if A_TickCount - LoopSkip >= 10000 { ; skips loop after 10 seconds
+            Notify("<@" data.DiscordUserId "> Cannot click 'YES' button `nTried for 10 seconds, closing Baya's Macro!")
+
+            ExitApp
+        }
+
+        MovingMouse(YesX, YesY, "Left", 2)
+
+        Sleep 250
+    } 
+    ; MovingMouse(735, 735, "Left", 0) ; quit game button
+    ; MovingMouse(1169, 742, "Left", 0) ; return to desktop button
 }
 
 CheckDied() {
     if PixelSearch(&_, &_, 157, 48, 163, 56, 0x9A8422, 3) { 
+        FarmLoopStop()
+        
+        status.Died := 1
+
         Notify("<@" data.DiscordUserId "> `nYou have Died!`nEnding Baya's Macro: Elden Ring Edition Momentarily...")
 
         if data.LogMethod != "Do Nothing" {
-
             if data.LogMethod = "Shutdown PC" {
                 Notify("Returning to Desktop to Avoid Data Corrupting...`n(Process will take around 1 minute to finalize, you will be notified with the results)")
 
                 WaitLoading()
+
+                if status.RetrievedRune = 1 {
+                    status.RetrievedRune := 0
+
+                    Notify(":moneybag: :o:")
+                } else {
+                    Notify(":moneybag: :x:")
+                }
 
                 ReturnToDesktop()
 
@@ -603,6 +677,14 @@ CheckDied() {
 
                 WaitLoading()
 
+                if status.RetrievedRune = 1 {
+                    status.RetrievedRune := 0
+
+                    Notify(":moneybag: :o:")
+                } else {
+                    Notify(":moneybag: :x:")
+                }
+
                 ReturnToDesktop()
 
                 ProcessWaitClose(status.PID, 60)
@@ -618,9 +700,59 @@ CheckDied() {
                 ExitApp
             }
             if data.LogMethod = "Stop Macro" {
-                Notify("Macro will be stopped now`nCollect your lost runes!")
+                Notify("Macro will soon be stopped`nAttempting to collect your lost runes...")
 
+                WaitLoading()
+
+                if status.RetrievedRune = 1 {
+                    status.RetrievedRune := 0
+
+                    Notify(":moneybag: :o:")
+                } else {
+                    Notify(":moneybag: :x:")
+                }
+                
                 ExitApp
+            }
+        } else{
+            WaitLoading()
+
+            FarmLoop()
+        }
+    }
+}
+
+RetrieveRunes() {
+    if status.Died != 0 {
+        if ImageSearch(&_, &_, 905, 931, 1019, 969, "*100 " images.Switch) {
+            Tries := 0
+    
+            while !ImageSearch(&_, &_, 890, 898, 978, 930, "*100 " images.Retrieve) and Tries < 5 {
+                Send("{Blind}{Right Down}")
+                Sleep 20
+                Send("{Blind}{Right Up}")
+                
+                Tries += 1
+    
+                Sleep 350
+            }
+        } 
+        
+        if ImageSearch(&_, &_, 890, 898, 978, 930, "*100 " images.Retrieve) {
+            Tries := 0
+    
+            while ImageSearch(&_, &_, 890, 898, 978, 930, "*100 " images.Retrieve) and Tries <= 3 {
+                Send("{Blind}{e Down}")
+                Sleep 20
+                Send("{Blind}{e Up}")
+                
+                Tries += 1
+    
+                Sleep 350
+            }
+    
+            if Tries <= 3 {
+                status.RetrievedRune := 1
             }
         }
     }
@@ -644,7 +776,7 @@ CaptureRunes() {
         try {
             tried := 0
         
-            while !ImageSearch(&FoundX, &FoundY, 38, 773, 137, 872, "*50 " images.Settings) and tried < status.MaxCaptureRunesRetry {
+            while !ImageSearch(&_, &_, 38, 773, 137, 872, "*100 " images.Settings) and tried < status.MaxCaptureRunesRetry {
                 Send("{Blind}{Esc Down}")
                 Sleep 20
                 Send("{Blind}{Esc Up}")
@@ -654,7 +786,7 @@ CaptureRunes() {
                 tried += 1
             }
         
-            if ImageSearch(&FoundX, &FoundY, 38, 773, 137, 872, "*50 " images.Settings) {
+            if ImageSearch(&_, &_, 38, 773, 137, 872, "*100 " images.Settings) {
                 outfile := A_Temp "\.runes.png"
                 CaptureScreen( "1672, 1017, 1869, 1052", 0, outfile)
 
@@ -728,41 +860,23 @@ UpdateStatsToDiscord() {
     }
 }
 
-; hotkeys
-;stops
-SC01B::ExitApp ; #]
-
-F1:: {
-    
-
-}
-
-#HotIf WinActive("ELDEN RING™")
-
-;play/pause
-SC01A:: ;#[ 
-{
-    status.PID := WinGetPID("ELDEN RING™")
-
-    if status.Ready != 0 {
-        static toggle := 0
-
-        toggle := !toggle  
-
-        if (toggle != 0) { ; # PLAY
-            if data.AutoFarmMethod = "Albinaurics" {
-                UpdateStatsToDiscord()
-                AutoAlbinaurics()
-            } else if data.AutoFarmMethod = "Bird" {
-                UpdateStatsToDiscord()
-                AutoBird()
-            } else if data.AutoFarmMethod = "Skel-Band(Pilgrimage Church)" {
-                AutoSkeleton()
-            }
-        } else if (toggle != 1) { ; # PAUSE
-            Reload
-        }
-    
+; HANDLER ________________________________________________________________
+;retrieve
+RetrievePID() {
+    if WinExist("ELDEN RING™") {
+        status.PID := WinGetPID("ELDEN RING™")
+        return status.PID
     }
 }
 
+RetrieveReady() {
+    return status.Ready
+}
+
+RetrieveAutoFarmMethod() {
+    return data.AutoFarmMethod
+}
+
+Test() {
+
+}
