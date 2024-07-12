@@ -127,7 +127,7 @@ if (FileExist(A_WorkingDir "\Baya's Macro Settings.ini")) {
         FileDelete(A_WorkingDir "\Baya's Macro Settings.ini")
     }
 } else {
-    Run "https://github.com/fiziaque/BayaMacro/wiki/Basics#how-to-start-bayas-macro"
+    Run "https://github.com/fiziaque/Elden_Ring_Macro/wiki/Basics#how-to-start-bayas-macro"
 }
 
 ; #create-gui
@@ -871,8 +871,8 @@ CheckWindow() {
             WinGetClientPos &X, &Y, &W, &H, "ELDEN RING™"
     
             if (W != 1920 && H != 1080) or (X != 0 && Y != 0) {
-                Notify("Make sure Display is at 1920w by 1080h & Game is in 'Fullscreen' or 'Borderless Fullscreen'")
-                Run "https://github.com/fiziaque/BayaMacro/wiki/Baya's-Macro:-Elden-Ring-Edition-Setup"
+                Notify("Make sure Display is at 1920w by 1080h & Game is in 'Fullscreen' or 'Borderless Windowed'")
+                Run "https://github.com/fiziaque/Elden_Ring_Macro/wiki/Baya's-Macro:-Elden-Ring-Edition-Setup#how-to-setup-bayas-macro-for-elden-ring"
                 ExitApp
             }
         } else {

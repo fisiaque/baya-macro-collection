@@ -57,9 +57,7 @@ SC01A:: ;#[
         if (toggle != 0) { ; # PLAY
             Initialize()
         } else if (toggle != 1) { ; # PAUSE
-            BlockInput "MouseMoveOff"
-
-            Reload
+            Terminate()
         }
     }
 }
