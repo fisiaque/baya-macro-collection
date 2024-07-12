@@ -10,6 +10,9 @@ CoordMode "Mouse", "Window"
 if !(FileExist(A_Temp "\.baya_icon.ico")) {
     FileInstall "C:\Users\ofhaq\Documents\.elden_ring\.imgs\.baya_icon.ico", A_Temp "\.baya_icon.ico", 1
 } 
+if !(FileExist(A_Temp "\.ricon_icon.ico")) {
+    FileInstall "C:\Users\ofhaq\Documents\.elden_ring\.imgs\.ricon_icon.ico", A_Temp "\.ricon_icon.ico", 1
+} 
 ;settings
 if !(FileExist(A_Temp "\.settings.png")) {
     FileInstall "C:\Users\ofhaq\Documents\.elden_ring\.imgs\.settings.png", A_Temp "\.settings.png", 1
@@ -69,6 +72,7 @@ directories.Images := "C:\Users\ofhaq\Documents\.elden_ring\.imgs\"
 
 ; images
 images.Icon := A_Temp "\.baya_icon.ico" or directories.Images ".baya_icon.ico"
+images.Icon2 := A_Temp "\.ricon_icon.ico" or directories.Images ".ricon_icon.ico"
 
 images.Settings := A_Temp "\.settings.png" or directories.Images ".settings.png"
 images.Next := A_Temp "\.next.png" or directories.Images ".next.png"
@@ -108,7 +112,7 @@ data.DiscordTrack := "Yes"
 data.DiscordInterval := 5
 
 ; #post-set
-TraySetIcon(images.Icon) 
+TraySetIcon(images.Icon2) 
 
 ; #get-data
 if (FileExist(A_WorkingDir "\Baya's Macro Settings.ini")) {
