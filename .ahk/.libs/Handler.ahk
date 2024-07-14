@@ -99,6 +99,7 @@ status.UpdateRepeated := 0
 status.PID := ""
 status.Died := 0
 status.RetrievedRune := 0
+status.AutoLog := 0
 
 autoFarmArray := ["Albinaurics", "Bird", "Skel-Band(Pilgrimage Church)"]
 logArray := ["Stop Macro", "Close Game", "Shutdown PC", "Do Nothing"]
@@ -375,7 +376,7 @@ GoToAlbinaurics() {
     Sleep 150
     Send("{Blind}{Numpad2 Up}")
 
-    Sleep 300
+    Sleep 500
 
     Send("{Blind}{f Down}")
     Sleep 20
@@ -649,6 +650,8 @@ CheckDied() {
             Notify("<@" data.DiscordUserId "> `nYou have Died!`nEnding Baya's Macro: Elden Ring Edition Momentarily...")
     
             if data.LogMethod != "Do Nothing" {
+                status.AutoLog := 1
+
                 if data.LogMethod = "Shutdown PC" {
                     Notify("Returning to Desktop to Avoid Data Corrupting...`n(Process will take around 1 minute to finalize, you will be notified with the results)")
     
@@ -722,6 +725,8 @@ CheckDied() {
                     
                     ExitApp
                 }
+
+                status.AutoLog := 0
             } else{
                 WaitLoading()
     
@@ -877,9 +882,11 @@ CheckWindow() {
             if (W != 1920 && H != 1080) or (X != 0 && Y != 0) {
                 Notify("Make sure Display is at 1920w by 1080h & Game is in 'Fullscreen' or 'Borderless Windowed'")
                 Run "https://github.com/fiziaque/Elden_Ring_Macro/wiki/Baya's-Macro:-Elden-Ring-Edition-Setup#how-to-setup-bayas-macro-for-elden-ring"
+                
                 ExitApp
             }
-        } else {
+        } else if status.AutoLog != 1 {
+            Notify("Elden RING™ has been closed unexpectedly")
             ExitApp
         }
     }
