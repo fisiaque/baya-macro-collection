@@ -5,7 +5,7 @@
 InstallKeybdHook
 InstallMouseHook
 
-#Include C:\Users\ofhaq\Documents\.elden_ring\.libs\Handler.ahk
+#Include C:\Users\ofhaq\Documents\.elden_ring\.ahk\.libs\Handler.ahk
 
 SetTitleMatchMode 2
 DetectHiddenWindows true
