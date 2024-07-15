@@ -1,39 +1,34 @@
 # python
 # imports
-import os
+import os 
+from dotenv import load_dotenv
+
 import discord
-from dotenv import find_dotenv, load_dotenv
-
-from discord import app_commands
 from discord.ext import commands
+from discord import Interaction
 
-def run_bot(discord_id):
-    load_dotenv()
-    TOKEN = os.getenv('discord_token')
+load_dotenv()
+intents = discord.Intents.default()
+intents.message_content = True
+TOKEN = os.getenv('discord_token')
 
-    intents = discord.Intents.default()
-    client = discord.Client(intents=intents)
+client = commands.Bot(command_prefix="!", intents=intents)
 
-    tree = app_commands.CommandTree(client)
+@client.event
+async def on_ready():
+    print(f"{client.user.name} is ready")
 
-    @client.event
-    async def on_ready():
-        print("Bot is Activated!")
+@client.hybrid_command()
+async def sync(ctx: commands.Context):
+    await ctx.send("Syncing...")
+    await client.tree.sync()
 
-        try:
-            await tree.sync()
-            
-        except Exception as e:
-            print(e)
+@client.command()
+async def hello(ctx):
+    await ctx.send(f"Hola Amigo! {ctx.message.author.mention}")
 
-    @tree.command(name='shutdown')
-    async def shutdown(interaction: discord.Integration):
+@client.command()
+async def shutdown(ctx):
+    await ctx.send(f"{ctx.message.author.mention} Shutting down PC!")
 
-        if discord_id == interaction.user.id:
-            await interaction.response.send_message(f"{interaction.user.mention} Shutting down PC!")
-            os.system('shutdown -s')
-        elif discord_id != interaction.user.id:
-            await interaction.response.send_message(f"{interaction.user.mention} Did not start bot!")
-
-    client.run(token=TOKEN)
-
+client.run(token=TOKEN)
