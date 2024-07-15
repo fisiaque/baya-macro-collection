@@ -16,7 +16,7 @@ client = commands.Bot(command_prefix="!", intents=intents)
 
 @client.event
 async def on_ready():
-    print(f"{client.user.name} is ready")
+    print("Baya's Macro Bot has been successfully Activated!")
 
 @client.hybrid_command()
 async def sync(ctx: commands.Context):
