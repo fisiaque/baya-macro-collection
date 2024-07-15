@@ -7,6 +7,7 @@ import discord
 from discord.ext import commands
 from discord import Interaction
 
+#main
 load_dotenv()
 intents = discord.Intents.default()
 intents.message_content = True
@@ -29,6 +30,18 @@ async def hello(ctx):
 
 @client.command()
 async def shutdown(ctx):
-    await ctx.send(f"{ctx.message.author.mention} Shutting down PC!")
+    await ctx.send(f"{ctx.message.author.mention} Attempting to shutdown PC!")
+
+    if os.name == 'nt':
+        # For Windows operating system
+        await ctx.send("Success")
+        os.system('shutdown /s /t 0')
+    elif os.name == 'posix':
+        # For Unix/Linux/Mac operating systems
+        await ctx.send("Success")
+        os.system('sudo shutdown now')
+    else:
+        await ctx.send("Failed")
+        print('Unsupported operating system.')
 
 client.run(token=TOKEN)
