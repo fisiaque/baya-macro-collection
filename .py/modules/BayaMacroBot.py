@@ -33,4 +33,3 @@ def run_bot():
 
     client.run(token=TOKEN)
 
-run_bot()
