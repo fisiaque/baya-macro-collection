@@ -1,17 +1,10 @@
 # python
-# pre-imports
+# imports
 import os, sys
 from modules import *
 
-# get current directory
-dir_path = os.path.dirname(os.path.realpath(__file__))
+# variables
+discord_id = 400783672980144128 #faizulhaque discord id 
 
-print("Current Directory", dir_path)
-
-#post-imports
-
-sys.path.insert(1, "/".join(os.path.realpath(__file__).split("/")[0:-2]) + "/lib")
-
-#print(os.path.dirname(os.path.expanduser('~/lib')))
-
-BayaMacroBot.run_bot()
+# discord bot
+BayaMacroBot.run_bot(discord_id)

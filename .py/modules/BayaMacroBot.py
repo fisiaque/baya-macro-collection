@@ -7,7 +7,7 @@ from dotenv import find_dotenv, load_dotenv
 from discord import app_commands
 from discord.ext import commands
 
-def run_bot():
+def run_bot(discord_id):
     load_dotenv()
     TOKEN = os.getenv('discord_token')
 
@@ -18,7 +18,7 @@ def run_bot():
 
     @client.event
     async def on_ready():
-        print("Bot is running")
+        print("Bot is Activated!")
 
         try:
             await tree.sync()
@@ -28,8 +28,12 @@ def run_bot():
 
     @tree.command(name='shutdown')
     async def shutdown(interaction: discord.Integration):
-        await interaction.response.send_message(f"{interaction.user.mention} Shutting down PC!")
-        os.system('shutdown -s')
+
+        if discord_id == interaction.user.id:
+            await interaction.response.send_message(f"{interaction.user.mention} Shutting down PC!")
+            os.system('shutdown -s')
+        elif discord_id != interaction.user.id:
+            await interaction.response.send_message(f"{interaction.user.mention} Did not start bot!")
 
     client.run(token=TOKEN)
 
