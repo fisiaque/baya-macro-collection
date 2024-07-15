@@ -1,5 +1,4 @@
 # python
-
 # imports
 import os
 import discord
@@ -11,7 +10,7 @@ from discord.ext import commands
 def run_bot():
     load_dotenv()
     TOKEN = os.getenv('discord_token')
-    
+
     intents = discord.Intents.default()
     client = discord.Client(intents=intents)
 
@@ -27,9 +26,10 @@ def run_bot():
         except Exception as e:
             print(e)
 
-    @tree.command(name='hello')
-    async def hello(interaction: discord.Integration):
-        await interaction.response.send_message(f"Hey! {interaction.user.mention} Hello!")
+    @tree.command(name='shutdown')
+    async def shutdown(interaction: discord.Integration):
+        await interaction.response.send_message(f"{interaction.user.mention} Shutting down PC!")
+        os.system('shutdown -s')
 
     client.run(token=TOKEN)
 
