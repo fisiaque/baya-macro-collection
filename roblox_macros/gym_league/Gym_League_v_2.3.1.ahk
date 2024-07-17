@@ -11,64 +11,64 @@ Persistent
 OnExit ExitFunc
 
 ; #includes
-#Include webhook.ahk
-#Include FileReadLine.ahk
-#Include CaptureScreen.ahk
+#Include modules\webhook.ahk
+#Include modules\FileReadLine.ahk
+#Include modules\CaptureScreen.ahk
 
 CoordMode "Pixel", "Window"
 CoordMode "Mouse", "Window"
 
 ; #File install
-if !(FileExist(A_Temp "\.disconnected.png")) {
-    FileInstall "C:\Users\ofhaq\Documents\.baya_macros\.roblox_macros\.gym_league\.imgs\.disconnected.png", A_Temp "\.disconnected.png", 1
+if !(FileExist(A_Temp "\disconnected.png")) {
+    FileInstall "C:\Users\ofhaq\Documents\baya_macros\roblox_macros\gym_league\images\disconnected.png", A_Temp "\disconnected.png", 1
 } 
-if !(FileExist(A_Temp "\.loading.png")) {
-    FileInstall "C:\Users\ofhaq\Documents\.baya_macros\.roblox_macros\.gym_league\.imgs\.loading.png", A_Temp "\.loading.png", 1
+if !(FileExist(A_Temp "\loading.png")) {
+    FileInstall "C:\Users\ofhaq\Documents\baya_macros\roblox_macros\gym_league\images\loading.png", A_Temp "\loading.png", 1
 } 
 ; equipment
-if !(FileExist(A_Temp "\.treadmill_auto_train.png")) {
-    FileInstall "C:\Users\ofhaq\Documents\.baya_macros\.roblox_macros\.gym_league\.imgs\.treadmill_auto_train.png", A_Temp "\.treadmill_auto_train.png", 1
+if !(FileExist(A_Temp "\treadmill_auto_train.png")) {
+    FileInstall "C:\Users\ofhaq\Documents\baya_macros\roblox_macros\gym_league\images\treadmill_auto_train.png", A_Temp "\treadmill_auto_train.png", 1
 } 
-if !(FileExist(A_Temp "\.later.png")) {
-    FileInstall "C:\Users\ofhaq\Documents\.baya_macros\.roblox_macros\.gym_league\.imgs\.later.png", A_Temp "\.later.png", 1
+if !(FileExist(A_Temp "\later.png")) {
+    FileInstall "C:\Users\ofhaq\Documents\baya_macros\roblox_macros\gym_league\images\later.png", A_Temp "\later.png", 1
 } 
-if !(FileExist(A_Temp "\.cross.png")) {
-    FileInstall "C:\Users\ofhaq\Documents\.baya_macros\.roblox_macros\.gym_league\.imgs\.cross.png", A_Temp "\.cross.png", 1
+if !(FileExist(A_Temp "\cross.png")) {
+    FileInstall "C:\Users\ofhaq\Documents\baya_macros\roblox_macros\gym_league\images\cross.png", A_Temp "\cross.png", 1
 } 
-if !(FileExist(A_Temp "\.auto_load.png")) {
-    FileInstall "C:\Users\ofhaq\Documents\.baya_macros\.roblox_macros\.gym_league\.imgs\.auto_load.png", A_Temp "\.auto_load.png", 1
+if !(FileExist(A_Temp "\auto_load.png")) {
+    FileInstall "C:\Users\ofhaq\Documents\baya_macros\roblox_macros\gym_league\images\auto_load.png", A_Temp "\auto_load.png", 1
 } 
 ;gym_league icon
-if !(FileExist(A_Temp "\.gym_league.ico")) {
-    FileInstall "C:\Users\ofhaq\Documents\.baya_macros\.roblox_macros\.icons\.gym_league.ico", A_Temp "\.gym_league.ico", 1
+if !(FileExist(A_Temp "\gym_league_icon.ico")) {
+    FileInstall "C:\Users\ofhaq\Documents\baya_macros\roblox_macros\icons\gym_league_icon.ico", A_Temp "\gym_league_icon.ico", 1
 } 
 ;stats
-if !(FileExist(A_Temp "\.Abs.png")) {
-    FileInstall "C:\Users\ofhaq\Documents\.baya_macros\.roblox_macros\.gym_league\.imgs\.Abs.png", A_Temp "\.Abs.png", 1
+if !(FileExist(A_Temp "\abs.png")) {
+    FileInstall "C:\Users\ofhaq\Documents\baya_macros\roblox_macros\gym_league\images\abs.png", A_Temp "\abs.png", 1
 } 
-if !(FileExist(A_Temp "\.Back.png")) {
-    FileInstall "C:\Users\ofhaq\Documents\.baya_macros\.roblox_macros\.gym_league\.imgs\.Back.png", A_Temp "\.Back.png", 1
+if !(FileExist(A_Temp "\back.png")) {
+    FileInstall "C:\Users\ofhaq\Documents\baya_macros\roblox_macros\gym_league\images\back.png", A_Temp "\back.png", 1
 } 
-if !(FileExist(A_Temp "\.Biceps.png")) {
-    FileInstall "C:\Users\ofhaq\Documents\.baya_macros\.roblox_macros\.gym_league\.imgs\.Biceps.png", A_Temp "\.Biceps.png", 1
+if !(FileExist(A_Temp "\biceps.png")) {
+    FileInstall "C:\Users\ofhaq\Documents\baya_macros\roblox_macros\gym_league\images\biceps.png", A_Temp "\biceps.png", 1
 } 
-if !(FileExist(A_Temp "\.Calves.png")) {
-    FileInstall "C:\Users\ofhaq\Documents\.baya_macros\.roblox_macros\.gym_league\.imgs\.Calves.png", A_Temp "\.Calves.png", 1
+if !(FileExist(A_Temp "\calves.png")) {
+    FileInstall "C:\Users\ofhaq\Documents\baya_macros\roblox_macros\gym_league\images\calves.png", A_Temp "\calves.png", 1
 } 
-if !(FileExist(A_Temp "\.Chest.png")) {
-    FileInstall "C:\Users\ofhaq\Documents\.baya_macros\.roblox_macros\.gym_league\.imgs\.Chest.png", A_Temp "\.Chest.png", 1
+if !(FileExist(A_Temp "\chest.png")) {
+    FileInstall "C:\Users\ofhaq\Documents\baya_macros\roblox_macros\gym_league\images\chest.png", A_Temp "\chest.png", 1
 } 
-if !(FileExist(A_Temp "\.Forearm.png")) {
-    FileInstall "C:\Users\ofhaq\Documents\.baya_macros\.roblox_macros\.gym_league\.imgs\.Forearm.png", A_Temp "\.Forearm.png", 1
+if !(FileExist(A_Temp "\forearm.png")) {
+    FileInstall "C:\Users\ofhaq\Documents\baya_macros\roblox_macros\gym_league\images\forearm.png", A_Temp "\forearm.png", 1
 } 
-if !(FileExist(A_Temp "\.Legs.png")) {
-    FileInstall "C:\Users\ofhaq\Documents\.baya_macros\.roblox_macros\.gym_league\.imgs\.Legs.png", A_Temp "\.Legs.png", 1
+if !(FileExist(A_Temp "\legs.png")) {
+    FileInstall "C:\Users\ofhaq\Documents\baya_macros\roblox_macros\gym_league\images\legs.png", A_Temp "\legs.png", 1
 } 
-if !(FileExist(A_Temp "\.Shoulders.png")) {
-    FileInstall "C:\Users\ofhaq\Documents\.baya_macros\.roblox_macros\.gym_league\.imgs\.Shoulders.png", A_Temp "\.Shoulders.png", 1
+if !(FileExist(A_Temp "\shoulder.png")) {
+    FileInstall "C:\Users\ofhaq\Documents\baya_macros\roblox_macros\gym_league\images\shoulder.png", A_Temp "\shoulder.png", 1
 } 
-if !(FileExist(A_Temp "\.Triceps.png")) {
-    FileInstall "C:\Users\ofhaq\Documents\.baya_macros\.roblox_macros\.gym_league\.imgs\.Triceps.png", A_Temp "\.Triceps.png", 1
+if !(FileExist(A_Temp "\triceps.png")) {
+    FileInstall "C:\Users\ofhaq\Documents\baya_macros\roblox_macros\gym_league\images\triceps.png", A_Temp "\triceps.png", 1
 } 
 ;words
 
@@ -81,7 +81,7 @@ status := Object()
 machine := Object()
 
 ; #pre-variables
-directories.Images := "C:\Users\ofhaq\Documents\.baya_macros\.roblox_macros\.gym_league\.imgs\"
+directories.Images := "C:\Users\ofhaq\Documents\baya_macros\roblox_macros\gym_league\images\"
 
 status.Ready := 0
 status.RegeneratingStamina := 0
@@ -134,22 +134,22 @@ for _, stat in trackArray {
     imageFilePaths.Push(A_Temp "\." stat ".png" or directories.Images "." stat ".png")
 }
 
-images.Disconnected := A_Temp "\.disconnected.png" or directories.Images ".disconnected.png"
-images.Loading := A_Temp "\.loading.png" or directories.Images ".loading.png"
-images.TreadmillAutoTrain := A_Temp "\.treadmill_auto_train.png" or directories.Images ".treadmill_auto_train.png"
-images.RateLater := A_Temp "\.later.png" or directories.Images ".later.png"
-images.CrossPopups := A_Temp "\.cross.png" or directories.Images ".cross.png"
-images.WeightAutoLoad := A_Temp "\.auto_load.png" or directories.Images ".auto_load.png"
-images.Icon := A_Temp "\.gym_league.ico" or directories.Images ".gym_league.ico"
-images.Abs := A_Temp "\.Abs.png" or directories.Images ".Abs.png"
-images.Back := A_Temp "\.Back.png" or directories.Images ".Back.png"
-images.Biceps := A_Temp "\.Biceps.png" or directories.Images ".Biceps.png"
-images.Calves := A_Temp "\.Calves.png" or directories.Images ".Calves.png"
-images.Chest := A_Temp "\.Chest.png" or directories.Images ".Chest.png"
-images.Forearm := A_Temp "\.Forearm.png" or directories.Images ".Forearm.png"
-images.Legs := A_Temp "\.Legs.png" or directories.Images ".Legs.png"
-images.Shoulders := A_Temp "\.Shoulders.png" or directories.Images ".Shoulders.png"
-images.Triceps := A_Temp "\.Triceps.png" or directories.Images ".Triceps.png"
+images.Disconnected := A_Temp "\disconnected.png" or directories.Images "disconnected.png"
+images.Loading := A_Temp "\loading.png" or directories.Images "loading.png"
+images.TreadmillAutoTrain := A_Temp "\treadmill_auto_train.png" or directories.Images "treadmill_auto_train.png"
+images.RateLater := A_Temp "\later.png" or directories.Images "later.png"
+images.CrossPopups := A_Temp "\cross.png" or directories.Images "cross.png"
+images.WeightAutoLoad := A_Temp "\auto_load.png" or directories.Images "auto_load.png"
+images.Icon := A_Temp "\gym_league_icon.ico" or directories.Images "gym_league_icon.ico"
+imagesabs := A_Temp "\abs.png" or directories.Images "abs.png"
+imagesback := A_Temp "\back.png" or directories.Images "back.png"
+imagesbiceps := A_Temp "\biceps.png" or directories.Images "biceps.png"
+imagescalves := A_Temp "\calves.png" or directories.Images "calves.png"
+imageschest := A_Temp "\chest.png" or directories.Images "chest.png"
+imagesforearm := A_Temp "\forearm.png" or directories.Images "forearm.png"
+imageslegs := A_Temp "\legs.png" or directories.Images "legs.png"
+imagesshoulder := A_Temp "\shoulder.png" or directories.Images "shoulder.png"
+imagestriceps := A_Temp "\triceps.png" or directories.Images "triceps.png"
 
 weightAutoLoadTime := 60000 ; -- 60 seconds
 maxRetryCounter := 50
