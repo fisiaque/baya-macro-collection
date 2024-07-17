@@ -8,58 +8,58 @@ CoordMode "Mouse", "Window"
 ; fileinstall
 ;icon
 if !(FileExist(A_Temp "\.baya_icon.ico")) {
-    FileInstall "C:\Users\ofhaq\Documents\.elden_ring\.ahk\.imgs\.baya_icon.ico", A_Temp "\.baya_icon.ico", 1
+    FileInstall "C:\Users\ofhaq\Documents\.baya_macros\.elden_ring\.ahk\.imgs\.baya_icon.ico", A_Temp "\.baya_icon.ico", 1
 } 
 if !(FileExist(A_Temp "\.ricon_icon.ico")) {
-    FileInstall "C:\Users\ofhaq\Documents\.elden_ring\.ahk\.imgs\.ricon_icon.ico", A_Temp "\.ricon_icon.ico", 1
+    FileInstall "C:\Users\ofhaq\Documents\.baya_macros\.elden_ring\.ahk\.imgs\.ricon_icon.ico", A_Temp "\.ricon_icon.ico", 1
 } 
 ;settings
 if !(FileExist(A_Temp "\.settings.png")) {
-    FileInstall "C:\Users\ofhaq\Documents\.elden_ring\.ahk\.imgs\.settings.png", A_Temp "\.settings.png", 1
+    FileInstall "C:\Users\ofhaq\Documents\.baya_macros\.elden_ring\.ahk\.imgs\.settings.png", A_Temp "\.settings.png", 1
 } 
 ;next
 if !(FileExist(A_Temp "\.next.png")) {
-    FileInstall "C:\Users\ofhaq\Documents\.elden_ring\.ahk\.imgs\.next.png", A_Temp "\.next.png", 1
+    FileInstall "C:\Users\ofhaq\Documents\.baya_macros\.elden_ring\.ahk\.imgs\.next.png", A_Temp "\.next.png", 1
 } 
 ;compass_circle
 if !(FileExist(A_Temp "\.compass_circle.png")) {
-    FileInstall "C:\Users\ofhaq\Documents\.elden_ring\.ahk\.imgs\.compass_circle.png", A_Temp "\.compass_circle.png", 1
+    FileInstall "C:\Users\ofhaq\Documents\.baya_macros\.elden_ring\.ahk\.imgs\.compass_circle.png", A_Temp "\.compass_circle.png", 1
 } 
 ;x1
 if !(FileExist(A_Temp "\.x1.png")) {
-    FileInstall "C:\Users\ofhaq\Documents\.elden_ring\.ahk\.imgs\.x1.png", A_Temp "\.x1.png", 1
+    FileInstall "C:\Users\ofhaq\Documents\.baya_macros\.elden_ring\.ahk\.imgs\.x1.png", A_Temp "\.x1.png", 1
 } 
 ;retrieve
 if !(FileExist(A_Temp "\.retrieve.png")) {
-    FileInstall "C:\Users\ofhaq\Documents\.elden_ring\.ahk\.imgs\.retrieve.png", A_Temp "\.retrieve.png", 1
+    FileInstall "C:\Users\ofhaq\Documents\.baya_macros\.elden_ring\.ahk\.imgs\.retrieve.png", A_Temp "\.retrieve.png", 1
 } 
 ;switch
 if !(FileExist(A_Temp "\.switch.png")) {
-    FileInstall "C:\Users\ofhaq\Documents\.elden_ring\.ahk\.imgs\.switch.png", A_Temp "\.switch.png", 1
+    FileInstall "C:\Users\ofhaq\Documents\.baya_macros\.elden_ring\.ahk\.imgs\.switch.png", A_Temp "\.switch.png", 1
 } 
 ;sites
 if !(FileExist(A_Temp "\.sites.png")) {
-    FileInstall "C:\Users\ofhaq\Documents\.elden_ring\.ahk\.imgs\.sites.png", A_Temp "\.sites.png", 1
+    FileInstall "C:\Users\ofhaq\Documents\.baya_macros\.elden_ring\.ahk\.imgs\.sites.png", A_Temp "\.sites.png", 1
 } 
 ;ok
 if !(FileExist(A_Temp "\.ok.png")) {
-    FileInstall "C:\Users\ofhaq\Documents\.elden_ring\.ahk\.imgs\.ok.png", A_Temp "\.ok.png", 1
+    FileInstall "C:\Users\ofhaq\Documents\.baya_macros\.elden_ring\.ahk\.imgs\.ok.png", A_Temp "\.ok.png", 1
 } 
 ;exit
 if !(FileExist(A_Temp "\.exit.png")) {
-    FileInstall "C:\Users\ofhaq\Documents\.elden_ring\.ahk\.imgs\.exit.png", A_Temp "\.exit.png", 1
+    FileInstall "C:\Users\ofhaq\Documents\.baya_macros\.elden_ring\.ahk\.imgs\.exit.png", A_Temp "\.exit.png", 1
 } 
 ;quit_game
 if !(FileExist(A_Temp "\.quit_game.png")) {
-    FileInstall "C:\Users\ofhaq\Documents\.elden_ring\.ahk\.imgs\.quit_game.png", A_Temp "\.quit_game.png", 1
+    FileInstall "C:\Users\ofhaq\Documents\.baya_macros\.elden_ring\.ahk\.imgs\.quit_game.png", A_Temp "\.quit_game.png", 1
 } 
 ;return
 if !(FileExist(A_Temp "\.return.png")) {
-    FileInstall "C:\Users\ofhaq\Documents\.elden_ring\.ahk\.imgs\.return.png", A_Temp "\.return.png", 1
+    FileInstall "C:\Users\ofhaq\Documents\.baya_macros\.elden_ring\.ahk\.imgs\.return.png", A_Temp "\.return.png", 1
 } 
 ;yes
 if !(FileExist(A_Temp "\.yes.png")) {
-    FileInstall "C:\Users\ofhaq\Documents\.elden_ring\.ahk\.imgs\.yes.png", A_Temp "\.yes.png", 1
+    FileInstall "C:\Users\ofhaq\Documents\.baya_macros\.elden_ring\.ahk\.imgs\.yes.png", A_Temp "\.yes.png", 1
 } 
 ; objects
 directories := Object()
@@ -68,7 +68,7 @@ data := Object()
 status := Object()
 
 ; #pre-variables
-directories.Images := "C:\Users\ofhaq\Documents\.elden_ring\.ahk\.imgs\"
+directories.Images := "C:\Users\ofhaq\Documents\.baya_macros\.elden_ring\.ahk\.imgs\"
 
 ; images
 images.Icon := A_Temp "\.baya_icon.ico" or directories.Images ".baya_icon.ico"
