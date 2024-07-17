@@ -6,12 +6,12 @@ CoordMode "Pixel", "Window"
 CoordMode "Mouse", "Window"
 
 ; fileinstall
-;icon
+;icons
 if !(FileExist(A_Temp "\.baya_icon.ico")) {
-    FileInstall "C:\Users\ofhaq\Documents\.baya_macros\.elden_ring\.ahk\.imgs\.baya_icon.ico", A_Temp "\.baya_icon.ico", 1
+    FileInstall "C:\Users\ofhaq\Documents\.baya_macros\.elden_ring\.icons\.baya_icon.ico", A_Temp "\.baya_icon.ico", 1
 } 
 if !(FileExist(A_Temp "\.ricon_icon.ico")) {
-    FileInstall "C:\Users\ofhaq\Documents\.baya_macros\.elden_ring\.ahk\.imgs\.ricon_icon.ico", A_Temp "\.ricon_icon.ico", 1
+    FileInstall "C:\Users\ofhaq\Documents\.baya_macros\.elden_ring\.icons\.ricon_icon.ico", A_Temp "\.ricon_icon.ico", 1
 } 
 ;settings
 if !(FileExist(A_Temp "\.settings.png")) {
