@@ -5,7 +5,7 @@
 InstallKeybdHook
 InstallMouseHook
 
-#Include C:\Users\ofhaq\Documents\.baya_macros\.elden_ring\.ahk\.libs\Handler.ahk
+#Include modules\Handler.ahk
 
 SetTitleMatchMode 2
 DetectHiddenWindows true
@@ -24,8 +24,8 @@ ExitFunc(ExitReason, ExitCode) {
 
     BlockInput "MouseMoveOff" 
 
-    if FileExist(A_Temp "\.runes.png") {
-        FileDelete A_Temp "\.runes.png"
+    if FileExist(A_Temp "\baya_macro_runes.png") {
+        FileDelete A_Temp "\baya_macro_runes.png"
     }   
 
     for name, file in images.OwnProps() {

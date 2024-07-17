@@ -1,5 +1,5 @@
 ﻿#Requires AutoHotkey v2.0
-#Include misc.ahk
+#Include Miscellaneous.ahk
 #Include CaptureScreen.ahk
 
 CoordMode "Pixel", "Window"
@@ -7,59 +7,59 @@ CoordMode "Mouse", "Window"
 
 ; fileinstall
 ;icons
-if !(FileExist(A_Temp "\.baya_icon.ico")) {
-    FileInstall "C:\Users\ofhaq\Documents\.baya_macros\.elden_ring\.icons\.baya_icon.ico", A_Temp "\.baya_icon.ico", 1
+if !(FileExist(A_Temp "\baya_icon.ico")) {
+    FileInstall "..\icons\baya_icon.ico", A_Temp "\baya_icon.ico", 1
 } 
-if !(FileExist(A_Temp "\.ricon_icon.ico")) {
-    FileInstall "C:\Users\ofhaq\Documents\.baya_macros\.elden_ring\.icons\.ricon_icon.ico", A_Temp "\.ricon_icon.ico", 1
+if !(FileExist(A_Temp "\ricon_icon.ico")) {
+    FileInstall "..\icons\ricon_icon.ico", A_Temp "\ricon_icon.ico", 1
 } 
 ;settings
-if !(FileExist(A_Temp "\.settings.png")) {
-    FileInstall "C:\Users\ofhaq\Documents\.baya_macros\.elden_ring\.ahk\.imgs\.settings.png", A_Temp "\.settings.png", 1
+if !(FileExist(A_Temp "\baya_macro_settings.png")) {
+    FileInstall "images\baya_macro_settings.png", A_Temp "\baya_macro_settings.png", 1
 } 
 ;next
-if !(FileExist(A_Temp "\.next.png")) {
-    FileInstall "C:\Users\ofhaq\Documents\.baya_macros\.elden_ring\.ahk\.imgs\.next.png", A_Temp "\.next.png", 1
+if !(FileExist(A_Temp "\baya_macro_next.png")) {
+    FileInstall "images\baya_macro_next.png", A_Temp "\baya_macro_next.png", 1
 } 
 ;compass_circle
-if !(FileExist(A_Temp "\.compass_circle.png")) {
-    FileInstall "C:\Users\ofhaq\Documents\.baya_macros\.elden_ring\.ahk\.imgs\.compass_circle.png", A_Temp "\.compass_circle.png", 1
+if !(FileExist(A_Temp "\baya_macro_compass_circle.png")) {
+    FileInstall "images\baya_macro_compass_circle.png", A_Temp "\baya_macro_compass_circle.png", 1
 } 
 ;x1
-if !(FileExist(A_Temp "\.x1.png")) {
-    FileInstall "C:\Users\ofhaq\Documents\.baya_macros\.elden_ring\.ahk\.imgs\.x1.png", A_Temp "\.x1.png", 1
+if !(FileExist(A_Temp "\baya_macro_x1.png")) {
+    FileInstall "images\baya_macro_x1.png", A_Temp "\baya_macro_x1.png", 1
 } 
 ;retrieve
-if !(FileExist(A_Temp "\.retrieve.png")) {
-    FileInstall "C:\Users\ofhaq\Documents\.baya_macros\.elden_ring\.ahk\.imgs\.retrieve.png", A_Temp "\.retrieve.png", 1
+if !(FileExist(A_Temp "\baya_macro_retrieve.png")) {
+    FileInstall "images\baya_macro_retrieve.png", A_Temp "\baya_macro_retrieve.png", 1
 } 
 ;switch
-if !(FileExist(A_Temp "\.switch.png")) {
-    FileInstall "C:\Users\ofhaq\Documents\.baya_macros\.elden_ring\.ahk\.imgs\.switch.png", A_Temp "\.switch.png", 1
+if !(FileExist(A_Temp "\baya_macro_switch.png")) {
+    FileInstall "images\baya_macro_switch.png", A_Temp "\baya_macro_switch.png", 1
 } 
 ;sites
-if !(FileExist(A_Temp "\.sites.png")) {
-    FileInstall "C:\Users\ofhaq\Documents\.baya_macros\.elden_ring\.ahk\.imgs\.sites.png", A_Temp "\.sites.png", 1
+if !(FileExist(A_Temp "\baya_macro_sites.png")) {
+    FileInstall "images\baya_macro_sites.png", A_Temp "\baya_macro_sites.png", 1
 } 
 ;ok
-if !(FileExist(A_Temp "\.ok.png")) {
-    FileInstall "C:\Users\ofhaq\Documents\.baya_macros\.elden_ring\.ahk\.imgs\.ok.png", A_Temp "\.ok.png", 1
+if !(FileExist(A_Temp "\baya_macro_ok.png")) {
+    FileInstall "images\baya_macro_ok.png", A_Temp "\baya_macro_ok.png", 1
 } 
 ;exit
-if !(FileExist(A_Temp "\.exit.png")) {
-    FileInstall "C:\Users\ofhaq\Documents\.baya_macros\.elden_ring\.ahk\.imgs\.exit.png", A_Temp "\.exit.png", 1
+if !(FileExist(A_Temp "\baya_macro_exit.png")) {
+    FileInstall "images\baya_macro_exit.png", A_Temp "\baya_macro_exit.png", 1
 } 
 ;quit_game
-if !(FileExist(A_Temp "\.quit_game.png")) {
-    FileInstall "C:\Users\ofhaq\Documents\.baya_macros\.elden_ring\.ahk\.imgs\.quit_game.png", A_Temp "\.quit_game.png", 1
+if !(FileExist(A_Temp "\baya_macro_quit_game.png")) {
+    FileInstall "images\baya_macro_quit_game.png", A_Temp "\baya_macro_quit_game.png", 1
 } 
 ;return
-if !(FileExist(A_Temp "\.return.png")) {
-    FileInstall "C:\Users\ofhaq\Documents\.baya_macros\.elden_ring\.ahk\.imgs\.return.png", A_Temp "\.return.png", 1
+if !(FileExist(A_Temp "\baya_macro_return.png")) {
+    FileInstall "images\baya_macro_return.png", A_Temp "\baya_macro_return.png", 1
 } 
 ;yes
-if !(FileExist(A_Temp "\.yes.png")) {
-    FileInstall "C:\Users\ofhaq\Documents\.baya_macros\.elden_ring\.ahk\.imgs\.yes.png", A_Temp "\.yes.png", 1
+if !(FileExist(A_Temp "\baya_macro_yes.png")) {
+    FileInstall "images\baya_macro_yes.png", A_Temp "\baya_macro_yes.png", 1
 } 
 ; objects
 directories := Object()
@@ -68,25 +68,25 @@ data := Object()
 status := Object()
 
 ; #pre-variables
-directories.Images := "C:\Users\ofhaq\Documents\.baya_macros\.elden_ring\.ahk\.imgs\"
+directories.Images := "images\"
 
 ; images
-images.Icon := A_Temp "\.baya_icon.ico" or directories.Images ".baya_icon.ico"
-images.Icon2 := A_Temp "\.ricon_icon.ico" or directories.Images ".ricon_icon.ico"
+images.Icon := A_Temp "\baya_icon.ico" or directories.Images "baya_icon.ico"
+images.Icon2 := A_Temp "\ricon_icon.ico" or directories.Images "ricon_icon.ico"
 
-images.Settings := A_Temp "\.settings.png" or directories.Images ".settings.png"
-images.Next := A_Temp "\.next.png" or directories.Images ".next.png"
-images.CompassCircle := A_Temp "\.compass_circle.png" or directories.Images ".compass_circle.png"
-images.Retrieve := A_Temp "\.retrieve.png" or directories.Images ".retrieve.png"
-images.Switch := A_Temp "\.switch.png" or directories.Images ".switch.png"
-images.Sites := A_Temp "\.sites.png" or directories.Images ".sites.png"
+images.Settings := A_Temp "\settings.png" or directories.Images "settings.png"
+images.Next := A_Temp "\next.png" or directories.Images "next.png"
+images.CompassCircle := A_Temp "\compass_circle.png" or directories.Images "compass_circle.png"
+images.Retrieve := A_Temp "\retrieve.png" or directories.Images "retrieve.png"
+images.Switch := A_Temp "\switch.png" or directories.Images "switch.png"
+images.Sites := A_Temp "\baya_macro_sites.png" or directories.Images "baya_macro_sites.png"
 
-images.yes := A_Temp "\.yes.png" or directories.Images ".yes.png"
-images.return := A_Temp "\.return.png" or directories.Images ".return.png"
-images.quit := A_Temp "\.quit_game.png" or directories.Images ".quit_game.png"
-images.exit := A_Temp "\.exit.png" or directories.Images ".exit.png"
-images.ok := A_Temp "\.ok.png" or directories.Images ".ok.png"
-images.x1 := A_Temp "\.x1.png" or directories.Images ".x1.png"
+imagesbaya_macro_yes := A_Temp "\baya_macro_yes.png" or directories.Images "baya_macro_yes.png"
+imagesbaya_macro_return := A_Temp "\baya_macro_return.png" or directories.Images "baya_macro_return.png"
+images.quit := A_Temp "\baya_macro_quit_game.png" or directories.Images "baya_macro_quit_game.png"
+imagesbaya_macro_exit := A_Temp "\baya_macro_exit.png" or directories.Images "baya_macro_exit.png"
+imagesbaya_macro_ok := A_Temp "\baya_macro_ok.png" or directories.Images "baya_macro_ok.png"
+imagesx1 := A_Temp "\x1.png" or directories.Images "x1.png"
 
 ; variables
 status.Running := 0
@@ -288,7 +288,7 @@ RestAtGrace() {
         Sleep 400
     }
 
-    if ImageSearch(&FoundX, &FoundY, 679, 571, 819, 599, "*100 " images.ok) {
+    if ImageSearch(&FoundX, &FoundY, 679, 571, 819, 599, "*100 " imagesbaya_macro_ok) {
         MovingMouse(FoundX, FoundY, "Left", 2)
     } else {
         TravelAccept()
@@ -484,11 +484,11 @@ GoToSkeleton() {
 
         LoopSkip := A_TickCount
 
-        while !ImageSearch(&_, &_, 1489, 818, 1909, 882, "*100 " images.x1) and A_TickCount - LoopSkip < 1500 {
+        while !ImageSearch(&_, &_, 1489, 818, 1909, 882, "*100 " imagesx1) and A_TickCount - LoopSkip < 1500 {
             Sleep 100
         }
 
-        if ImageSearch(&_, &_, 1489, 818, 1909, 882, "*100 " images.x1) {
+        if ImageSearch(&_, &_, 1489, 818, 1909, 882, "*100 " imagesx1) {
             MsgBox "ITEM COLLECTED"
         }
         
@@ -583,7 +583,7 @@ ReturnToDesktop() {
 
     LoopSkip := A_TickCount ; reset timer
 
-    while !ImageSearch(&ExitX, &ExitY, 1161, 166, 1219, 219, "*100 " images.exit) {
+    while !ImageSearch(&ExitX, &ExitY, 1161, 166, 1219, 219, "*100 " imagesbaya_macro_exit) {
         if A_TickCount - LoopSkip >= 10000 { ; skips loop after 10 seconds
             Notify("<@" data.DiscordUserId "> Cannot find exit button... `nTried for 10 seconds, closing Baya's Macro!")
 
@@ -597,7 +597,7 @@ ReturnToDesktop() {
 
     LoopSkip := A_TickCount ; reset timer
 
-    while !ImageSearch(&_, &_, 590, 729, 1328, 767, "*100 " images.quit) or !ImageSearch(&_, &_, 590, 729, 1328, 767, "*100 " images.return) {
+    while !ImageSearch(&_, &_, 590, 729, 1328, 767, "*100 " images.quit) or !ImageSearch(&_, &_, 590, 729, 1328, 767, "*100 " imagesbaya_macro_return) {
         if A_TickCount - LoopSkip >= 10000 { ; skips loop after 10 seconds
             Notify("<@" data.DiscordUserId "> Cannot find 'Quit Game/Return To Desktop' buttons... `nTried for 10 seconds, closing Baya's Macro!")
 
@@ -611,7 +611,7 @@ ReturnToDesktop() {
 
     LoopSkip := A_TickCount ; reset timer
 
-    while !ImageSearch(&_, &_, 669, 557, 806, 588, "*100 " images.yes) {
+    while !ImageSearch(&_, &_, 669, 557, 806, 588, "*100 " imagesbaya_macro_yes) {
         if A_TickCount - LoopSkip >= 10000 { ; skips loop after 10 seconds
             Notify("<@" data.DiscordUserId "> Cannot find 'YES' button... `nTried for 10 seconds, closing Baya's Macro!")
 
@@ -625,7 +625,7 @@ ReturnToDesktop() {
 
     LoopSkip := A_TickCount ; reset timer
 
-    while ImageSearch(&YesX, &YesY, 669, 557, 806, 588, "*100 " images.yes) {
+    while ImageSearch(&YesX, &YesY, 669, 557, 806, 588, "*100 " imagesbaya_macro_yes) {
         if A_TickCount - LoopSkip >= 10000 { ; skips loop after 10 seconds
             Notify("<@" data.DiscordUserId "> Cannot click 'YES' button `nTried for 10 seconds, closing Baya's Macro!")
 
@@ -801,7 +801,7 @@ CaptureRunes() {
             }
         
             if ImageSearch(&_, &_, 38, 773, 137, 872, "*100 " images.Settings) {
-                outfile := A_Temp "\.runes.png"
+                outfile := A_Temp "\baya_macro_runes.png"
                 CaptureScreen( "1672, 1017, 1869, 1052", 0, outfile)
 
                 Sleep 500
@@ -837,15 +837,15 @@ UpdateStatsToDiscord() {
                 objParam := { content  : contentText
                     , username         : "Baya's Macro 🖱️⌨️"
                     , avatar_url       : "https://i.imgur.com/rTHyKfI.png"
-                    , file             : [A_Temp "\.runes.png"]
+                    , file             : [A_Temp "\baya_macro_runes.png"]
                 }
         
                 Webhook(data.DiscordWebhookURL, objParam)
             }
              
             
-            if FileExist(A_Temp "\.runes.png") {
-                FileDelete A_Temp "\.runes.png"
+            if FileExist(A_Temp "\baya_macro_runes.png") {
+                FileDelete A_Temp "\baya_macro_runes.png"
             }
         } else if A_TickCount - status.UpdateTime >= (data.DiscordInterval * 60000) {
             status.UpdateTime := A_TickCount
@@ -861,14 +861,14 @@ UpdateStatsToDiscord() {
                 objParam := { content  : contentText
                     , username         : "Baya's Macro 🖱️⌨️"
                     , avatar_url       : "https://i.imgur.com/rTHyKfI.png"
-                    , file             : [A_Temp "\.runes.png"]
+                    , file             : [A_Temp "\baya_macro_runes.png"]
                 }
                         
                 Webhook(data.DiscordWebhookURL, objParam) 
             }
                  
-            if FileExist(A_Temp "\.runes.png") {
-                FileDelete A_Temp "\.runes.png"
+            if FileExist(A_Temp "\baya_macro_runes.png") {
+                FileDelete A_Temp "\baya_macro_runes.png"
             }            
         }
     }

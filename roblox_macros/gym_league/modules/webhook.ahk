@@ -108,7 +108,7 @@ Webhook(URL, objParam) {
         ;objParam := { content       : "Hello? <@" 400783672980144128 ">"
         ;            , username      : "Baya's Macro 🖱️⌨️"
         ;            , avatar_url    : "https://i.imgur.com/rTHyKfI.png"
-        ;            , file          : [A_WorkingDir "\.imgs\.later.png"]  
+        ;            , file          : []  
         ;        }
         
     CreateFormData(&PostData, &hdr_ContentType, objParam)

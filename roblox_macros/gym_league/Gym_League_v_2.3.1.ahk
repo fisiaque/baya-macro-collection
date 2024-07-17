@@ -11,7 +11,7 @@ Persistent
 OnExit ExitFunc
 
 ; #includes
-#Include modules\webhook.ahk
+#Include modules\Webhook.ahk
 #Include modules\FileReadLine.ahk
 #Include modules\CaptureScreen.ahk
 
@@ -19,56 +19,56 @@ CoordMode "Pixel", "Window"
 CoordMode "Mouse", "Window"
 
 ; #File install
-if !(FileExist(A_Temp "\disconnected.png")) {
-    FileInstall "C:\Users\ofhaq\Documents\baya_macros\roblox_macros\gym_league\images\disconnected.png", A_Temp "\disconnected.png", 1
+if !(FileExist(A_Temp "\baya_macro_disconnected.png")) {
+    FileInstall "images\baya_macro_disconnected.png", A_Temp "\baya_macro_disconnected.png", 1
 } 
-if !(FileExist(A_Temp "\loading.png")) {
-    FileInstall "C:\Users\ofhaq\Documents\baya_macros\roblox_macros\gym_league\images\loading.png", A_Temp "\loading.png", 1
+if !(FileExist(A_Temp "\baya_macro_loading.png")) {
+    FileInstall "images\baya_macro_loading.png", A_Temp "\baya_macro_loading.png", 1
 } 
 ; equipment
-if !(FileExist(A_Temp "\treadmill_auto_train.png")) {
-    FileInstall "C:\Users\ofhaq\Documents\baya_macros\roblox_macros\gym_league\images\treadmill_auto_train.png", A_Temp "\treadmill_auto_train.png", 1
+if !(FileExist(A_Temp "\baya_macro_treadmill_auto_train.png")) {
+    FileInstall "images\baya_macro_treadmill_auto_train.png", A_Temp "\baya_macro_treadmill_auto_train.png", 1
 } 
-if !(FileExist(A_Temp "\later.png")) {
-    FileInstall "C:\Users\ofhaq\Documents\baya_macros\roblox_macros\gym_league\images\later.png", A_Temp "\later.png", 1
+if !(FileExist(A_Temp "\baya_macro_later.png")) {
+    FileInstall "images\baya_macro_later.png", A_Temp "\baya_macro_later.png", 1
 } 
-if !(FileExist(A_Temp "\cross.png")) {
-    FileInstall "C:\Users\ofhaq\Documents\baya_macros\roblox_macros\gym_league\images\cross.png", A_Temp "\cross.png", 1
+if !(FileExist(A_Temp "\baya_macro_cross.png")) {
+    FileInstall "images\baya_macro_cross.png", A_Temp "\baya_macro_cross.png", 1
 } 
-if !(FileExist(A_Temp "\auto_load.png")) {
-    FileInstall "C:\Users\ofhaq\Documents\baya_macros\roblox_macros\gym_league\images\auto_load.png", A_Temp "\auto_load.png", 1
+if !(FileExist(A_Temp "\baya_macro_auto_load.png")) {
+    FileInstall "images\baya_macro_auto_load.png", A_Temp "\baya_macro_auto_load.png", 1
 } 
 ;gym_league icon
 if !(FileExist(A_Temp "\gym_league_icon.ico")) {
-    FileInstall "C:\Users\ofhaq\Documents\baya_macros\roblox_macros\icons\gym_league_icon.ico", A_Temp "\gym_league_icon.ico", 1
+    FileInstall "..\icons\gym_league_icon.ico", A_Temp "\gym_league_icon.ico", 1
 } 
 ;stats
-if !(FileExist(A_Temp "\abs.png")) {
-    FileInstall "C:\Users\ofhaq\Documents\baya_macros\roblox_macros\gym_league\images\abs.png", A_Temp "\abs.png", 1
+if !(FileExist(A_Temp "\baya_macro_abs.png")) {
+    FileInstall "images\baya_macro_abs.png", A_Temp "\baya_macro_abs.png", 1
 } 
-if !(FileExist(A_Temp "\back.png")) {
-    FileInstall "C:\Users\ofhaq\Documents\baya_macros\roblox_macros\gym_league\images\back.png", A_Temp "\back.png", 1
+if !(FileExist(A_Temp "\baya_macro_back.png")) {
+    FileInstall "images\baya_macro_back.png", A_Temp "\baya_macro_back.png", 1
 } 
-if !(FileExist(A_Temp "\biceps.png")) {
-    FileInstall "C:\Users\ofhaq\Documents\baya_macros\roblox_macros\gym_league\images\biceps.png", A_Temp "\biceps.png", 1
+if !(FileExist(A_Temp "\baya_macro_biceps.png")) {
+    FileInstall "images\baya_macro_biceps.png", A_Temp "\baya_macro_biceps.png", 1
 } 
-if !(FileExist(A_Temp "\calves.png")) {
-    FileInstall "C:\Users\ofhaq\Documents\baya_macros\roblox_macros\gym_league\images\calves.png", A_Temp "\calves.png", 1
+if !(FileExist(A_Temp "\baya_macro_calves.png")) {
+    FileInstall "images\baya_macro_calves.png", A_Temp "\baya_macro_calves.png", 1
 } 
-if !(FileExist(A_Temp "\chest.png")) {
-    FileInstall "C:\Users\ofhaq\Documents\baya_macros\roblox_macros\gym_league\images\chest.png", A_Temp "\chest.png", 1
+if !(FileExist(A_Temp "\baya_macro_chest.png")) {
+    FileInstall "images\baya_macro_chest.png", A_Temp "\baya_macro_chest.png", 1
 } 
-if !(FileExist(A_Temp "\forearm.png")) {
-    FileInstall "C:\Users\ofhaq\Documents\baya_macros\roblox_macros\gym_league\images\forearm.png", A_Temp "\forearm.png", 1
+if !(FileExist(A_Temp "\baya_macro_forearm.png")) {
+    FileInstall "images\baya_macro_forearm.png", A_Temp "\baya_macro_forearm.png", 1
 } 
-if !(FileExist(A_Temp "\legs.png")) {
-    FileInstall "C:\Users\ofhaq\Documents\baya_macros\roblox_macros\gym_league\images\legs.png", A_Temp "\legs.png", 1
+if !(FileExist(A_Temp "\baya_macro_legs.png")) {
+    FileInstall "images\baya_macro_legs.png", A_Temp "\baya_macro_legs.png", 1
 } 
-if !(FileExist(A_Temp "\shoulder.png")) {
-    FileInstall "C:\Users\ofhaq\Documents\baya_macros\roblox_macros\gym_league\images\shoulder.png", A_Temp "\shoulder.png", 1
+if !(FileExist(A_Temp "\baya_macro_shoulder.png")) {
+    FileInstall "images\baya_macro_shoulder.png", A_Temp "\baya_macro_shoulder.png", 1
 } 
-if !(FileExist(A_Temp "\triceps.png")) {
-    FileInstall "C:\Users\ofhaq\Documents\baya_macros\roblox_macros\gym_league\images\triceps.png", A_Temp "\triceps.png", 1
+if !(FileExist(A_Temp "\baya_macro_triceps.png")) {
+    FileInstall "images\baya_macro_triceps.png", A_Temp "\baya_macro_triceps.png", 1
 } 
 ;words
 
@@ -81,7 +81,7 @@ status := Object()
 machine := Object()
 
 ; #pre-variables
-directories.Images := "C:\Users\ofhaq\Documents\baya_macros\roblox_macros\gym_league\images\"
+directories.Images := "images\"
 
 status.Ready := 0
 status.RegeneratingStamina := 0
@@ -134,22 +134,22 @@ for _, stat in trackArray {
     imageFilePaths.Push(A_Temp "\." stat ".png" or directories.Images "." stat ".png")
 }
 
-images.Disconnected := A_Temp "\disconnected.png" or directories.Images "disconnected.png"
-images.Loading := A_Temp "\loading.png" or directories.Images "loading.png"
-images.TreadmillAutoTrain := A_Temp "\treadmill_auto_train.png" or directories.Images "treadmill_auto_train.png"
-images.RateLater := A_Temp "\later.png" or directories.Images "later.png"
-images.CrossPopups := A_Temp "\cross.png" or directories.Images "cross.png"
-images.WeightAutoLoad := A_Temp "\auto_load.png" or directories.Images "auto_load.png"
+images.Disconnected := A_Temp "\baya_macro_disconnected.png" or directories.Images "baya_macro_disconnected.png"
+images.Loading := A_Temp "\baya_macro_loading.png" or directories.Images "baya_macro_loading.png"
+images.TreadmillAutoTrain := A_Temp "\baya_macro_treadmill_auto_train.png" or directories.Images "baya_macro_treadmill_auto_train.png"
+images.RateLater := A_Temp "\baya_macro_later.png" or directories.Images "baya_macro_later.png"
+images.CrossPopups := A_Temp "\baya_macro_cross.png" or directories.Images "baya_macro_cross.png"
+images.WeightAutoLoad := A_Temp "\baya_macro_auto_load.png" or directories.Images "baya_macro_auto_load.png"
 images.Icon := A_Temp "\gym_league_icon.ico" or directories.Images "gym_league_icon.ico"
-imagesabs := A_Temp "\abs.png" or directories.Images "abs.png"
-imagesback := A_Temp "\back.png" or directories.Images "back.png"
-imagesbiceps := A_Temp "\biceps.png" or directories.Images "biceps.png"
-imagescalves := A_Temp "\calves.png" or directories.Images "calves.png"
-imageschest := A_Temp "\chest.png" or directories.Images "chest.png"
-imagesforearm := A_Temp "\forearm.png" or directories.Images "forearm.png"
-imageslegs := A_Temp "\legs.png" or directories.Images "legs.png"
-imagesshoulder := A_Temp "\shoulder.png" or directories.Images "shoulder.png"
-imagestriceps := A_Temp "\triceps.png" or directories.Images "triceps.png"
+imagesabs := A_Temp "\baya_macro_abs.png" or directories.Images "baya_macro_abs.png"
+imagesback := A_Temp "\baya_macro_back.png" or directories.Images "baya_macro_back.png"
+imagesbiceps := A_Temp "\baya_macro_biceps.png" or directories.Images "baya_macro_biceps.png"
+imagescalves := A_Temp "\baya_macro_calves.png" or directories.Images "baya_macro_calves.png"
+imageschest := A_Temp "\baya_macro_chest.png" or directories.Images "baya_macro_chest.png"
+imagesforearm := A_Temp "\baya_macro_forearm.png" or directories.Images "baya_macro_forearm.png"
+imageslegs := A_Temp "\baya_macro_legs.png" or directories.Images "baya_macro_legs.png"
+imagesshoulder := A_Temp "\baya_macro_shoulder.png" or directories.Images "baya_macro_shoulder.png"
+imagestriceps := A_Temp "\baya_macro_triceps.png" or directories.Images "baya_macro_triceps.png"
 
 weightAutoLoadTime := 60000 ; -- 60 seconds
 maxRetryCounter := 50
@@ -372,12 +372,12 @@ ScreenCaptureStats() {
             if ImageSearch(&FoundX, &FoundY, 274, 410, 370, 425, "*TransWhite *30 " imageFilePaths[statPosition]) {
                 status.GotTracked := 1
         
-                outfile := A_Temp "\.stat.png"
+                outfile := A_Temp "\baya_macro_stats.png"
                 CaptureScreen( "400, 265, 566, 335", 0, outfile)
             
                 Sleep 500
             } else { ; if tracked image stat not found
-                outfile := A_Temp "\.stat.png"
+                outfile := A_Temp "\baya_macro_stats.png"
                 CaptureScreen( "240, 225, 575, 435", 0, outfile)
             
                 Sleep 500
@@ -423,15 +423,15 @@ UpdateStatsToDiscord() {
                 objParam := { content  : contentText
                     , username         : "Baya's Macro 🖱️⌨️"
                     , avatar_url       : "https://i.imgur.com/rTHyKfI.png"
-                    , file             : [A_Temp "\.stat.png"]
+                    , file             : [A_Temp "\baya_macro_stats.png"]
                 }
         
                 Webhook(data.DiscordWebhookURL, objParam)
             }
              
             
-            if FileExist(A_Temp "\.stat.png") {
-                FileDelete A_Temp "\.stat.png"
+            if FileExist(A_Temp "\baya_macro_stats.png") {
+                FileDelete A_Temp "\baya_macro_stats.png"
             }
         } else if A_TickCount - status.UpdateTime >= (data.DiscordUpdate * 60000) {
             status.UpdateTime := A_TickCount
@@ -452,14 +452,14 @@ UpdateStatsToDiscord() {
                 objParam := { content  : contentText
                     , username         : "Baya's Macro 🖱️⌨️"
                     , avatar_url       : "https://i.imgur.com/rTHyKfI.png"
-                    , file             : [A_Temp "\.stat.png"]
+                    , file             : [A_Temp "\baya_macro_stats.png"]
                 }
                         
                 Webhook(data.DiscordWebhookURL, objParam) 
             }
                  
-            if FileExist(A_Temp "\.stat.png") {
-                FileDelete A_Temp "\.stat.png"
+            if FileExist(A_Temp "\baya_macro_stats.png") {
+                FileDelete A_Temp "\baya_macro_stats.png"
             }            
         }
     }
