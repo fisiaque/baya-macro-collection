@@ -4,7 +4,7 @@
 
 #Include modules\FileInstaller.ahk
 #Include modules\FileReadLine.ahk
-#Include modules\Misc.ahk
+#Include modules\Miscellaneous.ahk
 
 TraySetIcon(EnvGet("Icon"))
 
