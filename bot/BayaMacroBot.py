@@ -1,6 +1,7 @@
 # python
 # imports
 import os, sys
+import pyperclip
 import discord
 from discord.ext import commands
 from discord import Interaction
@@ -19,6 +20,7 @@ if TOKEN != None and TOKEN != "":
 
     @client.event
     async def on_ready():
+        pyperclip.copy('success')
         print("Baya's Macro Bot has been successfully Activated! \n -'Minimize' Console if you wish for the bot to stay active \n -'Close' Console if you wish the bot to be deactivated")
 
     @client.hybrid_command()
