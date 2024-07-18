@@ -74,11 +74,11 @@ directories.Images := "images\"
 images.Icon := A_Temp "\baya_icon.ico" or directories.Images "baya_icon.ico"
 images.Icon2 := A_Temp "\ricon_icon.ico" or directories.Images "ricon_icon.ico"
 
-images.Settings := A_Temp "\settings.png" or directories.Images "settings.png"
-images.Next := A_Temp "\next.png" or directories.Images "next.png"
-images.CompassCircle := A_Temp "\compass_circle.png" or directories.Images "compass_circle.png"
-images.Retrieve := A_Temp "\retrieve.png" or directories.Images "retrieve.png"
-images.Switch := A_Temp "\switch.png" or directories.Images "switch.png"
+images.Settings := A_Temp "\baya_macro_settings.png" or directories.Images "baya_macro_settings.png"
+images.Next := A_Temp "\baya_macro_next.png" or directories.Images "baya_macro_next.png"
+images.CompassCircle := A_Temp "\baya_macro_compass_circle.png" or directories.Images "baya_macro_compass_circle.png"
+images.Retrieve := A_Temp "\baya_macro_retrieve.png" or directories.Images "baya_macro_retrieve.png"
+images.Switch := A_Temp "\baya_macro_switch.png" or directories.Images "baya_macro_switch.png"
 images.Sites := A_Temp "\baya_macro_sites.png" or directories.Images "baya_macro_sites.png"
 
 imagesbaya_macro_yes := A_Temp "\baya_macro_yes.png" or directories.Images "baya_macro_yes.png"
@@ -86,7 +86,7 @@ imagesbaya_macro_return := A_Temp "\baya_macro_return.png" or directories.Images
 images.quit := A_Temp "\baya_macro_quit_game.png" or directories.Images "baya_macro_quit_game.png"
 imagesbaya_macro_exit := A_Temp "\baya_macro_exit.png" or directories.Images "baya_macro_exit.png"
 imagesbaya_macro_ok := A_Temp "\baya_macro_ok.png" or directories.Images "baya_macro_ok.png"
-imagesx1 := A_Temp "\x1.png" or directories.Images "x1.png"
+imagesx1 := A_Temp "\baya_macro_x1.png" or directories.Images "baya_macro_x1.png"
 
 ; variables
 status.Running := 0
