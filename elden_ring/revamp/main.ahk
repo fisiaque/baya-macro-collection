@@ -31,8 +31,6 @@ env := FileExist(A_WorkingDir "\.env") and A_WorkingDir "\.env" or "..\..\.env"
 discord_Token := quoted(FileReadLine(env, 1)), 'Quoted', 'Iconi'
 discord_UserId := quoted(FileReadLine(env, 2)), 'Quoted', 'Iconi'
 discord_WebhookURL := quoted(FileReadLine(env, 3)), 'Quoted', 'Iconi'
-bot_Loaded := quoted(FileReadLine(env, 4)), 'Quoted', 'Iconi'
-bot_Shutdown := quoted(FileReadLine(env, 5)), 'Quoted', 'Iconi'
 
 ; checks
 checkBot := DiscordBotCheck.Bind(discord_Token)
