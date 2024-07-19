@@ -38,4 +38,3 @@ bot_Shutdown := quoted(FileReadLine(env, 5)), 'Quoted', 'Iconi'
 checkBot := DiscordBotCheck.Bind(discord_Token)
 
 SetTimer(checkBot, -50)
-
