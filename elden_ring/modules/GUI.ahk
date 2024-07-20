@@ -1,4 +1,6 @@
 ; #variables
+_gui := Object()
+
 _user_inputs := Object()
 _indexes := Object()
 _options := Object()
@@ -10,7 +12,7 @@ _options.Decisions := ["Yes", "No"]
 _ini := Object()
 
 _ini.Version := GetVersion()
-_ini.Name := "_baya's_macro_data_ER_" _ini.Version ".ini" 
+_ini.Name := GetIniName() 
 
 _lowest_Interval := 5
 _highest_Interval := 60
@@ -36,6 +38,9 @@ _ini.DiscordIntervals := Integer(quoted(StrReadLine(_ini.Discord_String, 4)))
 ; -- data | default
 _ini.DataAutoFarm := quoted(StrReadLine(_ini.Data_String, 1))
 _ini.DataLogMethod := quoted(StrReadLine(_ini.Data_String, 2))
+
+; -- variables
+_gui.Ready := 0
 
 ; -- get|check save file
 if !(FileExist(".\" _ini.Name)) {
@@ -160,7 +165,7 @@ StartUserInput(*)
     _ini.DataAutoFarm := _user_inputs.AutoFarmMethod
     _ini.DataLogMethod := _user_inputs.LogMethod
 
-    status.Ready := 1
+    _gui.Ready := 1
 }
 
 TestUserPing(*) {
@@ -174,7 +179,7 @@ TestUserPing(*) {
         try {
             _params := { content: "Test Ping? <@" _discord_User_Id ">"
                 , username      : "Baya's Macro 🖱️⌨️"
-                , avatar_url    : "https://i.imgur.com/rTHyKfI.png"
+                , avatar_url    :  "https://i.imgur.com/rTHyKfI.png"
             }
 
             Webhook(_discord_URL, _params)

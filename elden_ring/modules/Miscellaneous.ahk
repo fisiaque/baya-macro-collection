@@ -3,10 +3,11 @@ check := Object()
 
 ;#variables
 check.bot_tries := 0
+check.window_ready := 0
 
 ;#global
 global file_extensions := ['jpg','jpeg','png','gif','ico']
-
+ 
 ;#functions
 quoted(str) {
     If RegExMatch(str, "'(.+?)'", &m)
@@ -100,20 +101,20 @@ ExitFunction(ExitReason, ExitCode) {
 
     print("[ExitFunction] Processing Closure...")
     
-    ; loop through temp files
-    Loop Files, A_Temp "\*.*" { 
-        if (InStr(A_LoopFileName, "baya") or IsFileExtenstion(A_LoopFileExt) == 1) {
-            FileDelete A_LoopFileFullPath
-            print("[ExitFunction] " A_LoopFileName " Deleted")
-        }
-    }
-
     ; checks if bot is not active before delete exe
     if CheckBotNotActive() == 1 {
         ; delete bot exe
         if FileExist(A_WorkingDir "\BayaMacroBot.exe") and !(ProcessExist("BayaMacroBot.exe")) and !(WinExist("BayaMacroBot.exe")) {
             FileDelete A_WorkingDir "\BayaMacroBot.exe"
             print("[ExitFunction] BayaMacroBot.exe Deleted")
+        }
+    }
+
+    ; loop through temp files
+    Loop Files, A_Temp "\*.*" { 
+        if (IsFileExtenstion(A_LoopFileExt) == 1) {
+            FileDelete A_LoopFileFullPath
+            print("[ExitFunction] " A_LoopFileName " Deleted")
         }
     }
 } 
@@ -408,4 +409,37 @@ Webhook(URL, _params) {
         
     whr.Send(PostData)
     whr.WaitForResponse()
+}
+
+Checks() {
+    static _notified := A_TickCount
+    ;--
+    if _status._halt != 0 {
+        _status._halt := 1
+
+        ;RunWait '*RunAs taskkill.exe /F /T /IM BayaMacro.exe',, 'Hide'
+    }
+
+    ;-- window checks
+    if WinExist("ELDEN RING™") {
+        WinActivate
+        WinWaitActive
+
+        WinMove 0,0
+
+        WinGetClientPos &_, &_, &_game_Width, &_game_Height, "ELDEN RING™"
+
+        if _game_Width != 800 && _game_Height != 450 && A_TickCount - _notified >= 10000 { ; prints out every 10 seconds
+            _notified := A_TickCount
+            print("[CheckGameWindow] Make sure in-game resolution is 800x450 'Windowed'")
+
+            SoundBeep(1000)
+        } else {
+            check.window_ready := 1
+        }
+    } else if _status._auto_log != 1 and _status._halt != 1 {
+        print("[CheckGameWindow] Macro will be halting due to game closed!")
+        check.window_ready := 0
+        _status._halt := 1
+    }
 }

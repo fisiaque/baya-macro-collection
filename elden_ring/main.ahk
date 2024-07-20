@@ -3,6 +3,9 @@
 #MaxThreadsPerHotkey 2
 #SingleInstance Off
 
+CoordMode "Pixel", "Window"
+CoordMode "Mouse", "Window"
+
 Persistent
 DetectHiddenWindows True
 
@@ -88,7 +91,6 @@ CloseRunningScripts()
 #Include modules\FileInstaller.ahk
 #Include modules\Miscellaneous.ahk
 #Include modules\Hotkeys.ahk
-#Include modules\Game.ahk
 #Include modules\GUI.ahk
 #Include modules\Github.ahk
 
@@ -99,7 +101,14 @@ OnExit ExitFunction
 OnMessage 0x004A, Receive_WM_COPYDATA  ; 0x004A is WM_COPYDATA
 
 ; variables
+_status := Object()
+
+_status._halt := 0
+_status._running := 0
+_status._auto_log := 0
+
 env := FileExist(A_WorkingDir "\.env") and A_WorkingDir "\.env" or "..\.env"
+
 discord_Token := quoted(FileReadLine(env, 1)), 'Quoted', 'Iconi'
 
 ; checks
@@ -112,6 +121,6 @@ SetTimer(checkBot, -50)
 ; hotkeys
 SC01B::_stop_ ; stop
 
-#HotIf WinActive("ELDEN RING™") ; Any Scripts After Will Only Run If __game__ is Active
+#HotIf WinExist("ELDEN RING™") ; Any Scripts After Will Only Run If __game__ is Active
 
 SC01A::_start_ ; start

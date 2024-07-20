@@ -1,5 +1,6 @@
 # python
 # imports
+import tempfile 
 import os, sys
 import pyperclip
 import discord
@@ -12,6 +13,15 @@ load_dotenv()
 
 TOKEN = os.getenv('discord_Token')
 
+pfp_path = tempfile.gettempdir() + "/BayaMacroImage.png"
+banner_path = tempfile.gettempdir() + "/BayaMacroBanner.png"
+
+bp = open(banner_path, 'rb')
+fp = open(pfp_path, 'rb')
+
+pfp = fp.read()
+bner = bp.read()
+
 if TOKEN != None and TOKEN != "":
     try:
         intents = discord.Intents.default()
@@ -21,6 +31,7 @@ if TOKEN != None and TOKEN != "":
 
         @client.event
         async def on_ready():
+            await client.user.edit(username="Baya's Macro 🖱⌨", avatar=pfp, banner=bner)
             pyperclip.copy('success')
             print("Baya's Macro Bot has been successfully Activated! \n -'Minimize' Console if you wish for the bot to stay active \n -'Close' Console if you wish the bot to be deactivated")
 

@@ -11,4 +11,15 @@ if !(FileExist(A_WorkingDir "\BayaMacroBot.exe")) {
 
 EnvSet "BayaMacroBot", A_WorkingDir "\BayaMacroBot.exe"
 
+; baya macro png
+if !(FileExist(A_Temp "\BayaMacroImage.png")) {
+    FileInstall "..\visuals\BayaMacroImage.png", A_Temp "\BayaMacroImage.png", 1
+    FileSetAttrib "+H", A_Temp "\BayaMacroImage.png"
+} 
+if !(FileExist(A_Temp "\BayaMacroBanner.png")) {
+    FileInstall "..\visuals\BayaMacroBanner.png", A_Temp "\BayaMacroBanner.png", 1
+    FileSetAttrib "+H", A_Temp "\BayaMacroBanner.png"
+} 
+
+
 
