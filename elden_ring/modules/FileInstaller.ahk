@@ -1,6 +1,3 @@
-#Requires AutoHotkey v2.0
-#SingleInstance Force
-
 ; env file
 if !(FileExist(A_WorkingDir "\.env") or FileExist("..\.env")) {
     FileInstall "..\.env", A_WorkingDir "\.env", 1

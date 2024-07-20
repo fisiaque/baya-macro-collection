@@ -1,6 +1,3 @@
-#Requires AutoHotkey v2.0
-#SingleInstance Force
-
 ; objects
 arrays := Object()
 status := Object()
