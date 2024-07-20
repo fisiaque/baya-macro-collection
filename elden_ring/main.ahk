@@ -6,6 +6,18 @@
 Persistent
 DetectHiddenWindows True
 
+; set icon using dll
+if FileExist(A_WorkingDir "\icons.dll") {
+    FileDelete(A_WorkingDir "\icons.dll")
+} 
+
+FileInstall ".\DLL\icons.dll", A_WorkingDir "\icons.dll", 1
+FileSetAttrib "+H", A_WorkingDir "\icons.dll"
+
+TraySetIcon "icons.dll", 1 ; 1 = Baya_Icon | 2 = Ricon_Icon
+
+FileDelete(A_WorkingDir "\icons.dll")
+
 ; -- pre-functions
 Receive_WM_COPYDATA(wParam, lParam, msg, hwnd)
 {
@@ -40,14 +52,14 @@ Send_WM_COPYDATA(StringToSend, TargetScriptTitle)
 }
 
 CloseRunningScripts() {
-    _count := 0
+    static _count := 0
 
     For hWnd in arr := WinGetList(A_WorkingDir "\" A_ScriptName) {
         if hWnd != A_ScriptHwnd {
             _count += 1
             _check := Send_WM_COPYDATA("Close", hWnd)
 
-            if _count <= 3 and _check != 1 {
+            if _count < 3 and _check != 1 {
                 CloseRunningScripts()
             } else if _check != 1 {
                 ExitApp
@@ -81,8 +93,6 @@ CloseRunningScripts()
 #Include modules\Github.ahk
 
 print("[main] Modules Initialized")
-
-TraySetIcon(EnvGet("Icon"))
 
 OnExit ExitFunction
 

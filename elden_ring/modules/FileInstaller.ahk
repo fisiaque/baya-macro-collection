@@ -11,10 +11,4 @@ if !(FileExist(A_WorkingDir "\BayaMacroBot.exe")) {
 
 EnvSet "BayaMacroBot", A_WorkingDir "\BayaMacroBot.exe"
 
-; icons
-if !(FileExist(A_Temp "\baya_icon.ico")) {
-    FileInstall ".\icons\baya_icon.ico", A_Temp "\baya_icon.ico", 1
-    FileSetAttrib "+H", A_Temp "\baya_icon.ico"
-} 
 
-EnvSet "Icon", A_Temp "\baya_icon.ico"
