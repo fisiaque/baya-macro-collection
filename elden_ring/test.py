@@ -1,18 +1,22 @@
-import struct
-import win32con
+import sys
 import win32gui
-import struct, array
 
+def callback(hwnd, strings):
+    if win32gui.IsWindowVisible(hwnd):
+        window_title = win32gui.GetWindowText(hwnd)
+        left, top, right, bottom = win32gui.GetWindowRect(hwnd)
+        if window_title and right-left and bottom-top:
+            strings.append('0x{:08x}: "{}"'.format(hwnd, window_title))
+    return True
 
-int_buffer = array.array("L", [0])
-char_buffer = array.array('b', b"do manage open")
-int_buffer_address = int_buffer.buffer_info()[0]
+def main():
+    win_list = []  # list of strings containing win handles and window titles
+    win32gui.EnumWindows(callback, win_list)  # populate list
 
-# Add () to buffer_info to call it.
-char_buffer_address, char_buffer_size = char_buffer.buffer_info()
+    for window in win_list:  # print results
+        print(window)
 
-# Need P  type for the addresses.
-copy_struct = struct.pack("PLP",int_buffer_address,char_buffer_size, char_buffer_address)
+    sys.exit(0)
 
-hwnd = win32gui.FindWindow(None, "ZhornSoftwareStickiesMain")
-win32gui.SendMessage(19172, win32con.WM_COPYDATA, None, copy_struct) #657652 #1509624
+if __name__ == '__main__':
+    main()

@@ -21,11 +21,12 @@ TraySetIcon "icons.dll", 1 ; 1 = Baya_Icon | 2 = Ricon_Icon
 
 FileDelete(A_WorkingDir "\icons.dll")
 
-MsgBox "HWD: " 
+A_Clipboard := A_ScriptHwnd
 
 ; -- pre-functions
 Receive_WM_COPYDATA(wParam, lParam, msg, hwnd)
 {
+    MsgBox hwnd
     StringAddress := NumGet(lParam, 2*A_PtrSize, "Ptr")  ; Retrieves the CopyDataStruct's lpData member.
     CopyOfData := StrGet(StringAddress)  ; Copy the string out of the structure.
     
