@@ -148,7 +148,7 @@ DiscordBotCheck(discord_Token) {
 
 GithubUpdate() {
     ; #check macro version
-    latestObj := Github.latest("fiziaque", "Baya-Macro-Elden-Ring-Edition")
+    latestObj := Github.latest("bayamacro", "Baya-Macro-Elden-Ring-Edition")
 
     if GetVersion() != latestObj.version {
         print("[GithubUpdate] Update Macro?")
