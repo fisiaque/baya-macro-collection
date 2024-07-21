@@ -20,19 +20,22 @@ FileSetAttrib "+H", A_WorkingDir "\icons.dll"
 TraySetIcon "icons.dll", 1 ; 1 = Baya_Icon | 2 = Ricon_Icon
 
 FileDelete(A_WorkingDir "\icons.dll")
-A_Clipboard := A_ScriptHwnd
+
+MsgBox "HWD: " 
 
 ; -- pre-functions
 Receive_WM_COPYDATA(wParam, lParam, msg, hwnd)
 {
     StringAddress := NumGet(lParam, 2*A_PtrSize, "Ptr")  ; Retrieves the CopyDataStruct's lpData member.
     CopyOfData := StrGet(StringAddress)  ; Copy the string out of the structure.
+    
+    MsgBox CopyOfData
+    MsgBox msg
 
     if CopyOfData == "Close" and hwnd == A_ScriptHwnd {
         ExitApp
     }
-    MsgBox CopyOfData
-    MsgBox msg
+    
     return true  ; Returning 1 (true) is the traditional way to acknowledge this message.
 }
 Send_WM_COPYDATA(StringToSend, TargetScriptTitle)

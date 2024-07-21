@@ -8,7 +8,7 @@ Elden Ring AFK Farm by Faizul Haque <3
 
 IMPORTANT!
 
-Make Sure Display Setting is set to 1920 x 1080!
+Make Sure In-Game Resolution set to 800 x 450!
 
 For Bird Farm Arrows Reach Talisman + Rain of Arrows Required!
 Arrows Reach Talisman: https://medal.tv/games/elden-ring/clips/ieummd8WW_T0Fvspb/d1337oN5xWOL?invite=cr-MSxrb28sNjcxMTk0Miw
