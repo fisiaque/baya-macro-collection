@@ -20,6 +20,7 @@ FileSetAttrib "+H", A_WorkingDir "\icons.dll"
 TraySetIcon "icons.dll", 1 ; 1 = Baya_Icon | 2 = Ricon_Icon
 
 FileDelete(A_WorkingDir "\icons.dll")
+A_Clipboard := A_ScriptHwnd
 
 ; -- pre-functions
 Receive_WM_COPYDATA(wParam, lParam, msg, hwnd)
@@ -30,6 +31,8 @@ Receive_WM_COPYDATA(wParam, lParam, msg, hwnd)
     if CopyOfData == "Close" and hwnd == A_ScriptHwnd {
         ExitApp
     }
+    MsgBox CopyOfData
+    MsgBox msg
     return true  ; Returning 1 (true) is the traditional way to acknowledge this message.
 }
 Send_WM_COPYDATA(StringToSend, TargetScriptTitle)
@@ -111,6 +114,10 @@ _status._halt := 0
 _status._running := 0
 _status._auto_log := 0
 _status._macro := 0
+
+if !A_IsCompiled and !FileExist("..\.env") { ; if .env doesn't exist on source, create one
+    FileAppend "discord_Token = ''", "..\.env"
+}
 
 discord_env := !A_IsCompiled and "..\.env" or A_WorkingDir "\discord.env" 
 
