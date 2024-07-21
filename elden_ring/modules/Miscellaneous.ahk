@@ -152,7 +152,7 @@ GithubUpdate() {
 
     if GetVersion() != latestObj.version {
         print("[GithubUpdate] Update Macro?")
-        Result := MsgBox("Update Baya's Macro? (" latestObj.version ") `r`n- new file will be available at the same file directory `r`n- old file will be deleted after a few seconds", "Auto-Update", "YesNo T10")
+        Result := MsgBox("Update Baya's Macro? (" latestObj.version ") `r`n- new file will be available at the same file directory `r`n- old file will be deleted after a few seconds", "Auto-Update", "YesNo T10 0x40000")
 
         if Result = "Yes"{
             print("[GithubUpdate] Updated | Check Directory")
