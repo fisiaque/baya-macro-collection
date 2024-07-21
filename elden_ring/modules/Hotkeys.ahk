@@ -26,5 +26,7 @@ _start_() {
         if !A_IsPaused {
             Pause -1
         }
+    } else if _gui.Ready != 1 {
+        print("[Hotkeys] Save GUI Settings " _time_Pressed "ms")
     }
 }

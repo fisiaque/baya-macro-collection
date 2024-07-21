@@ -127,4 +127,4 @@ SetTimer(Checks, 1000)
 ; hotkeys
 SC01B::ExitApp ; stop
 
-SC01A::_start_ ; start
+SC01A::_start_ ; start[]

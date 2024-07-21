@@ -96,7 +96,7 @@ CheckBotNotActive() {
 }
 
 ExitFunction(ExitReason, ExitCode) {
-    SoundBeep(1500)
+    SoundBeep(250)
 
     print("[ExitFunction] Processing Closure...")
 
@@ -124,7 +124,7 @@ ExitFunction(ExitReason, ExitCode) {
 
 DiscordBotCheck(discord_Token) {
     if discord_Token != "" and CheckBotNotActive() == 1 {
-        print("[DiscordBotCheck] Activating Discord Command Bot...")
+        print("[DiscordBotCheck] Loading... (Timeout in 10s)")
     
         A_Clipboard := "" ;Empty Clipboard
     
@@ -134,7 +134,7 @@ DiscordBotCheck(discord_Token) {
 
         if A_Clipboard == "success" {
             print("[DiscordBotCheck] Successfully Activated!")
-        } else if A_Clipboard == "fail" {
+        } else {
             print("[DiscordBotCheck] Failed to Activate")
         }
 
