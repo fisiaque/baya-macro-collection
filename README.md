@@ -6,7 +6,7 @@
 # .elden_ring
 Elden Ring AFK Farm by Faizul Haque <3
 
-IMPORTANT!
+IMPORTANT! 
 
 Make Sure In-Game Resolution set to 800 x 450!
 
