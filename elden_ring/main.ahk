@@ -110,6 +110,7 @@ _status := Object()
 _status._halt := 0
 _status._running := 0
 _status._auto_log := 0
+_status._macro := 0
 
 discord_env := !A_IsCompiled and "..\.env" or A_WorkingDir "\discord.env" 
 
@@ -125,7 +126,5 @@ SetTimer(Checks, 1000)
 
 ; hotkeys
 SC01B::ExitApp ; stop
-
-#HotIf WinExist("ELDEN RING™") ; Any Scripts After Will Only Run If __game__ is Active
 
 SC01A::_start_ ; start

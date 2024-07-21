@@ -3,8 +3,6 @@ check := Object()
 
 ;#variables
 check.bot_tries := 0
-check.window_ready := 0
-check.window_ran := 0
 
 ;#global
 global file_extensions := ['jpg','jpeg','png','gif','ico']
@@ -420,26 +418,35 @@ Checks() {
     if _status._running == 1 {
         static _notified := A_TickCount
 
-        MsgBox("Check", "Debug", "Iconi T1")
-
         ;-- window checks
         if WinExist("ELDEN RING™") {
+            WinGetClientPos &_, &_, &_game_Width, &_game_Height, "ELDEN RING™"
+
+            if _game_Width != 800 && _game_Height != 450 { 
+                _status._macro := 0 ; macro stops it wrong resolution 
+
+                if A_TickCount - _notified >= 10000 { ; prints out every 10 seconds
+                    _notified := A_TickCount
+
+                    _time_String := FormatTime("hm", "Time")
+                    print("[Checks] (" _time_String ") : In-game resolution must be 800x450 'Windowed'")
+
+                    SoundBeep(1000)
+                }
+                
+                return
+            }
+
             WinActivate
             WinWaitActive
 
             WinMove 0,0
 
-            WinGetClientPos &_, &_, &_game_Width, &_game_Height, "ELDEN RING™"
-
-            if _game_Width != 800 && _game_Height != 450 && A_TickCount - _notified >= 10000 { ; prints out every 10 seconds
-                _notified := A_TickCount
-                check.window_ready := 0
-                check.window_ran := 0
-
-                print("[CheckGameWindow] Make sure in-game resolution is 800x450 'Windowed'")
-
-                SoundBeep(1000)
-            }
+            _status._macro := 1 ; macro starts when everything works
+        } else {
+            _status._macro := 0 ; when elden ring doesn't exist macro stops
         }
+    } else {
+        _status._macro := 0 ; when macro paused macro stops
     }
 }
