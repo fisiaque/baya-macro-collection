@@ -1,6 +1,6 @@
 ; env file
-if !(FileExist(A_WorkingDir "\.env") or FileExist("..\.env")) {
-    FileInstall "..\.env", A_WorkingDir "\.env", 1
+if !(FileExist(A_WorkingDir "\discord.env")) && A_IsCompiled {
+    FileInstall ".\files\discord.env", A_WorkingDir "\discord.env", 1
 } 
 
 ; discord bot

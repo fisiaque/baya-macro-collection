@@ -47,5 +47,3 @@ consoleGui.AddEdit("xm-8 ym+18 +Multi +Wrap +ReadOnly +r3 W214 h43 vStatus", sta
 consoleGui.AddGroupBox("xm-10 ym-12 w300 h30")
 
 consoleGui.Show("w" gui_Width " h" gui_Height " x" arrays.Position[1] " y" arrays.Position[2]) ;
-
-

@@ -4,6 +4,7 @@ check := Object()
 ;#variables
 check.bot_tries := 0
 check.window_ready := 0
+check.window_ran := 0
 
 ;#global
 global file_extensions := ['jpg','jpeg','png','gif','ico']
@@ -100,6 +101,10 @@ ExitFunction(ExitReason, ExitCode) {
     SoundBeep(1500)
 
     print("[ExitFunction] Processing Closure...")
+
+    SetTimer(Checks, 0)
+    
+    _status._running := 0
     
     ; checks if bot is not active before delete exe
     if CheckBotNotActive() == 1 {
@@ -412,34 +417,29 @@ Webhook(URL, _params) {
 }
 
 Checks() {
-    static _notified := A_TickCount
-    ;--
-    if _status._halt != 0 {
-        _status._halt := 1
+    if _status._running == 1 {
+        static _notified := A_TickCount
 
-        ;RunWait '*RunAs taskkill.exe /F /T /IM BayaMacro.exe',, 'Hide'
-    }
+        MsgBox("Check", "Debug", "Iconi T1")
 
-    ;-- window checks
-    if WinExist("ELDEN RING™") {
-        WinActivate
-        WinWaitActive
+        ;-- window checks
+        if WinExist("ELDEN RING™") {
+            WinActivate
+            WinWaitActive
 
-        WinMove 0,0
+            WinMove 0,0
 
-        WinGetClientPos &_, &_, &_game_Width, &_game_Height, "ELDEN RING™"
+            WinGetClientPos &_, &_, &_game_Width, &_game_Height, "ELDEN RING™"
 
-        if _game_Width != 800 && _game_Height != 450 && A_TickCount - _notified >= 10000 { ; prints out every 10 seconds
-            _notified := A_TickCount
-            print("[CheckGameWindow] Make sure in-game resolution is 800x450 'Windowed'")
+            if _game_Width != 800 && _game_Height != 450 && A_TickCount - _notified >= 10000 { ; prints out every 10 seconds
+                _notified := A_TickCount
+                check.window_ready := 0
+                check.window_ran := 0
 
-            SoundBeep(1000)
-        } else {
-            check.window_ready := 1
+                print("[CheckGameWindow] Make sure in-game resolution is 800x450 'Windowed'")
+
+                SoundBeep(1000)
+            }
         }
-    } else if _status._auto_log != 1 and _status._halt != 1 {
-        print("[CheckGameWindow] Macro will be halting due to game closed!")
-        check.window_ready := 0
-        _status._halt := 1
     }
 }

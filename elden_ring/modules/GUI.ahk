@@ -17,16 +17,22 @@ _ini.Name := GetIniName()
 _lowest_Interval := 5
 _highest_Interval := 60
 
+; -- indexes | default
+_indexes.DiscordTrack := 1
+
+_indexes.AutoFarmMethod := 1
+_indexes.LogMethod := 1
+
 ; -- Default Data
 _ini.Discord_String := (
     "discord_UserId = '' `r`n"
     "discord_WebhookURL = '' `r`n"
-    "discord_Track = '" _options.Decisions[1] "' `r`n"
+    "discord_Track = '" _options.Decisions[_indexes.DiscordTrack] "' `r`n"
     "discord_Intervals = '" _lowest_Interval "' `r`n"
 )
 _ini.Data_String := (
-    "data_AutoFarm = '" _options.AutoFarmMethods[1] "' `r`n"
-    "data_LogMethod = '" _options.LogMethods[1] "' `r`n"
+    "data_AutoFarm = '" _options.AutoFarmMethods[_indexes.AutoFarmMethod] "' `r`n"
+    "data_LogMethod = '" _options.LogMethods[_indexes.LogMethod] "' `r`n"
 )
 
 ; -- discord | default

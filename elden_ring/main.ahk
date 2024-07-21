@@ -57,15 +57,18 @@ Send_WM_COPYDATA(StringToSend, TargetScriptTitle)
 CloseRunningScripts() {
     static _count := 0
 
+    _count += 1
+
     For hWnd in arr := WinGetList(A_WorkingDir "\" A_ScriptName) {
         if hWnd != A_ScriptHwnd {
-            _count += 1
             _check := Send_WM_COPYDATA("Close", hWnd)
 
             if _count < 3 and _check != 1 {
                 CloseRunningScripts()
             } else if _check != 1 {
                 ExitApp
+            } else {
+                _count := 0
             }
         }
     }
@@ -93,6 +96,7 @@ CloseRunningScripts()
 #Include modules\Hotkeys.ahk
 #Include modules\GUI.ahk
 #Include modules\Github.ahk
+#Include modules\Game.ahk
 
 print("[main] Modules Initialized")
 
@@ -107,9 +111,9 @@ _status._halt := 0
 _status._running := 0
 _status._auto_log := 0
 
-env := FileExist(A_WorkingDir "\.env") and A_WorkingDir "\.env" or "..\.env"
+discord_env := !A_IsCompiled and "..\.env" or A_WorkingDir "\discord.env" 
 
-discord_Token := quoted(FileReadLine(env, 1)), 'Quoted', 'Iconi'
+discord_Token := quoted(FileReadLine(discord_env, 1))
 
 ; checks
 GithubUpdate() ; checks if macro up to date
@@ -117,9 +121,10 @@ GithubUpdate() ; checks if macro up to date
 checkBot := DiscordBotCheck.Bind(discord_Token)
 
 SetTimer(checkBot, -50)
+SetTimer(Checks, 1000)
 
 ; hotkeys
-SC01B::_stop_ ; stop
+SC01B::ExitApp ; stop
 
 #HotIf WinExist("ELDEN RING™") ; Any Scripts After Will Only Run If __game__ is Active
 
