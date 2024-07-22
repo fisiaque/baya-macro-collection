@@ -96,7 +96,7 @@ CheckBotNotActive() {
 }
 
 ExitFunction(ExitReason, ExitCode) {
-    SoundBeep(250)
+    SoundBeep(250, 75)
 
     print("[ExitFunction] Processing Closure...")
 
@@ -124,15 +124,17 @@ ExitFunction(ExitReason, ExitCode) {
 
 DiscordBotCheck(discord_Token) {
     if discord_Token != "" and CheckBotNotActive() == 1 {
-        print("[DiscordBotCheck] Loading... (Timeout in 10s)")
+        print("[DiscordBotCheck] Loading... (Timeout after 60s)")
         
         Run(EnvGet("BayaMacroBot") ' ' A_ScriptHwnd ' ' discord_Token)
 
-        while _status._bot == "" {
+        _last_TickCount := A_TickCount
+
+        while _status._bot == "" and A_TickCount - _last_TickCount <= 60000 { ;checks status bot or times out after 1 min
             Sleep 1000
         }
 
-        if _status == "success" {
+        if _status._bot == "success" {
             print("[DiscordBotCheck] Successfully Activated!")
         } else {
             print("[DiscordBotCheck] Failed to Activate")
@@ -430,7 +432,7 @@ Checks() {
                     _time_String := FormatTime("hm", "Time")
                     print("[Checks] (" _time_String ") : In-game resolution must be 800x450 'Windowed'")
 
-                    SoundBeep(1000)
+                    SoundBeep(1000, 500)
                 }
                 
                 return

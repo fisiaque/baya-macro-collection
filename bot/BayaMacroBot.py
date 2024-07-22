@@ -10,8 +10,7 @@ import array, struct, win32con, win32gui
 import ctypes 
 import sys
 
-#main
-
+#variables
 pfp_path = tempfile.gettempdir() + "/BayaMacroImage.png"
 banner_path = tempfile.gettempdir() + "/BayaMacroBanner.png"
 
@@ -21,12 +20,12 @@ fp = open(pfp_path, 'rb')
 pfp = fp.read()
 bner = bp.read()
 
+hwnd = sys.argv[1]
+TOKEN = sys.argv[2]
+
 #functions
 def Mbox(text, title, style):
     return ctypes.windll.user32.MessageBoxW(0, text, title, style)
-
-hwnd = sys.argv[1]
-TOKEN = sys.argv[2]
 
 def copy_data(hwnd, message, dwData = 0):
     buffer = array.array('u', message + '\x00')
@@ -36,7 +35,7 @@ def copy_data(hwnd, message, dwData = 0):
 
     return win32gui.SendMessage(hwnd, win32con.WM_COPYDATA, None, copy_struct)
 
-
+#main
 if TOKEN != None and TOKEN != "":
     try:
         intents = discord.Intents.default()
@@ -46,10 +45,11 @@ if TOKEN != None and TOKEN != "":
 
         @client.event
         async def on_ready():
-            await client.user.edit(username="Baya's Macro 🖱⌨", avatar=pfp, banner=bner)
-            copy_data(hwnd, 'DiscordBotCheck|success')
+            client.user.edit(username="Baya's Macro 🖱⌨", avatar=pfp, banner=bner)
 
             print("Baya's Macro Bot has been successfully Activated! \n -'Minimize' Console if you wish for the bot to stay active \n -'Close' Console if you wish the bot to be deactivated")
+
+            copy_data(hwnd, 'DiscordBotCheck|success')
 
         @client.hybrid_command()
         async def sync(ctx: commands.Context):
@@ -78,10 +78,12 @@ if TOKEN != None and TOKEN != "":
             else:
                 await ctx.send("Failed")
                 print('Unsupported operating system.')
-        client.run(token=TOKEN)
-    except: # NameError: #debugs
-        copy_data(hwnd, 'DiscordBotCheck|fail')
 
-        #print(NameError)
-        print("Invalid Discord Token")
+        client.run(token=TOKEN)
+    except:
+        print("Failed to Activate Bot!")
+
+        copy_data(hwnd, 'DiscordBotCheck|fail')
+        
+
     

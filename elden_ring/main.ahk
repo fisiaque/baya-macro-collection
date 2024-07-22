@@ -24,19 +24,10 @@ FileDelete(A_WorkingDir "\icons.dll")
 ; -- pre-functions
 Receive_WM_COPYDATA(wParam, lParam, msg, hwnd)
 {
-    MsgBox hwnd
     StringAddress := NumGet(lParam, 2*A_PtrSize, "Ptr")  ; Retrieves the CopyDataStruct's lpData member.
     CopyOfData := StrGet(StringAddress)  ; Copy the string out of the structure.
-    MsgBox "data: " CopyOfData
 
     _data := StrSplit(CopyOfData, "|")  
-
-    if _data[1] {
-        MsgBox "data name: " _data[1]
-    }
-    if _data[2] {
-        MsgBox "data value: " _data[2]
-    }
 
     if _data[1] == "Close" and hwnd == A_ScriptHwnd {
         ExitApp
