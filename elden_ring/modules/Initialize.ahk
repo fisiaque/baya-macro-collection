@@ -1,10 +1,6 @@
 _codes := Object()
 _codes.Close := 001
 
-IsArray(a) {
-    return a.SetCapacity(0)=(a.MaxIndex()-a.MinIndex()+1)
-}
-
 CloseRunningScripts() {
     For hWnd in arr := WinGetList(A_WorkingDir "\" A_ScriptName) {
         if hWnd != A_ScriptHwnd {
