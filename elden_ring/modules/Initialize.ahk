@@ -1,0 +1,47 @@
+_codes := Object()
+_codes.Close := 001
+
+CloseRunningScripts() {
+    For hWnd in arr := WinGetList(A_WorkingDir "\" A_ScriptName) {
+        if hWnd != A_ScriptHwnd {
+            DllCall("SendMessageCallback", "ptr", hWnd, "uint", _msg_Num.Close, "ptr", 123, "ptr", -456, "ptr", CallbackCreate(SendAsyncProc), "ptr", 0)
+        }
+    }
+}
+SendAsyncProc(hWnd, msgNum, dwData, result) {
+    if result == _codes.Close {
+        ExitApp
+    }
+}
+PostAsyncProc(wParam, lParam, msgNum, hwnd) {
+    
+    if msgNum == _msg_Num.Python {
+        StringAddress := NumGet(lParam, 2*A_PtrSize, "Ptr")  ; Retrieves the CopyDataStruct's lpData member.
+        CopyOfData := StrGet(StringAddress)  ; Copy the string out of the structure.
+        
+        _data := StrSplit(CopyOfData, "|")  
+
+        if _data[1] == "DiscordBotCheck" {
+            _status._bot := _data[2]
+        }
+    }
+
+    if msgNum == _msg_Num.Close {
+        return _codes.Close
+    }
+   
+}
+; -- pre-check
+RunAsTask()
+
+if not A_IsAdmin {
+    try {
+        Run '*RunAs ' A_ScriptFullPath '',, 'Hide'
+        ExitApp
+    } catch as e {
+        ExitApp
+    }
+}
+
+; close all other running scripts 
+CloseRunningScripts()

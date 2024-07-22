@@ -22,6 +22,7 @@ bner = bp.read()
 
 hwnd = sys.argv[1]
 TOKEN = sys.argv[2]
+msgNum = sys.argv[3]
 
 #functions
 def Mbox(text, title, style):
@@ -32,8 +33,8 @@ def copy_data(hwnd, message, dwData = 0):
     buffer_address, buffer_length = buffer.buffer_info()
 
     copy_struct = struct.pack('PLP', dwData, buffer_length * buffer.itemsize, buffer_address)
-
-    return win32gui.SendMessage(hwnd, win32con.WM_COPYDATA, None, copy_struct)
+    
+    return win32gui.SendMessage(hwnd, int(msgNum), None, copy_struct)
 
 #main
 if TOKEN != None and TOKEN != "":
@@ -50,7 +51,6 @@ if TOKEN != None and TOKEN != "":
             print("Baya's Macro Bot has been successfully Activated! \n -'Minimize' Console if you wish for the bot to stay active \n -'Close' Console if you wish the bot to be deactivated")
 
             copy_data(hwnd, 'DiscordBotCheck|success')
-
         @client.hybrid_command()
         async def sync(ctx: commands.Context):
             print("Syncing in progress...")
