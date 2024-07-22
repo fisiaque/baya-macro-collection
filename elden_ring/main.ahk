@@ -52,11 +52,7 @@ _status._auto_log := 0
 _status._macro := 0
 _status._bot := ""
 
-if !A_IsCompiled and !FileExist("..\.env") { ; if .env doesn't exist on source, create one
-    FileAppend "discord_Token = ''", "..\.env"
-}
-
-discord_env := !A_IsCompiled and "..\.env" or A_WorkingDir "\discord.env" 
+discord_env := A_WorkingDir "\discord.env" 
 
 discord_Token := quoted(FileReadLine(discord_env, 1))
 

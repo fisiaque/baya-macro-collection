@@ -48,6 +48,19 @@ if TOKEN != None and TOKEN != "":
         async def on_ready():
             client.user.edit(username="Baya's Macro 🖱⌨", avatar=pfp, banner=bner)
 
+            #for guild in client.guilds:
+
+                #guild = client.get_guild(guild)
+                #print(guild.get_member(client.user.id))
+            #    if guild.get_member(client.user.id).status is not discord.Status.offline: 
+            #        print("BOT ONLINE ELSEWHERE")
+            
+
+            print('Logged in as')
+            print(client.user.name)
+            print(client.user.id)
+            print('------')
+
             print("Baya's Macro Bot has been successfully Activated! \n -'Minimize' Console if you wish for the bot to stay active \n -'Close' Console if you wish the bot to be deactivated")
 
             copy_data(hwnd, 'DiscordBotCheck|success')

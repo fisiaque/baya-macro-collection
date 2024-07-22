@@ -1,5 +1,5 @@
 ; env file
-if !(FileExist(A_WorkingDir "\discord.env")) && A_IsCompiled {
+if !(FileExist(A_WorkingDir "\discord.env")) {
     FileInstall ".\files\discord.env", A_WorkingDir "\discord.env", 1
 } 
 
