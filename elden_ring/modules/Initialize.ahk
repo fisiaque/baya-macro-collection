@@ -12,7 +12,6 @@ SendAsyncProc(hWnd, msgNum, dwData, result) {
     ; -- CALLBACKS
     if result == _codes.Close {
         ExitApp
-        return
     }
 
     ; -- WM_COPYDATA 
