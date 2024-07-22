@@ -1,6 +1,10 @@
 _codes := Object()
 _codes.Close := 001
 
+IsArray(a) {
+    return a.SetCapacity(0)=(a.MaxIndex()-a.MinIndex()+1)
+}
+
 CloseRunningScripts() {
     For hWnd in arr := WinGetList(A_WorkingDir "\" A_ScriptName) {
         if hWnd != A_ScriptHwnd {
@@ -9,21 +13,30 @@ CloseRunningScripts() {
     }
 }
 SendAsyncProc(hWnd, msgNum, dwData, result) {
+    ; -- CALLBACKS
     if result == _codes.Close {
         ExitApp
+        return
     }
+
+    ; -- WM_COPYDATA 
+    ClassName := Type(result)
+
+    if ClassName == "Array" {
+        if result[1] == "DiscordBotCheck" {
+            _status._bot := result[2]
+        }
+    } 
 }
 PostAsyncProc(wParam, lParam, msgNum, hwnd) {
     
-    if msgNum == _msg_Num.Python {
+    if msgNum == _msg_Num.WM_COPYDATA {
         StringAddress := NumGet(lParam, 2*A_PtrSize, "Ptr")  ; Retrieves the CopyDataStruct's lpData member.
         CopyOfData := StrGet(StringAddress)  ; Copy the string out of the structure.
         
         _data := StrSplit(CopyOfData, "|")  
 
-        if _data[1] == "DiscordBotCheck" {
-            _status._bot := _data[2]
-        }
+        SendAsyncProc(hWnd, msgNum, 0, _data)
     }
 
     if msgNum == _msg_Num.Close {
