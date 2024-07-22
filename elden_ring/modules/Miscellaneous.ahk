@@ -5,7 +5,7 @@ check := Object()
 check.bot_tries := 0
 
 ;#global
-global file_extensions := ['jpg','jpeg','png','gif','ico']
+global file_extensions := ['jpg','jpeg','png','gif','ico','exe']
  
 ;#functions
 quoted(str) {
@@ -125,20 +125,19 @@ ExitFunction(ExitReason, ExitCode) {
 DiscordBotCheck(discord_Token) {
     if discord_Token != "" and CheckBotNotActive() == 1 {
         print("[DiscordBotCheck] Loading... (Timeout in 10s)")
-    
-        A_Clipboard := "" ;Empty Clipboard
-    
-        Run(EnvGet("BayaMacroBot"))
         
-        ClipWait(10)
+        Run(EnvGet("BayaMacroBot") ' ' A_ScriptHwnd ' ' discord_Token)
 
-        if A_Clipboard == "success" {
+        while _status._bot == "" {
+            Sleep 1000
+        }
+
+        if _status == "success" {
             print("[DiscordBotCheck] Successfully Activated!")
         } else {
             print("[DiscordBotCheck] Failed to Activate")
         }
 
-        A_Clipboard := "" ;Empty Clipboard
     } else if discord_Token == "" {
         print("[DiscordBotCheck] Empty Discord Token")
     }

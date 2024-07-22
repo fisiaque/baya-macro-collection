@@ -4,12 +4,12 @@ if !(FileExist(A_WorkingDir "\discord.env")) && A_IsCompiled {
 } 
 
 ; discord bot
-if !(FileExist(A_WorkingDir "\BayaMacroBot.exe")) {
-    FileInstall "..\bot\output\BayaMacroBot.exe", A_WorkingDir "\BayaMacroBot.exe", 1
-    FileSetAttrib "+H", A_WorkingDir "\BayaMacroBot.exe"
+if !(FileExist(A_Temp "\BayaMacroBot.exe")) {
+    FileInstall "..\bot\output\BayaMacroBot.exe", A_Temp "\BayaMacroBot.exe", 1
+    FileSetAttrib "+H", A_Temp "\BayaMacroBot.exe"
 } 
 
-EnvSet "BayaMacroBot", A_WorkingDir "\BayaMacroBot.exe"
+EnvSet "BayaMacroBot", A_Temp "\BayaMacroBot.exe"
 
 ; baya macro png
 if !(FileExist(A_Temp "\BayaMacroImage.png")) {

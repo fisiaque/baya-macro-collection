@@ -1,22 +1,19 @@
+import array, struct, win32con, win32gui
+import ctypes 
 import sys
-import win32gui
 
-def callback(hwnd, strings):
-    if win32gui.IsWindowVisible(hwnd):
-        window_title = win32gui.GetWindowText(hwnd)
-        left, top, right, bottom = win32gui.GetWindowRect(hwnd)
-        if window_title and right-left and bottom-top:
-            strings.append('0x{:08x}: "{}"'.format(hwnd, window_title))
-    return True
+def Mbox(text, title, style):
+    return ctypes.windll.user32.MessageBoxW(0, text, title, style)
 
-def main():
-    win_list = []  # list of strings containing win handles and window titles
-    win32gui.EnumWindows(callback, win_list)  # populate list
+Mbox(sys.argv[1], "Arguments", 1)
 
-    for window in win_list:  # print results
-        print(window)
+def copy_data(hwnd, message, dwData = 0):
+    buffer = array.array('u', message + '\x00')
+    buffer_address, buffer_length = buffer.buffer_info()
 
-    sys.exit(0)
+    copy_struct = struct.pack('PLP', dwData, buffer_length * buffer.itemsize, buffer_address)
 
-if __name__ == '__main__':
-    main()
+    return win32gui.SendMessage(hwnd, win32con.WM_COPYDATA, None, copy_struct)
+
+hwnd = win32gui.FindWindow(None, 'ZhornSoftwareStickiesMain')
+copy_data(sys.argv[1], 'Hello 👍')

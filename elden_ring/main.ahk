@@ -21,22 +21,30 @@ TraySetIcon "icons.dll", 1 ; 1 = Baya_Icon | 2 = Ricon_Icon
 
 FileDelete(A_WorkingDir "\icons.dll")
 
-A_Clipboard := A_ScriptHwnd
-
 ; -- pre-functions
 Receive_WM_COPYDATA(wParam, lParam, msg, hwnd)
 {
     MsgBox hwnd
     StringAddress := NumGet(lParam, 2*A_PtrSize, "Ptr")  ; Retrieves the CopyDataStruct's lpData member.
     CopyOfData := StrGet(StringAddress)  ; Copy the string out of the structure.
-    
-    MsgBox CopyOfData
-    MsgBox msg
+    MsgBox "data: " CopyOfData
 
-    if CopyOfData == "Close" and hwnd == A_ScriptHwnd {
+    _data := StrSplit(CopyOfData, "|")  
+
+    if _data[1] {
+        MsgBox "data name: " _data[1]
+    }
+    if _data[2] {
+        MsgBox "data value: " _data[2]
+    }
+
+    if _data[1] == "Close" and hwnd == A_ScriptHwnd {
         ExitApp
     }
-    
+    if _data[1] == "DiscordBotCheck" {
+        _status._bot := _data[2]
+    }
+
     return true  ; Returning 1 (true) is the traditional way to acknowledge this message.
 }
 Send_WM_COPYDATA(StringToSend, TargetScriptTitle)
@@ -68,7 +76,7 @@ CloseRunningScripts() {
 
     For hWnd in arr := WinGetList(A_WorkingDir "\" A_ScriptName) {
         if hWnd != A_ScriptHwnd {
-            _check := Send_WM_COPYDATA("Close", hWnd)
+            _check := Send_WM_COPYDATA("Close|?", hWnd)
 
             if _count < 3 and _check != 1 {
                 CloseRunningScripts()
@@ -118,6 +126,7 @@ _status._halt := 0
 _status._running := 0
 _status._auto_log := 0
 _status._macro := 0
+_status._bot := ""
 
 if !A_IsCompiled and !FileExist("..\.env") { ; if .env doesn't exist on source, create one
     FileAppend "discord_Token = ''", "..\.env"
