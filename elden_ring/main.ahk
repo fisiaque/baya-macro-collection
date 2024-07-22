@@ -11,7 +11,7 @@ DetectHiddenWindows True
 
 _msg_Num := Object()
 _msg_Num.Close := DllCall("RegisterWindowMessage", "Str", "CloseAHKScript")
-_msg_Num.Python := 0x004A ; -- VM_COPYDATA ;DllCall("RegisterWindowMessage", "Str", "Python") ;
+_msg_Num.WM_COPYDATA := 0x004A ; -- WM_COPYDATA 
 
 ; set icon using dll
 if FileExist(A_WorkingDir "\icons.dll") {
@@ -41,7 +41,7 @@ print("[main] Modules Initialized")
 OnExit ExitFunction
 
 OnMessage(_msg_Num.Close, PostAsyncProc)
-OnMessage(_msg_Num.Python, PostAsyncProc)
+OnMessage(_msg_Num.WM_COPYDATA, PostAsyncProc)
 
 ; variables
 _status := Object()
