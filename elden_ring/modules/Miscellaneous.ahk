@@ -126,7 +126,7 @@ DiscordBotCheck(discord_Token) {
     if discord_Token != "" and CheckBotNotActive() == 1 {
         print("[DiscordBotCheck] Loading... (Timeout after 60s)")
         
-        Run(EnvGet("BayaMacroBot") ' ' A_ScriptHwnd ' ' discord_Token ' ' _msg_Num.Python)
+        Run(EnvGet("BayaMacroBot") ' ' A_ScriptHwnd ' ' discord_Token ' ' _msg_Num.WM_COPYDATA)
 
         _last_TickCount := A_TickCount
 
