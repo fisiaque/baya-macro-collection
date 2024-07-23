@@ -43,12 +43,7 @@ PostAsyncProc(wParam, lParam, msgNum, hwnd) {
 RunAsTask()
 
 if not A_IsAdmin {
-    try {
-        Run '*RunAs ' A_ScriptFullPath '',, 'Hide'
-        ExitApp
-    } catch as e {
-        ExitApp
-    }
+    ExitApp
 }
 
 ; close all other running scripts 
