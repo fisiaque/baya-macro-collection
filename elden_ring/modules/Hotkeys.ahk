@@ -10,9 +10,7 @@ _start_() {
 
         print("[Hotkeys] Play " _time_Pressed "ms")
 
-        if A_IsPaused {
-            Pause -1
-        }
+        Run(EnvGet("BayaMacro") ' ' A_ScriptHwnd)
 
         _status._running := 1
         
@@ -21,11 +19,10 @@ _start_() {
         
         _status._running:= 0
 
+        CheckIfActive("BayaMacro.exe")
+
         _toggle := 0
 
-        if !A_IsPaused {
-            Pause -1
-        }
     } else if _gui.Ready != 1 {
         print("[Hotkeys] Save GUI Settings " _time_Pressed "ms")
     }

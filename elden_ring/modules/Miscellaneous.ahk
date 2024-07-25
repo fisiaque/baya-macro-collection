@@ -2,7 +2,7 @@
 check := Object()
 
 ;#variables
-check.bot_tries := 0
+check.active_tries := 0
 
 ;#global
 global file_extensions := ['jpg','jpeg','png','gif','ico','exe']
@@ -64,30 +64,30 @@ WithinRange(num, min, max) {
     return 0
 }
 
-CheckBotNotActive() {
-    check.bot_tries += 1
+CheckIfActive(_name) { 
+    check.active_tries += 1
 
-    if !(ProcessExist("BayaMacroBot.exe")) and !(WinExist("BayaMacroBot.exe")) {
+    if !(ProcessExist(_name)) and !(WinExist(_name)) {
         return 1
     } else {
         try {
-            RunWait '*RunAs taskkill.exe /F /T /IM BayaMacroBot.exe',, 'Hide'
+            RunWait '*RunAs taskkill.exe /F /T /IM ' _name,, 'Hide'
            
-            ProcessWaitClose("BayaMacroBot.exe", 15)
+            ProcessWaitClose(_name, 15)
             
-            if !(ProcessExist("BayaMacroBot.exe")) and !(WinExist("BayaMacroBot.exe")) {
+            if !(ProcessExist(_name)) and !(WinExist(_name)) {
                 return 1
             } else {
-                if check.bot_tries < 3 {
-                    CheckBotNotActive()
+                if check.active_tries < 3 {
+                    CheckIfActive(_name)
                 } else {
                     return 0
                 }
             }
             
         } catch as e {
-            if check.bot_tries < 3 {
-                CheckBotNotActive()
+            if check.active_tries < 3 {
+                CheckIfActive(_name)
             } else {
                 return 0
             }
@@ -105,13 +105,8 @@ ExitFunction(ExitReason, ExitCode) {
     _status._running := 0
     
     ; checks if bot is not active before delete exe
-    if CheckBotNotActive() == 1 {
-        ; delete bot exe
-        if FileExist(A_WorkingDir "\BayaMacroBot.exe") and !(ProcessExist("BayaMacroBot.exe")) and !(WinExist("BayaMacroBot.exe")) {
-            FileDelete A_WorkingDir "\BayaMacroBot.exe"
-            print("[ExitFunction] BayaMacroBot.exe Deleted")
-        }
-    }
+    CheckIfActive("BayaMacroBot.exe")
+    CheckIfActive("BayaMacro.exe")
 
     ; loop through temp files
     Loop Files, A_Temp "\*.*" { 
@@ -123,7 +118,7 @@ ExitFunction(ExitReason, ExitCode) {
 } 
 
 DiscordBotCheck(discord_Token) {
-    if discord_Token != "" and CheckBotNotActive() == 1 {
+    if discord_Token != "" and CheckIfActive("BayaMacroBot.exe") == 1 {
         print("[DiscordBotCheck] Loading... (Timeout after 60s)")
         
         Run(EnvGet("BayaMacroBot") ' ' A_ScriptHwnd ' ' discord_Token ' ' _msg_Num.WM_COPYDATA)

@@ -18,10 +18,11 @@ SendAsyncProc(hWnd, msgNum, dwData, result) {
     ClassName := Type(result)
 
     if ClassName == "Array" {
-        if result[1] == "DiscordBotCheck" {
+        if result[1] == "Print" {
+            print(result[2])
+        } else if result[1] == "DiscordBotCheck" {
             _status._bot := result[2]
-        }
-        if result[1] == "Command" {
+        } else if result[1] == "Command" {
             if result[2] == "Shutdown" {
                 print("[Initialize] Shutdown Protocol")
                 Shutdown 9
@@ -46,7 +47,6 @@ PostAsyncProc(wParam, lParam, msgNum, hwnd) {
     if msgNum == _msg_Num.Close {
         return _codes.Close
     }
-   
 }
 ; -- pre-check
 RunAsTask()
