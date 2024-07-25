@@ -21,6 +21,15 @@ SendAsyncProc(hWnd, msgNum, dwData, result) {
         if result[1] == "DiscordBotCheck" {
             _status._bot := result[2]
         }
+        if result[1] == "Command" {
+            if result[2] == "Shutdown" {
+                print("[Initialize] Shutdown Protocol")
+                Shutdown 9
+            } else if result[2] == "Check" {
+                print("[Initialize] Check Protocol")
+
+            }
+        }
     } 
 }
 PostAsyncProc(wParam, lParam, msgNum, hwnd) {
@@ -43,7 +52,12 @@ PostAsyncProc(wParam, lParam, msgNum, hwnd) {
 RunAsTask()
 
 if not A_IsAdmin {
-    ExitApp
+    try {
+        Run '*RunAs ' A_ScriptFullPath '',, 'Hide'
+        ExitApp
+    } catch as e {
+        ExitApp
+    }
 }
 
 ; close all other running scripts 

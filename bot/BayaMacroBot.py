@@ -1,5 +1,6 @@
 # python
 # imports
+import random
 import tempfile 
 import os, sys
 import discord
@@ -11,6 +12,58 @@ import ctypes
 import sys
 
 #variables
+hello_messages = [
+    "Hola amigo!",  # Spanish
+    "Bonjour mon ami!",  # French
+    "Hallo mein Freund!",  # German
+    "Ciao amico mio!",  # Italian
+    "Olá meu amigo!",  # Portuguese
+    "Привет мой друг!",  # Russian
+    "こんにちは、友よ！",  # Japanese
+    "你好，我的朋友！",  # Chinese (Simplified)
+    "안녕 내 친구!",  # Korean
+    "مرحبا يا صديقي!",  # Arabic
+    "हैलो मेरे दोस्त!",  # Hindi
+    "Merhaba arkadaşım!",  # Turkish
+    "Hej min vän!",  # Swedish
+    "Hei ystäväni!",  # Finnish
+    "Ahoj můj příteli!",  # Czech
+    "Hej min ven!",  # Danish
+    "Sveiki mano drauge!",  # Lithuanian
+    "Tere mu sõber!",  # Estonian
+    "Pozdrav moj prijatelju!",  # Croatian
+    "Γεια σου φίλε μου!",  # Greek
+    "Hallo mijn vriend!",  # Dutch
+    "Salve amice!",  # Latin
+    "Szia barátom!",  # Hungarian
+    "Bună prietene!",  # Romanian
+    "Salam dostum!",  # Azerbaijani
+    "Halo sobatku!",  # Indonesian
+    "Sawubona umngane wami!",  # Zulu
+    "Kumusta kaibigan ko!",  # Filipino
+    "Halò mo charaid!",  # Scottish Gaelic
+    "Aloha e kuʻu hoa!",  # Hawaiian
+    "Saluton mia amiko!",  # Esperanto
+    "Selam arkadaşım!",  # Kurdish
+    "Kamusta higala!",  # Cebuano
+    "Bongu sieħbi!",  # Maltese
+    "Mbote moninga!",  # Lingala
+    "Sannu aboki!",  # Hausa
+    "Dumela tsala!",  # Tswana
+    "Kaixo lagun!",  # Basque
+    "Moien meng Frënd!",  # Luxembourgish
+    "Pozdrav prijatelju!",  # Serbian
+    "Здравей приятелю!",  # Bulgarian
+    "Aloha au iā ʻoe e ke hoa!",  # Hawaiian
+    "Bonjour ami!",  # Haitian Creole
+    "Olá meu camarada!",  # Galician
+    "Sveiks mans draugs!",  # Latvian
+    "Halo kawanku!",  # Malay
+    "Hola amic meu!",  # Catalan
+    "Zdravo prijatelju!",  # Bosnian
+    "Yassou file mou!"  # Greek (informal)
+]
+    
 pfp_path = tempfile.gettempdir() + "/BayaMacroImage.png"
 banner_path = tempfile.gettempdir() + "/BayaMacroBanner.png"
 
@@ -42,11 +95,11 @@ if TOKEN != None and TOKEN != "":
         intents = discord.Intents.default()
         intents.message_content = True
 
-        client = commands.Bot(command_prefix="/", intents=intents)
+        client = commands.Bot(command_prefix="!", intents=intents)
 
         @client.event
         async def on_ready():
-            client.user.edit(username="Baya's Macro 🖱⌨", avatar=pfp, banner=bner)
+            await client.user.edit(username="Baya's Macro 🖱⌨", avatar=pfp, banner=bner)
 
             #for guild in client.guilds:
 
@@ -72,25 +125,22 @@ if TOKEN != None and TOKEN != "":
 
         @client.command()
         async def hello(ctx):
-            print("Sending Hello Command Reply")
-            await ctx.send(f"Hola Amigo! {ctx.message.author.mention}")
+            hello = random.choice(hello_messages)
+            await ctx.send(f"{hello} {ctx.message.author.mention}")
 
         @client.command()
         async def shutdown(ctx):
             print("Shutdown Command Recieved")
             await ctx.send(f"{ctx.message.author.mention} Attempting to shutdown PC!")
 
-            if os.name == 'nt':
-                # For Windows operating system
-                await ctx.send("Success")
-                os.system('shutdown /s /t 0')
-            elif os.name == 'posix':
-                # For Unix/Linux/Mac operating systems
-                await ctx.send("Success")
-                os.system('sudo shutdown now')
-            else:
-                await ctx.send("Failed")
-                print('Unsupported operating system.')
+            copy_data(hwnd, 'Command|Shutdown')
+
+        @client.command()
+        async def check(ctx):
+            print("Check Command Recieved")
+            await ctx.send(f"{ctx.message.author.mention} Attempting to send update!")
+
+            copy_data(hwnd, 'Command|Check')
 
         client.run(token=TOKEN)
     except:
@@ -98,5 +148,3 @@ if TOKEN != None and TOKEN != "":
 
         copy_data(hwnd, 'DiscordBotCheck|fail')
         
-
-    
