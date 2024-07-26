@@ -4,6 +4,8 @@ check := Object()
 ;#variables
 check.active_tries := 0
 
+keys := "LShift|W|A|S|D|Q|E|M|F|Esc|Enter|CapsLock|Tab|Space|LButton|MButton|RButton|Numpad2|Numpad4|Numpad6|Numpad8"
+
 ;#global
 global file_extensions := ['jpg','jpeg','png','gif','ico','exe']
  
@@ -27,6 +29,14 @@ FileReadLine(file_to_read, line_number) {
         line_text := file_object.ReadLine() 
     file_object.Close
     return line_text
+}
+
+UnpressKeys() {
+    loop parse keys, "|" {
+        if GetKeyState(A_LoopField, "P") {
+            Send "{" A_LoopField " Up}"
+        }
+    }
 }
 
 IsFileExtenstion(ext) {
@@ -107,6 +117,8 @@ ExitFunction(ExitReason, ExitCode) {
     ; checks if bot is not active before delete exe
     CheckIfActive("BayaMacroBot.exe")
     CheckIfActive("BayaMacro.exe")
+
+    UnpressKeys()
 
     ; loop through temp files
     Loop Files, A_Temp "\*.*" { 

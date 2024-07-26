@@ -20,6 +20,7 @@ _start_() {
         _status._running:= 0
 
         CheckIfActive("BayaMacro.exe")
+        UnpressKeys()
 
         _toggle := 0
 
