@@ -111,8 +111,6 @@ if TOKEN != None and TOKEN != "":
 
         client = commands.Bot(command_prefix="!", intents=intents)
 
-        
-
         @client.event
         async def on_ready():
 
@@ -138,7 +136,6 @@ if TOKEN != None and TOKEN != "":
         @client.hybrid_command()
         async def sync(ctx: commands.Context):
             print("Syncing in progress...")
-            await ctx.send("Syncing...")
             await client.tree.sync()
 
         @client.command()

@@ -7,9 +7,11 @@ CoordMode "Mouse", "Window"
 
 DetectHiddenWindows True
 
+; pre variables
 hWnd := A_Args[1]
 TimeOutTime := 4000
 
+; pre functions
 Send(StringToSend) {
     CopyDataStruct := Buffer(3*A_PtrSize) 
 
@@ -33,6 +35,10 @@ command(NewCommand) {
 
     Send(StringToSend)
 }
+
+; variables
+
+; game functions
 
 F1:: {
     print("[Checking] HI BAYA")
