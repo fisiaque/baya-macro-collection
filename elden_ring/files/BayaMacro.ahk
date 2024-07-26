@@ -10,7 +10,7 @@ DetectHiddenWindows True
 hWnd := A_Args[1]
 TimeOutTime := 4000
 
-send(StringToSend) {
+Send(StringToSend) {
     CopyDataStruct := Buffer(3*A_PtrSize) 
 
     SizeInBytes := (StrLen(StringToSend) + 1) * 2
@@ -22,7 +22,18 @@ send(StringToSend) {
     SendMessage(0x004A, 0, CopyDataStruct,, "ahk_id " hWnd,,,, TimeOutTime)
 }
 
+print(NewMessage) {
+    StringToSend := "Print|" NewMessage
+
+    Send(StringToSend)
+}
+
+command(NewCommand) {
+    StringToSend := "Command|" NewCommand
+
+    Send(StringToSend)
+}
+
 F1:: {
-    StringToSend := "Print|[macro] Checking ..."
-    send(StringToSend)
+    print("[Checking] HI BAYA")
 }

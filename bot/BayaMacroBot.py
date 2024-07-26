@@ -75,7 +75,10 @@ bner = bp.read()
 
 hwnd = sys.argv[1]
 TOKEN = sys.argv[2]
-msgNum = sys.argv[3]
+DISCORD_DATA = sys.argv[3].split(",")
+
+DISCORD_USER_ID = DISCORD_DATA[0] != "" and int(DISCORD_DATA[0]) or 0
+DISCORD_ROLE_ID = DISCORD_DATA[1] != "" and int(DISCORD_DATA[1]) or 0
 
 #functions
 def Mbox(text, title, style):
@@ -87,7 +90,18 @@ def copy_data(hwnd, message, dwData = 0):
 
     copy_struct = struct.pack('PLP', dwData, buffer_length * buffer.itemsize, buffer_address)
     
-    return win32gui.SendMessage(hwnd, int(msgNum), None, copy_struct)
+    return win32gui.SendMessage(hwnd, 0x004A, None, copy_struct) # 0x004A is WM_COPYDATA 
+
+def can_use_commands(ctx):
+    role = discord.utils.get(ctx.guild.roles, id=DISCORD_ROLE_ID)
+
+    if ctx.message.author.id == ctx.guild.owner_id or ctx.message.author.id == DISCORD_USER_ID or role in ctx.message.author.roles: 
+        return True
+    
+    return False
+
+print("Discord User Id:", DISCORD_USER_ID) # Discord User Id
+print("Discord Role Id:", DISCORD_ROLE_ID) # Discord Role Id
 
 #main
 if TOKEN != None and TOKEN != "":
@@ -97,9 +111,10 @@ if TOKEN != None and TOKEN != "":
 
         client = commands.Bot(command_prefix="!", intents=intents)
 
+        
+
         @client.event
         async def on_ready():
-            await client.user.edit(username="Baya's Macro 🖱⌨", avatar=pfp, banner=bner)
 
             #for guild in client.guilds:
 
@@ -117,6 +132,9 @@ if TOKEN != None and TOKEN != "":
             print("Baya's Macro Bot has been successfully Activated! \n -'Minimize' Console if you wish for the bot to stay active \n -'Close' Console if you wish the bot to be deactivated")
 
             copy_data(hwnd, 'DiscordBotCheck|success')
+
+            await client.user.edit(username="Baya's Macro 🖱⌨", avatar=pfp, banner=bner)
+
         @client.hybrid_command()
         async def sync(ctx: commands.Context):
             print("Syncing in progress...")
@@ -130,17 +148,19 @@ if TOKEN != None and TOKEN != "":
 
         @client.command()
         async def shutdown(ctx):
-            print("Shutdown Command Recieved")
-            await ctx.send(f"{ctx.message.author.mention} Attempting to shutdown PC!")
+            if can_use_commands(ctx) == True:  
+                print("Shutdown Command Recieved")
+                await ctx.send(f"{ctx.message.author.mention} Attempting to shutdown PC!")
 
-            copy_data(hwnd, 'Command|Shutdown')
+                copy_data(hwnd, 'Command|Shutdown')
 
         @client.command()
         async def check(ctx):
-            print("Check Command Recieved")
-            await ctx.send(f"{ctx.message.author.mention} Attempting to send update!")
+            if can_use_commands(ctx) == True:  
+                print("Check Command Recieved")
+                await ctx.send(f"{ctx.message.author.mention} Attempting to send update!")
 
-            copy_data(hwnd, 'Command|Check')
+                copy_data(hwnd, 'Command|Check')
 
         client.run(token=TOKEN)
     except:

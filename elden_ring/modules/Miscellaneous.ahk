@@ -118,10 +118,16 @@ ExitFunction(ExitReason, ExitCode) {
 } 
 
 DiscordBotCheck(discord_Token) {
+    while _gui.Ready != 1 {
+        Sleep 1000
+    }
+
     if discord_Token != "" and CheckIfActive("BayaMacroBot.exe") == 1 {
         print("[DiscordBotCheck] Loading... (Timeout after 60s)")
         
-        Run(EnvGet("BayaMacroBot") ' ' A_ScriptHwnd ' ' discord_Token ' ' _msg_Num.WM_COPYDATA)
+        discord_ID_DATA := _ini.DiscordUserId "," _ini.DiscordRoleId
+
+        Run(EnvGet("BayaMacroBot") ' ' A_ScriptHwnd ' ' discord_Token ' ' discord_ID_DATA)
 
         _last_TickCount := A_TickCount
 

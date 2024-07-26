@@ -21,7 +21,9 @@ SendAsyncProc(hWnd, msgNum, dwData, result) {
         if result[1] == "Print" {
             print(result[2])
         } else if result[1] == "DiscordBotCheck" {
-            _status._bot := result[2]
+            if _status._bot == "" {
+                _status._bot := result[2]
+            }
         } else if result[1] == "Command" {
             if result[2] == "Shutdown" {
                 print("[Initialize] Shutdown Protocol")
