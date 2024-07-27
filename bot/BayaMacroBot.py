@@ -113,15 +113,6 @@ if TOKEN != None and TOKEN != "":
 
         @client.event
         async def on_ready():
-
-            #for guild in client.guilds:
-
-                #guild = client.get_guild(guild)
-                #print(guild.get_member(client.user.id))
-            #    if guild.get_member(client.user.id).status is not discord.Status.offline: 
-            #        print("BOT ONLINE ELSEWHERE")
-            
-
             print('Logged in as')
             print(client.user.name)
             print(client.user.id)

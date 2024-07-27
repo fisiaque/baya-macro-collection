@@ -15,7 +15,7 @@ WinGetPos(,,, &_h_, "ahk_class Shell_TrayWnd")
 arrays.Position := [(A_ScreenWidth) - gui_Width, (A_ScreenHeight) - (gui_Height + _h_)]
 
 ; status
-status.String := "[OutputConsole] Initiated`r`n" 
+status.String := "[OutputConsole(" Format_Msec(A_TickCount - _status._start_script) ")] Initiated`r`n" 
 status.MaxMessage := 7  ; last 5 messages show up
 
 ; functions

@@ -68,7 +68,7 @@ WithinRange(num, min, max) {
             return 1
         }
     } else {
-        print("[WithinRange] Not Given Number")
+        print("[Misc|WithinRange(" Format_Msec(A_TickCount - _status._start_script) ")] Not Given Number")
     }
 
     return 0
@@ -110,7 +110,7 @@ CheckIfActive(_name) {
 ExitFunction(ExitReason, ExitCode) {
     SoundBeep(250, 75)
 
-    print("[ExitFunction] Processing Closure...")
+    print("[Misc|ExitFunction(" Format_Msec(A_TickCount - _status._start_script) ")] Processing Closure...")
     
     _status._running := 0
     
@@ -122,7 +122,7 @@ ExitFunction(ExitReason, ExitCode) {
     Loop Files, A_Temp "\*.*" { 
         if (IsFileExtenstion(A_LoopFileExt) == 1) {
             FileDelete A_LoopFileFullPath
-            print("[ExitFunction] " A_LoopFileName " Deleted")
+            print("[Misc|ExitFunction(" Format_Msec(A_TickCount - _status._start_script) ")] " A_LoopFileName " Deleted")
         }
     }
 } 
@@ -133,7 +133,7 @@ DiscordBotCheck(discord_Token) {
     }
 
     if discord_Token != "" and CheckIfActive("BayaMacroBot.exe") == 1 {
-        print("[DiscordBotCheck] Loading... (Timeout after 60s)")
+        print("[Misc|DiscordBotCheck(" Format_Msec(A_TickCount - _status._start_script) ")] Loading... (Timeout after 60s)")
         
         discord_ID_DATA := _ini.DiscordUserId "," _ini.DiscordRoleId
 
@@ -146,13 +146,13 @@ DiscordBotCheck(discord_Token) {
         }
 
         if _status._bot == "success" {
-            print("[DiscordBotCheck] Successfully Activated!")
+            print("[Misc|DiscordBotCheck(" Format_Msec(A_TickCount - _status._start_script) ")] Successfully Activated!")
         } else {
-            print("[DiscordBotCheck] Failed to Activate")
+            print("[Misc|DiscordBotCheck(" Format_Msec(A_TickCount - _status._start_script) ")] Failed to Activate")
         }
 
     } else if discord_Token == "" {
-        print("[DiscordBotCheck] Empty Discord Token")
+        print("[Misc|DiscordBotCheck(" Format_Msec(A_TickCount - _status._start_script) ")] Empty Discord Token")
     }
 }
 
@@ -161,21 +161,21 @@ GithubUpdate() {
     latestObj := Github.latest("bayamacro", "Baya-Macro-Elden-Ring-Edition")
 
     if GetVersion() != latestObj.version {
-        print("[GithubUpdate] Update Macro?")
+        print("[Misc|GithubUpdate(" Format_Msec(A_TickCount - _status._start_script) ")] Update Macro?")
         Result := MsgBox("Update Baya's Macro? (" latestObj.version ") `r`n- new file will be available at the same file directory `r`n- old file will be deleted after a few seconds", "Auto-Update", "YesNo T10 0x40000")
 
         if Result = "Yes"{
-            print("[GithubUpdate] Updated | Check Directory")
+            print("[Misc|GithubUpdate(" Format_Msec(A_TickCount - _status._start_script) ")] Updated | Check Directory")
             Github.Download(latestObj.downloadURLs[1], A_ScriptDir "\Baya's Macro Elden Ring Edition")
 
             if A_IsCompiled != 0 { ; if compiled
-                print("[GithubUpdate] Deleting this executable...")
+                print("[Misc|GithubUpdate(" Format_Msec(A_TickCount - _status._start_script) ")] Deleting this executable...")
 
                 Run A_ComSpec ' /c ping -n 3 127.0.0.1>nul & Del ' A_ScriptName,, 'Hide'
                 ExitApp
             }
         } else {
-            print("[GithubUpdate] Cancelled")
+            print("[Misc|GithubUpdate(" Format_Msec(A_TickCount - _status._start_script) ")] Cancelled")
         }     
     }
 }
@@ -426,6 +426,11 @@ Webhook(URL, _params) {
     whr.WaitForResponse()
 }
 
+Format_Msec(ms) {
+    VarSetStrCapacity(&t,256),DllCall("GetDurationFormat","uint",2048,"uint",0,"ptr",0,"int64",ms*10000,"wstr","hh':'mm':'ss","wstr",t,"int",256)
+    return t
+}
+
 Checks() {
     if _status._running == 1 {
         static _notified := A_TickCount
@@ -435,7 +440,7 @@ Checks() {
             WinGetClientPos &_game_X, &_game_Y, &_game_Width, &_game_Height, "ahk_id " _game.PID
             
             if (_game_X != 8 && _game_Y != 31) { ; since windowed | checks if it's in the top left
-                print("[Checks] Elden Ring window is not positioned properly")
+                print("[Misc|Checks(" Format_Msec(A_TickCount - _status._start_script) ")] Elden Ring window is not positioned properly")
 
                 CheckIfActive("BayaMacro.exe")
 
@@ -443,7 +448,7 @@ Checks() {
                     _notified := A_TickCount
 
                     _time_String := FormatTime("hm", "Time")
-                    print("[Checks] (" _time_String ") : Game window should be positioned top left")
+                    print("[Misc|Checks(" Format_Msec(A_TickCount - _status._start_script) ")] (" _time_String ") : Game window should be positioned top left")
 
                     SoundBeep(1000, 500)
                 }
@@ -454,7 +459,7 @@ Checks() {
             }
 
             if (_game_Width != 800 && _game_Height != 450) { 
-                print("[Checks] Elden Ring is not the correct resolution")
+                print("[Misc|Checks(" Format_Msec(A_TickCount - _status._start_script) ")] Elden Ring is not the correct resolution")
 
                 CheckIfActive("BayaMacro.exe")
 
@@ -462,7 +467,7 @@ Checks() {
                     _notified := A_TickCount
 
                     _time_String := FormatTime("hm", "Time")
-                    print("[Checks] (" _time_String ") : In-game resolution must be 800x450 'Windowed'")
+                    print("[Misc|Checks(" Format_Msec(A_TickCount - _status._start_script) ")] (" _time_String ") : In-game resolution must be 800x450 'Windowed'")
 
                     SoundBeep(1000, 500)
                 }
@@ -473,7 +478,7 @@ Checks() {
             } 
 
         } else {
-            print("[Checks] Elden Ring is not active")
+            print("[Misc|Checks(" Format_Msec(A_TickCount - _status._start_script) ")] Elden Ring is not active")
 
             CheckIfActive("BayaMacro.exe")
 

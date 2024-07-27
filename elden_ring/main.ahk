@@ -22,24 +22,6 @@ TraySetIcon "icons.dll", 1 ; 1 = Baya_Icon | 2 = Ricon_Icon
 
 FileDelete(A_WorkingDir "\icons.dll")
 
-; -- includes
-#Include modules\Initialize.ahk
-#Include modules\Version.ahk
-#Include modules\OutputConsole.ahk
-#Include modules\FileInstaller.ahk
-#Include modules\Miscellaneous.ahk
-#Include modules\Hotkeys.ahk
-#Include modules\GUI.ahk
-#Include modules\Github.ahk
-#Include modules\Game.ahk
-
-print("[main] Modules Initialized")
-
-OnExit ExitFunction
-
-OnMessage(_msg_Num.Close, PostAsyncProc)
-OnMessage(_msg_Num.WM_COPYDATA, PostAsyncProc)
-
 ; variables
 _game := Object()
 _status := Object()
@@ -52,6 +34,22 @@ _status._running := 0
 _status._auto_log := 0
 _status._macro := 0
 _status._bot := ""
+_status._start_script := A_TickCount
+
+; -- includes
+#Include modules\Initialize.ahk
+#Include modules\Version.ahk
+#Include modules\OutputConsole.ahk
+#Include modules\FileInstaller.ahk
+#Include modules\Miscellaneous.ahk
+#Include modules\Hotkeys.ahk
+#Include modules\GUI.ahk
+#Include modules\Github.ahk
+
+OnExit ExitFunction
+
+OnMessage(_msg_Num.Close, PostAsyncProc)
+OnMessage(_msg_Num.WM_COPYDATA, PostAsyncProc)
 
 discord_env := A_WorkingDir "\discord.env" 
 
@@ -65,9 +63,11 @@ checkBot := DiscordBotCheck.Bind(discord_Token)
 SetTimer(checkBot, -50)
 SetTimer(Checks, 1000)
 
+print("[main(" Format_Msec(A_TickCount - _status._start_script) ") Modules Initialized")
+
 ; hotkeys
 SC01B::ExitApp ; stop
 
-#HotIf WinExist(_game.Title)
+#HotIf WinExist(_game.Title) or print("[main(" Format_Msec(A_TickCount - _status._start_script) ")] Elden Ring not running")
 
 SC01A::_start_ ; start[]

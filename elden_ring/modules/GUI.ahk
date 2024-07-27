@@ -54,18 +54,18 @@ _gui.Ready := 0
 ; -- get|check save file
 if !(FileExist(".\" _ini.Name)) {
     Loop Files, ".\*.ini" {
-        print("[GUI] Deleting Old Data Save")
+        print("[GUI(" Format_Msec(A_TickCount - _status._start_script) ")] Deleting Old Data Save")
         FileDelete A_LoopFileFullPath
     }
 
-    print("[GUI] Writing New Data Save")
+    print("[GUI(" Format_Msec(A_TickCount - _status._start_script) ")] Writing New Data Save")
 
     IniWrite _ini.Discord_String, ".\" _ini.Name, "Discord"
     IniWrite _ini.Data_String, ".\" _ini.Name, "Data"
 
     FileSetAttrib "+H", ".\" _ini.Name
 } else {
-    print("[GUI] Found Data Save")
+    print("[GUI(" Format_Msec(A_TickCount - _status._start_script) ")] Found Data Save")
 
     discordString := IniRead(".\" _ini.Name, "Discord")
     dataString := IniRead(".\" _ini.Name, "Data")
@@ -172,7 +172,7 @@ StartUserInput(*)
         "data_Interval = '" _user_inputs.DataInterval "' `r`n"
     )
 
-    print("[GUI] Rewriting Data Save")
+    print("[GUI(" Format_Msec(A_TickCount - _status._start_script) ")] Rewriting Data Save")
 
     IniWrite _new_Discord_String, ".\" _ini.Name, "Discord"
     IniWrite _new_Data_String, ".\" _ini.Name, "Data"
@@ -220,12 +220,12 @@ TestUserPing(*) {
         ;    }
 
         } catch as e {
-            print("[TestUserPing] Error!")
+            print("[GUI|TestUserPing(" Format_Msec(A_TickCount - _status._start_script) ")] Error!")
         } else {
-            print("[TestUserPing] Sent!")
+            print("[GUI|TestUserPing(" Format_Msec(A_TickCount - _status._start_script) ")] Sent!")
         }
     } else {
-        print("[TestUserPing] Invalid Webhook URL!")
+        print("[GUI|TestUserPing(" Format_Msec(A_TickCount - _status._start_script) ")] Invalid Webhook URL!")
     }
 }
 

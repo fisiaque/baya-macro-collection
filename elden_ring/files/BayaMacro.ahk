@@ -10,6 +10,7 @@ DetectHiddenWindows True
 ; pre variables
 hWnd := A_Args[1]
 autoFarmMethod := A_Args[2]
+scriptStart := A_Args[3]
 
 TimeOutTime := 4000
 
@@ -38,10 +39,15 @@ command(NewCommand) {
     Send(StringToSend)
 }
 
+Format_Msec(ms) {
+    VarSetStrCapacity(&t,256),DllCall("GetDurationFormat","uint",2048,"uint",0,"ptr",0,"int64",ms*10000,"wstr","hh':'mm':'ss","wstr",t,"int",256)
+    return t
+}
+
 ; variables
 
 ; game functions
 
 F1:: {
-    print("[Checking] HI BAYA")
+    print("[BayaMacro(" Format_Msec(A_TickCount - scriptStart) ")] HI BAYA")
 }

@@ -26,10 +26,10 @@ SendAsyncProc(hWnd, msgNum, dwData, result) {
             }
         } else if result[1] == "Command" {
             if result[2] == "Shutdown" {
-                print("[Initialize] Shutdown Protocol")
+                print("[Initialize(" Format_Msec(A_TickCount - _status._start_script) ")] Shutdown Protocol")
                 Shutdown 9
             } else if result[2] == "Check" {
-                print("[Initialize] Check Protocol")
+                print("[Initialize(" Format_Msec(A_TickCount - _status._start_script) ")] Check Protocol")
 
             }
         }
