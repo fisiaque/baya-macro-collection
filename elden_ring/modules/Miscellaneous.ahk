@@ -86,6 +86,8 @@ CheckIfActive(_name) {
             ProcessWaitClose(_name, 15)
             
             if !(ProcessExist(_name)) and !(WinExist(_name)) {
+                UnpressKeys()
+                
                 return 1
             } else {
                 if check.active_tries < 3 {
@@ -109,16 +111,12 @@ ExitFunction(ExitReason, ExitCode) {
     SoundBeep(250, 75)
 
     print("[ExitFunction] Processing Closure...")
-
-    SetTimer(Checks, 0)
     
     _status._running := 0
     
     ; checks if bot is not active before delete exe
     CheckIfActive("BayaMacroBot.exe")
     CheckIfActive("BayaMacro.exe")
-
-    UnpressKeys()
 
     ; loop through temp files
     Loop Files, A_Temp "\*.*" { 
@@ -432,14 +430,35 @@ Checks() {
     if _status._running == 1 {
         static _notified := A_TickCount
 
-        ;-- window checks
-        if WinExist("ELDEN RING™") {
-            WinGetClientPos &_, &_, &_game_Width, &_game_Height, "ELDEN RING™"
+        ;-- WinActive checks if window is active | not to get mixed up with WinActivate which makes window on top
+        if (WinActive("ahk_id " _game.PID)) {
+            WinGetClientPos &_game_X, &_game_Y, &_game_Width, &_game_Height, "ahk_id " _game.PID
+            
+            if (_game_X != 8 && _game_Y != 31) { ; since windowed | checks if it's in the top left
+                print("[Checks] Elden Ring window is not positioned properly")
 
-            if _game_Width != 800 && _game_Height != 450 { 
-                _status._macro := 0 ; macro stops it wrong resolution 
+                CheckIfActive("BayaMacro.exe")
 
-                if A_TickCount - _notified >= 10000 { ; prints out every 10 seconds
+                if A_TickCount - _notified >= 5000 { ; prints out every 5 seconds
+                    _notified := A_TickCount
+
+                    _time_String := FormatTime("hm", "Time")
+                    print("[Checks] (" _time_String ") : Game window should be positioned top left")
+
+                    SoundBeep(1000, 500)
+                }
+                
+                _status._running := 0 ; macro stops it wrong resolution 
+
+                return
+            }
+
+            if (_game_Width != 800 && _game_Height != 450) { 
+                print("[Checks] Elden Ring is not the correct resolution")
+
+                CheckIfActive("BayaMacro.exe")
+
+                if A_TickCount - _notified >= 5000 { ; prints out every 5 seconds
                     _notified := A_TickCount
 
                     _time_String := FormatTime("hm", "Time")
@@ -448,19 +467,17 @@ Checks() {
                     SoundBeep(1000, 500)
                 }
                 
+                _status._running := 0 ; macro stops it wrong resolution 
+
                 return
-            }
+            } 
 
-            WinActivate
-            WinWaitActive
-
-            WinMove 0,0
-
-            _status._macro := 1 ; macro starts when everything works
         } else {
-            _status._macro := 0 ; when elden ring doesn't exist macro stops
+            print("[Checks] Elden Ring is not active")
+
+            CheckIfActive("BayaMacro.exe")
+
+            _status._running := 0 ; when elden ring doesn't exist macro stops
         }
-    } else {
-        _status._macro := 0 ; when macro paused macro stops
     }
 }

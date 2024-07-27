@@ -9,6 +9,8 @@ DetectHiddenWindows True
 
 ; pre variables
 hWnd := A_Args[1]
+autoFarmMethod := A_Args[2]
+
 TimeOutTime := 4000
 
 ; pre functions

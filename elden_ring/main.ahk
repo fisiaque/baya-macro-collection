@@ -1,10 +1,7 @@
 ﻿; -- made by faizul haque aka fiziaque
 #Requires AutoHotkey v2.0
-#MaxThreadsPerHotkey 2
+#MaxThreadsPerHotkey 3
 #SingleInstance Off
-
-CoordMode "Pixel", "Window"
-CoordMode "Mouse", "Window"
 
 Persistent
 DetectHiddenWindows True
@@ -44,7 +41,11 @@ OnMessage(_msg_Num.Close, PostAsyncProc)
 OnMessage(_msg_Num.WM_COPYDATA, PostAsyncProc)
 
 ; variables
+_game := Object()
 _status := Object()
+
+_game.Title := "ELDEN RING™"
+_game.PID := ""
 
 _status._halt := 0
 _status._running := 0
@@ -66,5 +67,7 @@ SetTimer(Checks, 1000)
 
 ; hotkeys
 SC01B::ExitApp ; stop
+
+#HotIf WinExist(_game.Title)
 
 SC01A::_start_ ; start[]
