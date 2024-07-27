@@ -3,11 +3,9 @@
 _start_() {   
     
     static _last_Pressed := "" 
-
-    _time_Pressed := A_TimeSincePriorHotkey != "" and A_TimeSincePriorHotkey or 0
     
     if _last_Pressed != "" and A_TickCount - _last_Pressed <= 500 {
-        print("[Hotkeys(" Format_Msec(A_TickCount - _status._start_script) ")] Pressing Debounce " _time_Pressed "ms")
+        print("[Hotkeys(" Format_Msec(A_TickCount - _status._start_script) ")] Debounce")
         return
     }
 
@@ -20,14 +18,14 @@ _start_() {
 
         _status._running := 1
         
-        print("[Hotkeys(" Format_Msec(A_TickCount - _status._start_script) ")] Play " _time_Pressed "ms")
+        print("[Hotkeys(" Format_Msec(A_TickCount - _status._start_script) ")] Play")
 
         _last_Pressed := A_TickCount 
 
         Run(EnvGet("BayaMacro") ' ' A_ScriptHwnd ' ' _ini.DataAutoFarm ' ' _status._start_script)
         
     } else if (_status._running != 0) { ; # PAUSE
-        print("[Hotkeys(" Format_Msec(A_TickCount - _status._start_script) ")] Pause " _time_Pressed "ms")
+        print("[Hotkeys(" Format_Msec(A_TickCount - _status._start_script) ")] Pause")
 
         _last_Pressed := A_TickCount 
         
@@ -36,6 +34,6 @@ _start_() {
         _status._running:= 0
 
     } else if _gui.Ready != 1 {
-        print("[Hotkeys(" Format_Msec(A_TickCount - _status._start_script) ")] Save GUI Settings " _time_Pressed "ms")
+        print("[Hotkeys(" Format_Msec(A_TickCount - _status._start_script) ")] Save GUI Settings")
     } 
 }
