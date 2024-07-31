@@ -1,6 +1,6 @@
 ﻿; -- made by faizul haque aka fiziaque
 #Requires AutoHotkey v2.0
-#MaxThreadsPerHotkey 3
+#MaxThreadsPerHotkey 2
 #SingleInstance Off
 
 Persistent
@@ -25,14 +25,11 @@ FileDelete(A_WorkingDir "\icons.dll")
 ; variables
 _game := Object()
 _status := Object()
+_discord := Object()
 
 _game.Title := "ELDEN RING™"
 _game.PID := ""
 
-_status._halt := 0
-_status._running := 0
-_status._auto_log := 0
-_status._macro := 0
 _status._bot := ""
 _status._start_script := A_TickCount
 
@@ -45,29 +42,30 @@ _status._start_script := A_TickCount
 #Include modules\Hotkeys.ahk
 #Include modules\GUI.ahk
 #Include modules\Github.ahk
+#Include modules\Checks.ahk
+#Include modules\Commands.ahk
+#Include modules\Game.ahk
+
+print("[main(" Format_Msec(A_TickCount - _status._start_script) ") Modules Initialized")
 
 OnExit ExitFunction
 
 OnMessage(_msg_Num.Close, PostAsyncProc)
 OnMessage(_msg_Num.WM_COPYDATA, PostAsyncProc)
 
-discord_env := A_WorkingDir "\discord.env" 
+_discord.env := A_WorkingDir "\discord.env" 
+_discord.token := quoted(FileReadLine(_discord.env, 1))
+_discord.loading := 0
 
-discord_Token := quoted(FileReadLine(discord_env, 1))
+checkBot := DiscordBotCheck.Bind(_discord.token)
+SetTimer(checkBot, -50)
 
-; checks
+; latest version?
 GithubUpdate() ; checks if macro up to date
 
-checkBot := DiscordBotCheck.Bind(discord_Token)
-
-SetTimer(checkBot, -50)
-SetTimer(Checks, 1000)
-
-print("[main(" Format_Msec(A_TickCount - _status._start_script) ") Modules Initialized")
-
 ; hotkeys
-SC01B::ExitApp ; stop
+~SC01B::ExitApp ; stopM
 
-#HotIf WinExist(_game.Title) or print("[main(" Format_Msec(A_TickCount - _status._start_script) ")] Elden Ring not running")
+#HotIf _game.PID := WinExist(_game.Title) or print("[main(" Format_Msec(A_TickCount - _status._start_script) ")] Elden Ring not running")
 
-SC01A::_start_ ; start[]
+~SC01A::_start_ ; start[]

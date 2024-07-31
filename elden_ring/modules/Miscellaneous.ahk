@@ -1,10 +1,15 @@
-;#objects
-check := Object()
 
-;#variables
-check.active_tries := 0
+if !(A_IsCompiled) && A_LineFile == A_ScriptFullPath { ; if ran directly open main
+    #Warn All, Off
 
-keys := "LShift|W|A|S|D|Q|E|M|F|Esc|Enter|CapsLock|Tab|Space|LButton|MButton|RButton|Numpad2|Numpad4|Numpad6|Numpad8"
+    SetWorkingDir("../")
+
+    Run A_WorkingDir "/main.ahk"
+    ExitApp
+}
+
+
+keys := "W|A|S|D|Q|E|M|F|Esc|Enter|LButton|MButton|RButton|Numpad2|Numpad4|Numpad6|Numpad8|WheelUp|WheelDown|Right|LShift"
 
 ;#global
 global file_extensions := ['jpg','jpeg','png','gif','ico','exe']
@@ -31,10 +36,20 @@ FileReadLine(file_to_read, line_number) {
     return line_text
 }
 
+sw(key, state := "") {
+    sws := "{" . Format("sc{:X}", getKeySC(key)) " " . state . "}"
+
+    if state == "" {
+       sws := StrReplace(sws, A_Space)
+    }
+
+    return sws
+}
+
 UnpressKeys() {
     loop parse keys, "|" {
-        if GetKeyState(A_LoopField, "P") {
-            Send "{" A_LoopField " Up}"
+        if GetKeyState(A_LoopField) {
+            SendInput(sw(A_LoopField, "Up"))
         }
     }
 }
@@ -74,39 +89,6 @@ WithinRange(num, min, max) {
     return 0
 }
 
-CheckIfActive(_name) { 
-    check.active_tries += 1
-
-    if !(ProcessExist(_name)) and !(WinExist(_name)) {
-        return 1
-    } else {
-        try {
-            RunWait '*RunAs taskkill.exe /F /T /IM ' _name,, 'Hide'
-           
-            ProcessWaitClose(_name, 15)
-            
-            if !(ProcessExist(_name)) and !(WinExist(_name)) {
-                UnpressKeys()
-                
-                return 1
-            } else {
-                if check.active_tries < 3 {
-                    CheckIfActive(_name)
-                } else {
-                    return 0
-                }
-            }
-            
-        } catch as e {
-            if check.active_tries < 3 {
-                CheckIfActive(_name)
-            } else {
-                return 0
-            }
-        } 
-    }
-}
-
 ExitFunction(ExitReason, ExitCode) {
     SoundBeep(250, 75)
 
@@ -118,6 +100,12 @@ ExitFunction(ExitReason, ExitCode) {
     CheckIfActive("BayaMacroBot.exe")
     CheckIfActive("BayaMacro.exe")
 
+    ; delete folder
+    if FileExist(A_Temp "\BayaMacroImages") {
+        FileDelete A_Temp "\BayaMacroImages"
+        print("[Misc|ExitFunction(" Format_Msec(A_TickCount - _status._start_script) ")] BayaMacroImages Deleted")
+    }
+
     ; loop through temp files
     Loop Files, A_Temp "\*.*" { 
         if (IsFileExtenstion(A_LoopFileExt) == 1) {
@@ -126,35 +114,6 @@ ExitFunction(ExitReason, ExitCode) {
         }
     }
 } 
-
-DiscordBotCheck(discord_Token) {
-    while _gui.Ready != 1 {
-        Sleep 1000
-    }
-
-    if discord_Token != "" and CheckIfActive("BayaMacroBot.exe") == 1 {
-        print("[Misc|DiscordBotCheck(" Format_Msec(A_TickCount - _status._start_script) ")] Loading... (Timeout after 60s)")
-        
-        discord_ID_DATA := _ini.DiscordUserId "," _ini.DiscordRoleId
-
-        Run(EnvGet("BayaMacroBot") ' ' A_ScriptHwnd ' ' discord_Token ' ' discord_ID_DATA)
-
-        _last_TickCount := A_TickCount
-
-        while _status._bot == "" and A_TickCount - _last_TickCount <= 60000 { ;checks status bot or times out after 1 min
-            Sleep 1000
-        }
-
-        if _status._bot == "success" {
-            print("[Misc|DiscordBotCheck(" Format_Msec(A_TickCount - _status._start_script) ")] Successfully Activated!")
-        } else {
-            print("[Misc|DiscordBotCheck(" Format_Msec(A_TickCount - _status._start_script) ")] Failed to Activate")
-        }
-
-    } else if discord_Token == "" {
-        print("[Misc|DiscordBotCheck(" Format_Msec(A_TickCount - _status._start_script) ")] Empty Discord Token")
-    }
-}
 
 GithubUpdate() {
     ; #check macro version
@@ -426,63 +385,32 @@ Webhook(URL, _params) {
     whr.WaitForResponse()
 }
 
+; notify
+Notify(_string, _file := "") {
+    if _ini.DiscordWebhookURL != "" {
+        try {
+            objParam := { content  : _string
+                , username         : "Baya's Macro 🖱️⌨️"
+                , avatar_url       : "https://i.imgur.com/rTHyKfI.png"
+            }
+        
+            if _file != "" {
+                objParam := { content  : _string
+                    , username         : "Baya's Macro 🖱️⌨️"
+                    , avatar_url       : "https://i.imgur.com/rTHyKfI.png"
+                    , file          : [_file]  
+                }
+            }
+        
+            Webhook(_ini.DiscordWebhookURL, objParam) 
+        } catch as e {
+            print("[Notify(" Format_Msec(A_TickCount - _status._start_script) ")] Error!")
+        }
+    }
+}
+
 Format_Msec(ms) {
     VarSetStrCapacity(&t,256),DllCall("GetDurationFormat","uint",2048,"uint",0,"ptr",0,"int64",ms*10000,"wstr","hh':'mm':'ss","wstr",t,"int",256)
     return t
 }
 
-Checks() {
-    if _status._running == 1 {
-        static _notified := A_TickCount
-
-        ;-- WinActive checks if window is active | not to get mixed up with WinActivate which makes window on top
-        if (WinActive("ahk_id " _game.PID)) {
-            WinGetClientPos &_game_X, &_game_Y, &_game_Width, &_game_Height, "ahk_id " _game.PID
-            
-            if (_game_X != 8 && _game_Y != 31) { ; since windowed | checks if it's in the top left
-                print("[Misc|Checks(" Format_Msec(A_TickCount - _status._start_script) ")] Elden Ring window is not positioned properly")
-
-                CheckIfActive("BayaMacro.exe")
-
-                if A_TickCount - _notified >= 5000 { ; prints out every 5 seconds
-                    _notified := A_TickCount
-
-                    _time_String := FormatTime("hm", "Time")
-                    print("[Misc|Checks(" Format_Msec(A_TickCount - _status._start_script) ")] (" _time_String ") : Game window should be positioned top left")
-
-                    SoundBeep(1000, 500)
-                }
-                
-                _status._running := 0 ; macro stops it wrong resolution 
-
-                return
-            }
-
-            if (_game_Width != 800 && _game_Height != 450) { 
-                print("[Misc|Checks(" Format_Msec(A_TickCount - _status._start_script) ")] Elden Ring is not the correct resolution")
-
-                CheckIfActive("BayaMacro.exe")
-
-                if A_TickCount - _notified >= 5000 { ; prints out every 5 seconds
-                    _notified := A_TickCount
-
-                    _time_String := FormatTime("hm", "Time")
-                    print("[Misc|Checks(" Format_Msec(A_TickCount - _status._start_script) ")] (" _time_String ") : In-game resolution must be 800x450 'Windowed'")
-
-                    SoundBeep(1000, 500)
-                }
-                
-                _status._running := 0 ; macro stops it wrong resolution 
-
-                return
-            } 
-
-        } else {
-            print("[Misc|Checks(" Format_Msec(A_TickCount - _status._start_script) ")] Elden Ring is not active")
-
-            CheckIfActive("BayaMacro.exe")
-
-            _status._running := 0 ; when elden ring doesn't exist macro stops
-        }
-    }
-}

@@ -1,5 +1,14 @@
+if !(A_IsCompiled) && A_LineFile == A_ScriptFullPath { ; if ran directly open main
+    #Warn All, Off
+
+    SetWorkingDir("../")
+
+    Run A_WorkingDir "/main.ahk"
+    ExitApp
+}
+
 _codes := Object()
-_codes.Close := 001
+_codes.Close := 000
 
 CloseRunningScripts() {
     For hWnd in arr := WinGetList(A_WorkingDir "\" A_ScriptName) {
@@ -26,17 +35,18 @@ SendAsyncProc(hWnd, msgNum, dwData, result) {
             }
         } else if result[1] == "Command" {
             if result[2] == "Shutdown" {
-                print("[Initialize(" Format_Msec(A_TickCount - _status._start_script) ")] Shutdown Protocol")
-                Shutdown 9
+                commands.shutdown := 1
+                Shutdown_Command()
             } else if result[2] == "Check" {
-                print("[Initialize(" Format_Msec(A_TickCount - _status._start_script) ")] Check Protocol")
-
+                commands.check := 1
+                Check_Command()
             }
+        } else if result[1] == "Hwnd" {
+            macro.hwnd := result[2]
         }
     } 
 }
 PostAsyncProc(wParam, lParam, msgNum, hwnd) {
-    
     if msgNum == _msg_Num.WM_COPYDATA {
         StringAddress := NumGet(lParam, 2*A_PtrSize, "Ptr")  ; Retrieves the CopyDataStruct's lpData member.
         CopyOfData := StrGet(StringAddress)  ; Copy the string out of the structure.
@@ -48,8 +58,9 @@ PostAsyncProc(wParam, lParam, msgNum, hwnd) {
 
     if msgNum == _msg_Num.Close {
         return _codes.Close
-    }
+    } 
 }
+
 ; -- pre-check
 RunAsTask()
 

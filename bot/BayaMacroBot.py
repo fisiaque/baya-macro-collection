@@ -138,7 +138,7 @@ if TOKEN != None and TOKEN != "":
         async def shutdown(ctx):
             if can_use_commands(ctx) == True:  
                 print("Shutdown Command Recieved")
-                await ctx.send(f"{ctx.message.author.mention} Attempting to shutdown PC!")
+                await ctx.send(f"{ctx.message.author.mention} Sending Command to 'Shutdown'!")
 
                 copy_data(hwnd, 'Command|Shutdown')
 
@@ -146,7 +146,7 @@ if TOKEN != None and TOKEN != "":
         async def check(ctx):
             if can_use_commands(ctx) == True:  
                 print("Check Command Recieved")
-                await ctx.send(f"{ctx.message.author.mention} Attempting to send update!")
+                await ctx.send(f"{ctx.message.author.mention} Sending Command to 'Check'!")
 
                 copy_data(hwnd, 'Command|Check')
 

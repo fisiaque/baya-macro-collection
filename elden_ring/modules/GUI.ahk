@@ -1,3 +1,12 @@
+if !(A_IsCompiled) && A_LineFile == A_ScriptFullPath { ; if ran directly open main
+    #Warn All, Off
+
+    SetWorkingDir("../")
+
+    Run A_WorkingDir "/main.ahk"
+    ExitApp
+}
+
 ; #variables
 _gui := Object()
 
@@ -12,7 +21,7 @@ _options.Decisions := ["Yes", "No"]
 _ini := Object()
 
 _ini.Version := GetVersion()
-_ini.Name := GetIniName() 
+_ini.Name := GetName() "Data_" GetVersion() ".ini"
 
 _lowest_Interval := 5
 _highest_Interval := 60

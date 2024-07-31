@@ -1,3 +1,12 @@
+if !(A_IsCompiled) && A_LineFile == A_ScriptFullPath { ; if ran directly open main
+    #Warn All, Off
+
+    SetWorkingDir("../")
+
+    Run A_WorkingDir "/main.ahk"
+    ExitApp
+}
+
 ; objects
 arrays := Object()
 status := Object()

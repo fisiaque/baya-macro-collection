@@ -258,7 +258,7 @@ OpenMap() {
 
     while !ImageSearch(&_, &_, 1787, 83, 1822, 117, "*100 " images.CompassCircle) and A_TickCount - LoopSkip <= 3500 {
         Send("{Blind}{m Down}")
-        Sleep 20
+        Sleep 50
         Send("{Blind}{m Up}")
     
         Sleep 400
@@ -266,14 +266,14 @@ OpenMap() {
 }
 
 TravelAccept() {
-    LoopSkip := A_TickCount
+    if ImageSearch(&FoundX, &FoundY, 244, 126, 411, 160, "*100 " images.Sites) {
+        Loop 2 {
+            Send("{Blind}{Enter Down}")
+            Sleep 50
+            Send("{Blind}{Enter Up}")
 
-    if ImageSearch(&FoundX, &FoundY, 244, 126, 411, 160, "*100 " images.Sites) and A_TickCount - LoopSkip <= 3500  {
-        Send("{Blind}{Enter Down}")
-        Sleep 20
-        Send("{Blind}{Enter Up}")
-
-        Sleep 400
+            Sleep 250
+        }
     }
 }
 
@@ -282,7 +282,7 @@ RestAtGrace() {
 
     while !ImageSearch(&FoundX, &FoundY, 244, 126, 411, 160, "*100 " images.Sites) and A_TickCount - LoopSkip <= 3500 {
         Send("{Blind}{f Down}")
-        Sleep 20
+        Sleep 50
         Send("{Blind}{f Up}")
 
         Sleep 400
@@ -292,13 +292,12 @@ RestAtGrace() {
         MovingMouse(FoundX, FoundY, "Left", 2)
     } else {
         TravelAccept()
-        TravelAccept()
     }
 }
 
 GoBack() {
     Send("{Blind}{Esc Down}")
-    Sleep 20
+    Sleep 50
     Send("{Blind}{Esc Up}")
             
     Sleep 400
@@ -354,35 +353,43 @@ WaitLoading() {
 }
 
 GoToAlbinaurics() {
-    Send("{Blind}{Numpad4 Down}")
-    Sleep 35
-    Send("{Blind}{Numpad4 Up}")
-
-    Send("{Blind}{w Down}")
-    Sleep 20
+    
+    Send("{Blind}{W Down}")
+    Sleep 50
     Send("{Blind}{LShift Down}") ; start sprinting
-    Sleep 2200
 
-    Send("{Blind}{Numpad4 Down}")
-    Sleep 275
-    Send("{Blind}{Numpad4 Up}")
+    Sleep(1000)
 
-    Sleep 1000
+    Send("{Blind}{A Down}")
 
-    Send("{Blind}{w Up}")
-    Send("{Blind}{LShift Up}") ; stop sprinting
+    Sleep(500)
 
-    Send("{Blind}{Numpad2 Down}")
-    Sleep 150
-    Send("{Blind}{Numpad2 Up}")
+    Send("{Blind}{A Up}")
 
-    Sleep 500
+    Sleep(1000)
 
-    Send("{Blind}{f Down}")
-    Sleep 20
-    Send("{Blind}{f Up}")
+    Send("{Blind}{A Down}")
 
-    Sleep 6000
+    Sleep(350)
+
+    Send("{Blind}{A Up}")
+
+    Sleep(250)
+
+    Send("{Blind}{F Down}")
+    Sleep 50
+    Send("{Blind}{F Up}")
+
+    Sleep(5000)
+
+    Send("{Blind}{F Down}")
+    Sleep 50
+    Send("{Blind}{F Up}")
+
+    Send("{W Up}")
+    Send("{LShift Up}") ; stop sprinting
+
+    Sleep(5000)
 }
 
 GoToBird() {
@@ -403,7 +410,7 @@ GoToBird() {
     Send("{Blind}{Numpad2 Up}")
 
     Send("{Blind}{MButton Down}")
-    Sleep 20
+    Sleep 50
     Send("{Blind}{MButton Up}")
 
     Sleep 350
@@ -440,7 +447,7 @@ GoToSkeleton() {
         Sleep 150
 
         Send("{Blind}{MButton Down}")
-        Sleep 20
+        Sleep 50
         Send("{Blind}{MButton Up}")
 
         Send("{Blind}{w Down}")
@@ -448,13 +455,13 @@ GoToSkeleton() {
         Send("{Blind}{Space Down}")
         Send("{Blind}{w Up}")
         Send("{Blind}{LControl Down}")
-        Sleep 20
+        Sleep 50
         Send("{Blind}{Space Up}")
         Send("{Blind}{Click Left 2}")
         Send("{Blind}{LControl Up}")
 
         Send("{Blind}{MButton Down}")
-        Sleep 20
+        Sleep 50
         Send("{Blind}{MButton Up}")
         Send("{Blind}{LShift Up}")
 
@@ -465,11 +472,11 @@ GoToSkeleton() {
         Send("{Blind}{Numpad4 Up}")
         
         Send("{Blind}{w Down}")
-        Sleep 20
+        Sleep 50
         Send("{Blind}{LShift Down}")
-        Sleep 20
+        Sleep 50
         Send("{Blind}{LShift Up}")
-        Sleep 20
+        Sleep 50
         Send("{Blind}{w Up}")
 
         Sleep 1000
@@ -575,7 +582,7 @@ ReturnToDesktop() {
         }
 
         Send("{Blind}{Esc Down}")
-        Sleep 20
+        Sleep 50
         Send("{Blind}{Esc Up}")
 
         Sleep 250
@@ -743,7 +750,7 @@ RetrieveRunes() {
     
             while !ImageSearch(&_, &_, 890, 898, 978, 930, "*100 " images.Retrieve) and Tries < 5 {
                 Send("{Blind}{Right Down}")
-                Sleep 20
+                Sleep 50
                 Send("{Blind}{Right Up}")
                 
                 Tries += 1
@@ -757,7 +764,7 @@ RetrieveRunes() {
     
             while ImageSearch(&_, &_, 890, 898, 978, 930, "*100 " images.Retrieve) and Tries <= 3 {
                 Send("{Blind}{e Down}")
-                Sleep 20
+                Sleep 50
                 Send("{Blind}{e Up}")
                 
                 Tries += 1
@@ -792,7 +799,7 @@ CaptureRunes() {
         
             while !ImageSearch(&_, &_, 38, 773, 137, 872, "*100 " images.Settings) and tried < status.MaxCaptureRunesRetry {
                 Send("{Blind}{Esc Down}")
-                Sleep 20
+                Sleep 50
                 Send("{Blind}{Esc Up}")
 
                 Sleep 500
@@ -808,7 +815,7 @@ CaptureRunes() {
             } 
             
             Send("{Blind}{Esc Down}")
-            Sleep 20
+            Sleep 50
             Send("{Blind}{Esc Up}")
         }
         catch as e  {
