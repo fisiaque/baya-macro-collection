@@ -30,13 +30,6 @@ LoopImages() {
 
 try {
     LoopImages()
-} catch as e {
-    Loop Files, A_Temp "\*.png" { 
-        FileDelete A_LoopFileFullPath
-        print("[FileInstaller(" Format_Msec(A_TickCount - _status._start_script) ")] " A_LoopFileName " Deleted")
-    }
-
-    LoopImages()
 }
 
 ; baya macro png

@@ -45,7 +45,9 @@ _status._start_script := A_TickCount
 #Include modules\Checks.ahk
 #Include modules\Commands.ahk
 #Include modules\Game.ahk
+#Include modules\BatteryLife.ahk
 
+; start
 print("[main(" Format_Msec(A_TickCount - _status._start_script) ") Modules Initialized")
 
 OnExit ExitFunction

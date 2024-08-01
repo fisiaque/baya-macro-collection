@@ -274,26 +274,16 @@ FarmMob() {
         return 0
     }
 
+    SendInput(sw("W", "Up") sw("LShift", "Up"))
+    
     SendKeyPress("F")    
-    SendInput(sw("W", "Up") sw("LShift", "Up"))
-    Wait(2500)
-    if !(macro.running) || (!(macro.is_alive)) {
-        return 0
-    }
-
-    SendInput(sw("W", "Down") sw("LShift", "Down"))
-    Wait(2750)
-    if !(macro.running) || (!(macro.is_alive)) {
-        return 0
-    }
-
-    SendInput(sw("W", "Up") sw("LShift", "Up"))
-    SendKeyPress("F")
-
     Wait(3000)
-    SendKeyPress("F")
-    Wait(2000)
+    if !(macro.running) || (!(macro.is_alive)) {
+        return 0
+    }
 
+    SendKeyPress("F")
+    Wait(4000)
     if !(macro.running) || (!(macro.is_alive)) {
         return 0
     }

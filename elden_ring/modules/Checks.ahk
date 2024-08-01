@@ -8,10 +8,6 @@ if !(A_IsCompiled) && A_LineFile == A_ScriptFullPath { ; if ran directly open ma
 }
 
 ;#objects
-check := Object()
-
-check.active_tries := 0
-
 Checks() {
     static _notified := A_TickCount
 
@@ -64,7 +60,8 @@ Checks() {
 
             Notify(notification)
 
-            macro.retrieving := 0
+            Send(sw("F8"))
+
             macro.is_alive := 0 ; dead  
             
             return 0
@@ -74,6 +71,10 @@ Checks() {
         print("[Checks(" Format_Msec(A_TickCount - _status._start_script) ")] Elden Ring is not active")
 
         SoundBeep(1000, 500)
+
+        notification := _ini.DiscordUserId != "" and "<@" _ini.DiscordUserId "> Elden Ring is not active" or "Elden Ring is not active]"
+
+        Notify(notification)
 
         macro.running := 0
 
@@ -86,32 +87,38 @@ Checks() {
 }
 
 CheckIfActive(_name) { 
-    check.active_tries += 1
+    static active_tries := 0
 
     if !(ProcessExist(_name)) and !(WinExist(_name)) {
         return 1
     } else {
         try {
+            active_tries += 1
+
             RunWait '*RunAs taskkill.exe /F /T /IM ' _name,, 'Hide'
            
             ProcessWaitClose(_name, 15)
             
             if !(ProcessExist(_name)) and !(WinExist(_name)) {
+                active_tries := 0
+
                 UnpressKeys()
                 
                 return 1
             } else {
-                if check.active_tries < 3 {
+                if active_tries < 3 {
                     CheckIfActive(_name)
                 } else {
+                    active_tries := 0
                     return 0
                 }
             }
             
         } catch as e {
-            if check.active_tries < 3 {
+            if active_tries < 3 {
                 CheckIfActive(_name)
             } else {
+                active_tries := 0
                 return 0
             }
         } 
