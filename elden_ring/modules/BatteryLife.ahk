@@ -42,7 +42,7 @@ WM_POWERBROADCAST(wParam, lParam, msg, hwnd) {
                 Notify(notification)
             } 
 
-            if getPowerStatus().BatteryFlag == 9 && percent == 80 { ; if charging + high power
+            if getPowerStatus().BatteryFlag == 9 && (percent == 80 || percent == 100) { ; if charging + high power
                 notification := _ini.DiscordUserId != "" and "<@" _ini.DiscordUserId "> High Charge! Battery Percent: " percent "%" or "High Charge! Battery Percent: " percent "%"
     
                 Notify(notification)
