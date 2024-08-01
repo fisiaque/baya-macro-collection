@@ -27,7 +27,7 @@ WM_POWERBROADCAST(wParam, lParam, msg, hwnd) {
             case "{A7AD8041-B45A-4CAE-87A3-EECBB468A9E1}": ;GUID_BATTERY_PERCENTAGE_REMAINING
             percent:=NumGet(lParam,0x14,"Uint")
         
-            print("[BatteryLife] Charge is currently at: " percent "%")
+            print("[BatteryLife] Charge is currently at:" percent "%")
             
             if (percent < _battery_percent_limit) {
                 notification := _ini.DiscordUserId != "" and "<@" _ini.DiscordUserId "> Less than " _battery_percent_limit "% of Battery Life, Shutting Down PC" or "Less than " _battery_percent_limit "% of Battery Life, Shutting Down PC"

@@ -12,10 +12,10 @@ commands.shutdown := 0
 commands.check := 0
 
 Shutdown_Command() {
-    while (commands.shutdown && !(macro.is_alive)) {
+    while (commands.shutdown && (macro.running && !(macro.is_alive))) {
         Sleep 1000
     }
-
+    
     print("[Initialize(" Format_Msec(A_TickCount - _status._start_script) ")] Shutdown Command")
     
     Notify("Initialized Shutdown Command")
@@ -24,7 +24,7 @@ Shutdown_Command() {
 }
 
 Check_Command() {
-    while (commands.check && !(macro.is_alive)) {
+    while (commands.check && (macro.running && !(macro.is_alive))) {
         Sleep 100
     }
 
