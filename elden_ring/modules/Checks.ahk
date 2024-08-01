@@ -65,8 +65,8 @@ Checks() {
             Notify(notification)
 
             macro.retrieving := 0
-            macro.is_alive := 0 ; dead    
-             
+            macro.is_alive := 0 ; dead  
+            
             return 0
         }
 

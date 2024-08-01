@@ -90,7 +90,7 @@ OpenMap() {
 
     print("[BayaMacro(" Format_Msec(A_TickCount - _status._start_script) ")] Attempting to Open Menu")
 
-    while !ImageSearch(&_, &_, 24, 41, 58, 74, "*25 " A_Temp "\" GetName() "Map.png") && A_TickCount - LoopSkip <= 3500 {
+    while !ImageSearch(&_, &_, 24, 41, 58, 74, "*25 " A_Temp "\" GetName() "Map.png") && A_TickCount - LoopSkip <= 5000 {
         SendKeyPress("M")
 
         result := Wait(500)
@@ -112,7 +112,7 @@ Travel() {
 
     print("[BayaMacro(" Format_Msec(A_TickCount - _status._start_script) ")] Attempting to Find Site")
 
-    while !ImageSearch(&FoundX, &FoundY, 191, 109, 238, 162, "*50 " A_Temp "\" GetName() "Site.png") && A_TickCount - LoopSkip <= 3500 {
+    while !ImageSearch(&FoundX, &FoundY, 191, 109, 238, 162, "*50 " A_Temp "\" GetName() "Site.png") && A_TickCount - LoopSkip <= 5000 {
         SendKeyPress("F") ; open sites menu
 
         result := Wait(350)
@@ -152,7 +152,7 @@ TravelAccept() {
 
     LoopSkip := A_TickCount
 
-    while ImageSearch(&_, &_, 275, 224, 592, 291, "*25 " A_Temp "\" GetName() "Ok.png") && A_TickCount - LoopSkip <= 3500  {
+    while ImageSearch(&_, &_, 275, 224, 592, 291, "*25 " A_Temp "\" GetName() "Ok.png") && A_TickCount - LoopSkip <= 5000 {
         print("[BayaMacro(" Format_Msec(A_TickCount - _status._start_script) ")] Attempt " A_Index " to 'Click' OK")
     
         MovingMouse(313, 273, "Left", 2)
@@ -174,14 +174,15 @@ TravelAccept() {
 WaitLoading() {  
     macro.loading := 1
 
+    LoadWait := 10000 ; 10000 seconds
     LoopSkip := A_TickCount
 
     print("[BayaMacro(" Format_Msec(A_TickCount - _status._start_script) ")] Waiting for Loading Screen")
 
-    while !ImageSearch(&_, &_, 18, 410, 226, 473, "*25 " A_Temp "\" GetName() "Next.png") && A_TickCount - LoopSkip <= 30000 { ; 30 seconds loop skip
+    while !ImageSearch(&_, &_, 18, 410, 226, 473, "*50 " A_Temp "\" GetName() "Next.png") && A_TickCount - LoopSkip <= LoadWait { ; 10 seconds loop skip
         result := Wait(250)
 
-        if !(result) { ; if something went wrong
+        if !(result) || ImageSearch(&_, &_, 18, 410, 226, 473, "*25 " A_Temp "\" GetName() "Next.png") { ; if something went wrong
             break   ; break loop
         }
     }
@@ -190,14 +191,24 @@ WaitLoading() {
         return 0
     }
 
-    LoopSkip := A_TickCount
+    Wait(1000)
 
-    while ImageSearch(&_, &_, 18, 410, 226, 473, "*25 " A_Temp "\" GetName() "Next.png") && A_TickCount - LoopSkip <= 30000 { ; 30 seconds loop skip
-        result := Wait(250)
+    if !(macro.running) { ; macro stopped
+        return 0
+    }
 
-        if !(result) { ; if something went wrong
-           break   ; break loop
+    if ImageSearch(&_, &_, 18, 410, 226, 473, "*50 " A_Temp "\" GetName() "Next.png") {
+        LoopSkip := A_TickCount
+
+        while ImageSearch(&_, &_, 18, 410, 226, 473, "*50 " A_Temp "\" GetName() "Next.png") && A_TickCount - LoopSkip <= LoadWait { ; 10 seconds loop skip
+            result := Wait(250)
+    
+            if !(result) { ; if something went wrong
+               break   ; break loop
+            }
         }
+    else
+        Wait(LoadWait)
     }
 
     print("[BayaMacro(" Format_Msec(A_TickCount - _status._start_script) ")] Finished Loading")
@@ -278,7 +289,11 @@ FarmMob() {
 
     SendInput(sw("W", "Up") sw("LShift", "Up"))
     SendKeyPress("F")
-    Wait(6000)
+
+    Wait(3000)
+    SendKeyPress("F")
+    Wait(2000)
+
     if !(macro.running) || (!(macro.is_alive)) {
         return 0
     }
