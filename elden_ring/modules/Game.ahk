@@ -180,9 +180,11 @@ WaitLoading() {
     print("[BayaMacro(" Format_Msec(A_TickCount - _status._start_script) ")] Waiting for Loading Screen")
 
     while !ImageSearch(&_, &_, 18, 410, 226, 473, "*50 " A_Temp "\" GetName() "Next.png") && A_TickCount - LoopSkip <= LoadWait { ; 10 seconds loop skip
+        SendKeyPress("Esc")
+
         result := Wait(250)
 
-        if !(result) || ImageSearch(&_, &_, 18, 410, 226, 473, "*25 " A_Temp "\" GetName() "Next.png") { ; if something went wrong
+        if !(result) || ImageSearch(&_, &_, 18, 410, 226, 473, "*25 " A_Temp "\" GetName() "Next.png") || ImageSearch(&_, &_, 18, 410, 226, 473, "*50 " A_Temp "\" GetName() "Settings.png") { ; if something went wrong
             break   ; break loop
         }
     }
@@ -283,7 +285,13 @@ FarmMob() {
     }
 
     SendKeyPress("F")
-    Wait(6000)
+    Wait(3000)
+    if !(macro.running) || (!(macro.is_alive)) {
+        return 0
+    }
+
+    SendKeyPress("F")
+    Wait(3000)
     if !(macro.running) || (!(macro.is_alive)) {
         return 0
     }
@@ -382,6 +390,10 @@ StartMacro() {
             if !(result) {
                 if !(macro.running) { ; macro stopped
                     break
+                }
+                if ImageSearch(&_, &_, 18, 410, 226, 473, "*50 " A_Temp "\" GetName() "Settings.png") {
+                    SendKeyPress("Esc")
+                    continue
                 }
             }
         }
