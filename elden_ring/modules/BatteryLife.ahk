@@ -29,18 +29,14 @@ WM_POWERBROADCAST(wParam, lParam, msg, hwnd) {
         
             print("[BatteryLife] Charge is currently at:" percent "%")
             
-            if (percent < _battery_percent_limit) {
-                notification := _ini.DiscordUserId != "" and "<@" _ini.DiscordUserId "> Less than " _battery_percent_limit "% of Battery Life, Shutting Down PC" or "Less than " _battery_percent_limit "% of Battery Life, Shutting Down PC"
-                Notify(notification)
-
-                Shutdown_Command()
-
-            } else if (getPowerStatus().BatteryFlag == 2 || getPowerStatus().BatteryFlag == 6) && (percent == 30 || percent == 25 || percent == 20) { ; if not charging : Low Battery + Critical Battery i.e 5%
+            if (getPowerStatus().BatteryFlag == 2 || getPowerStatus().BatteryFlag == 6) && (percent == 30 || percent == 25 || percent == 20) { ; if not charging : Low Battery + Critical Battery i.e 5%
                 charge := getPowerStatus().BatteryFlag == 2 and "Low" or "Critically Low"
                 notification := _ini.DiscordUserId != "" and "<@" _ini.DiscordUserId "> " charge " Charge! Battery Percent: " percent "%" or charge " Charge! Battery Percent: " percent "%"
 
                 Notify(notification)
-            } 
+            } else if (getPowerStatus().BatteryFlag == 2 || getPowerStatus().BatteryFlag == 6) && (percent <= _battery_percent_limit) {
+                Shutdown_Command("Battery")
+            }
 
             if getPowerStatus().BatteryFlag == 9 && (percent == 80 || percent == 100) { ; if charging + high power
                 notification := _ini.DiscordUserId != "" and "<@" _ini.DiscordUserId "> High Charge! Battery Percent: " percent "%" or "High Charge! Battery Percent: " percent "%"
