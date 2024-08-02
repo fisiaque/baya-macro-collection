@@ -32,6 +32,7 @@ SendAsyncProc(hWnd, msgNum, dwData, result) {
         } else if result[1] == "DiscordBotCheck" {
             if _status._bot == "" {
                 _status._bot := result[2]
+                print("[DiscordBotCheck(" Format_Msec(A_TickCount - _status._start_script) ")] " _status._bot "!")
             }
         } else if result[1] == "Command" {
             if result[2] == "Shutdown" {

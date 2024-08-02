@@ -11,11 +11,6 @@ _start_() {
     
     static _last_Pressed := "" 
 
-    if _discord.loading {
-        print("[Hotkeys(" Format_Msec(A_TickCount - _status._start_script) ")] Wait for Discord Bot Response!")
-        return
-    }
-    
     if _last_Pressed != "" and A_TickCount - _last_Pressed <= 500 {
         print("[Hotkeys(" Format_Msec(A_TickCount - _status._start_script) ")] Debounce")
         return

@@ -57,10 +57,9 @@ OnMessage(_msg_Num.WM_COPYDATA, PostAsyncProc)
 
 _discord.env := A_WorkingDir "\discord.env" 
 _discord.token := quoted(FileReadLine(_discord.env, 1))
-_discord.loading := 0
 
 checkBot := DiscordBotCheck.Bind(_discord.token)
-SetTimer(checkBot, -50)
+SetTimer(checkBot, -50, -1)
 
 ; latest version?
 GithubUpdate() ; checks if macro up to date
@@ -70,4 +69,4 @@ GithubUpdate() ; checks if macro up to date
 
 #HotIf _game.PID := WinExist(_game.Title) or print("[main(" Format_Msec(A_TickCount - _status._start_script) ")] Elden Ring not running")
 
-~SC01A::_start_ ; start[]
+~SC01A::_start_ ; start[

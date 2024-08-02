@@ -126,8 +126,6 @@ CheckIfActive(_name) {
 }
 
 DiscordBotCheck(discord_Token) {
-    _discord.loading := 1
-
     while !(_gui.Ready) {
         Sleep 100
     }
@@ -139,22 +137,8 @@ DiscordBotCheck(discord_Token) {
 
         Run(EnvGet("BayaMacroBot") ' ' A_ScriptHwnd ' ' discord_Token ' ' discord_ID_DATA)
 
-        _last_TickCount := A_TickCount
-
-        while _status._bot == "" and A_TickCount - _last_TickCount <= 60000 { ;checks status bot or times out after 1 min
-            Sleep 1000
-        }
-
-        if _status._bot == "success" {
-            print("[DiscordBotCheck(" Format_Msec(A_TickCount - _status._start_script) ")] Successfully Activated!")
-        } else {
-            print("[DiscordBotCheck(" Format_Msec(A_TickCount - _status._start_script) ")] Failed to Activate")
-        }
-
-        _discord.loading := 0
     } else if discord_Token == "" {
         print("[DiscordBotCheck(" Format_Msec(A_TickCount - _status._start_script) ")] Empty Discord Token")
-        _discord.loading := 0
     }
 }
 
