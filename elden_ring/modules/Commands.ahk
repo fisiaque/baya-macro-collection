@@ -8,51 +8,44 @@ if !(A_IsCompiled) && A_LineFile == A_ScriptFullPath { ; if ran directly open ma
 }
 
 commands := Object()
-commands.shutdown := 0
-commands.check := 0
+commands.active := ""
+commands.start := A_TickCount
+commands.start_cycle := macro.cycle
+commands.cycle := 3
 
 Shutdown_Command(_reasoning := "") {
-    static active := 0
-
-    if active == 0 {
-        active := 1
-
-        while (commands.shutdown && (macro.running && !(macro.is_alive))) {
-            Sleep 1000
-        }
-        
-        notification := _ini.DiscordUserId != "" and "<@" _ini.DiscordUserId "> Initialized Shutdown Command" or "Initialized Shutdown Command"
-
-        if _reasoning == "Battery" {
-            notification := _ini.DiscordUserId != "" and "<@" _ini.DiscordUserId "> Less than 15% of Battery Life, Shutting Down PC" or "Less than 15% of Battery Life, Shutting Down Laptop"
-        }
-        
-        Notify(notification)
-
-        print("[Initialize(" Format_Msec(A_TickCount - _status._start_script) ")] Shutdown Command")
-    
-        ;Shutdown 9
-
-        active := 0
-    }
+    Notify("CHECKING SHUTDOWN")
 }
 
 Check_Command() {
-    static active := 0
+    Notify("CHECKING CHECK")
+}
 
-    if active == 0 {
-        active := 1
-
-        while (commands.check && (macro.running && !(macro.is_alive))) {
-            Sleep 100
-        }
+; -- set commands
+Set_Command_Shutdown(_reasoning := "") {
+    if commands.active == "" {
+        commands.start := A_TickCount
+        commands.start_cycle := macro.cycle
+        commands.active := "Shutdown"
+    } else {
+        print("[Commands(" Format_Msec(A_TickCount - _status._start_script) ")] Wait for " commands.active " Command to Finish")
     
-        print("[Initialize(" Format_Msec(A_TickCount - _status._start_script) ")] Check Command")
-    
-        Notify("Initialized Check Command")
-    
-        commands.check := 0
-
-        active := 0
+        Notify("Wait for " commands.active " Command to Finish")
     }
+}
+
+Set_Command_Check() {
+    if commands.active == "" {
+        commands.start := A_TickCount
+        commands.start_cycle := macro.cycle
+        commands.active := "Check"
+    } else {
+        print("[Commands(" Format_Msec(A_TickCount - _status._start_script) ")] Wait for " commands.active " Command to Finish")
+    
+        Notify("Wait for " commands.active " Command to Finish")
+    }
+}
+
+Set_Command_Cancel() {
+    commands.active := ""
 }

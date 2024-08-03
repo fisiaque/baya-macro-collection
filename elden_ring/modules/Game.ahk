@@ -16,6 +16,8 @@ SetKeyDelay -1, 50
 
 ; object
 macro := Object()
+macro.cycle := 0
+macro.force_shutdown := 0
 
 ; variables
 macro.running := 0
@@ -54,31 +56,15 @@ SendKeyPress(key) {
 
 ; COMMANDS CHECK
 CommandsCheck() {
-    Wait(1000) ; dont use custom sleep here
-
-    is_command := 0
-
-    for _command, _value in commands.OwnProps() {
-        if _value {
-           is_command := 1
-           break 
-        }
-    }
-
-    if is_command {
-        UnpressKeys()
-        CommandsSend()
-    }
-
-    Wait(1000) ; dont use custom sleep here
-}
-
-CommandsSend() {
-    if commands.shutdown {
+    if commands.active == "Shutdown" || macro.force_shutdown {
+        commands.active := ""
+        
         Shutdown_Command()
         Termination()
     }
-    if commands.check {
+    if commands.active == "Check" {
+        commands.active := ""
+
         Check_Command()
     }
 }
@@ -180,11 +166,9 @@ WaitLoading() {
     print("[BayaMacro(" Format_Msec(A_TickCount - _status._start_script) ")] Waiting for Loading Screen")
 
     while !ImageSearch(&_, &_, 18, 410, 226, 473, "*50 " A_Temp "\" GetName() "Next.png") && A_TickCount - LoopSkip <= LoadWait { ; 10 seconds loop skip
-        SendKeyPress("Esc")
-
         result := Wait(250)
 
-        if !(result) || ImageSearch(&_, &_, 18, 410, 226, 473, "*25 " A_Temp "\" GetName() "Next.png") || ImageSearch(&_, &_, 18, 410, 226, 473, "*50 " A_Temp "\" GetName() "Settings.png") { ; if something went wrong
+        if !(result) || ImageSearch(&_, &_, 18, 410, 226, 473, "*25 " A_Temp "\" GetName() "Next.png") { ; if something went wrong
             break   ; break loop
         }
     }
@@ -223,6 +207,11 @@ WaitLoading() {
 
     if !(result) {
         return 0
+    }
+
+    ; -- check commands
+    if macro.cycle >= (commands.start_cycle + commands.cycle) || macro.force_shutdown {
+        CommandsCheck()
     }
 
     macro.loading := 0
@@ -285,13 +274,7 @@ FarmMob() {
     }
 
     SendKeyPress("F")
-    Wait(3000)
-    if !(macro.running) || (!(macro.is_alive)) {
-        return 0
-    }
-
-    SendKeyPress("F")
-    Wait(3000)
+    Wait(6000)
     if !(macro.running) || (!(macro.is_alive)) {
         return 0
     }
@@ -306,6 +289,8 @@ Termination() {
 
     UnpressKeys()
 
+    macro.running := 0
+
     Exit
 }
 
@@ -318,6 +303,9 @@ StartMacro() {
     macro.is_alive := 1
     macro.farming := 0
     macro.loading := 0
+    macro.cycle := 1
+
+    commands.can_use := 0
 
     result := Checks()
 
@@ -327,7 +315,7 @@ StartMacro() {
     }
 
     Loop {
-        if macro.is_alive {
+    ;    if macro.is_alive {
             result := OpenMap()
 
             if !(result) {
@@ -391,12 +379,8 @@ StartMacro() {
                 if !(macro.running) { ; macro stopped
                     break
                 }
-                if ImageSearch(&_, &_, 18, 410, 226, 473, "*50 " A_Temp "\" GetName() "Settings.png") {
-                    SendKeyPress("Esc")
-                    continue
-                }
             }
-        }
+    ;    }
     
         macro.is_alive:= 1
 
@@ -418,6 +402,8 @@ StartMacro() {
                 }
             }
         }
+
+        macro.cycle += 1
     }
 
     Termination()

@@ -36,11 +36,13 @@ SendAsyncProc(hWnd, msgNum, dwData, result) {
             }
         } else if result[1] == "Command" {
             if result[2] == "Shutdown" {
-                commands.shutdown := 1
-                Shutdown_Command()
-            } else if result[2] == "Check" {
-                commands.check := 1
-                Check_Command()
+                Set_Command_Shutdown()
+            }
+            if result[2] == "Check" {
+                Set_Command_Check()
+            }
+            if result[2] == "Cancel" {
+                Set_Command_Cancel()
             }
         } else if result[1] == "Hwnd" {
             macro.hwnd := result[2]

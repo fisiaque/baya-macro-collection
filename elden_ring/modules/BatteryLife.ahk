@@ -35,7 +35,11 @@ WM_POWERBROADCAST(wParam, lParam, msg, hwnd) {
 
                 Notify(notification)
             } else if (getPowerStatus().BatteryFlag == 2 || getPowerStatus().BatteryFlag == 6) && (percent <= _battery_percent_limit) {
-                Shutdown_Command("Battery")
+                notification := _ini.DiscordUserId != "" and "<@" _ini.DiscordUserId "> Attempting to Force Shutdown PC, Battery Percent Too Low: " percent "%" or "Attempting to Force Shutdown PC, Battery Percent Too Low: " percent "%"
+
+                Notify(notification)
+
+                macro.force_shutdown := 1
             }
 
             if getPowerStatus().BatteryFlag == 9 && (percent == 80 || percent == 100) { ; if charging + high power

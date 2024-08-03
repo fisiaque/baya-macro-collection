@@ -43,8 +43,8 @@ _status._start_script := A_TickCount
 #Include modules\GUI.ahk
 #Include modules\Github.ahk
 #Include modules\Checks.ahk
-#Include modules\Commands.ahk
 #Include modules\Game.ahk
+#Include modules\Commands.ahk
 #Include modules\BatteryLife.ahk
 
 ; start

@@ -150,6 +150,14 @@ if TOKEN != None and TOKEN != "":
 
                 copy_data(hwnd, 'Command|Check')
 
+        @client.command()
+        async def cancel(ctx):
+            if can_use_commands(ctx) == True:  
+                print("Cancel Command Recieved")
+                await ctx.send(f"{ctx.message.author.mention} Sending Command to 'Cancel'!")
+
+                copy_data(hwnd, 'Command|Cancel')
+
         client.run(token=TOKEN)
     except:
         print("Failed to Activate Bot!")
