@@ -45,7 +45,6 @@ StartMacro() {
     macro.running := 1
     research.time := A_TickCount
     research.notified := 0
-    macro.cycle := 0
 
     loop {
         if !(macro.running) {
@@ -84,6 +83,6 @@ StartMacro() {
 
         SendKeyPress("X")
 
-        Sleep(250)
+        Sleep(500)
     }
 }
