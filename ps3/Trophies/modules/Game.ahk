@@ -75,11 +75,11 @@ StartMacro() {
 
         SendKeyPress("X")
 
-        Sleep(250)
+        Sleep(500)
 
         SendKeyPress("X")
 
-        Sleep(250)
+        Sleep(500)
 
         SendKeyPress("X")
 
