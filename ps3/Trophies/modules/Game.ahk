@@ -65,7 +65,7 @@ StartMacro() {
             Sleep(100)
         }
 
-        if A_TickCount - LoopSkip <= 60000 {
+        if A_TickCount - LoopSkip >= 60000 {
             print("[BayaMacro(" Format_Msec(A_TickCount - _status._start_script) ")] Max " macro.cycle " Synced?")
             break
         }
