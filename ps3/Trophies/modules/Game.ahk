@@ -9,6 +9,7 @@ research := Object()
 
 ; variables
 macro.running := 0
+macro.cycle := 0
 research.time := A_TickCount
 research.notified := 0
 
@@ -44,11 +45,14 @@ StartMacro() {
     macro.running := 1
     research.time := A_TickCount
     research.notified := 0
+    macro.cycle := 0
 
     loop {
         if !(macro.running) {
             break
         }
+
+        macro.cycle += 0
 
         ; Make sure to over over trophies on ps3
         SendKeyPress("Z")
@@ -57,15 +61,22 @@ StartMacro() {
 
         LoopSkip := A_TickCount
 
-        print("[BayaMacro(" Format_Msec(A_TickCount - _status._start_script) ")] Waiting for Trophy...")
+        print("[BayaMacro(" Format_Msec(A_TickCount - _status._start_script) ")] Waiting for Trophy Sync Error..." macro.cycle "Synced")
 
-        while !ImageSearch(&_, &_, 0, 0, 1920, 1080, "*25 " A_Temp "\BayaMacroPerforming.png") && A_TickCount - LoopSkip <= 60000 { 
+        while !ImageSearch(&_, &_, 0, 0, 1920, 1080, "*100 " A_Temp "\BayaMacroErrorMin.png") && A_TickCount - LoopSkip <= 60000 { 
             Sleep(100)
         }
 
-        while !ImageSearch(&_, &_, 0, 0, 1920, 1080, "*25 " A_Temp "\BayaMacroPerforming.png") && A_TickCount - LoopSkip <= 60000 { 
-            Sleep(100)
+        if A_TickCount - LoopSkip > 60000 {
+            print("[BayaMacro(" Format_Msec(A_TickCount - _status._start_script) ")] Error Syncing! " macro.cycle "Synced")
+            break
         }
+
+        print("[BayaMacro(" Format_Msec(A_TickCount - _status._start_script) ")] Confirming Sync! " macro.cycle "Synced")
+
+        SendKeyPress("X")
+
+        Sleep(250)
 
         SendKeyPress("X")
 
