@@ -69,14 +69,17 @@ StartMacro() {
         }
 
         if A_TickCount - LoopSkip >= 60000 {
-            print("[BayaMacro(" Format_Msec(A_TickCount - _status._start_script) ")] Max " macro.cycle " Synced?")
-            break
+            if macro.cycle >= 99 {
+                print("[BayaMacro(" Format_Msec(A_TickCount - _status._start_script) ")] Max " macro.cycle " Synced?")
+                break
+            }
+            
+        } else {
+            macro.cycle += 1
+
+            print("[BayaMacro(" Format_Msec(A_TickCount - _status._start_script) ")] Synced " macro.cycle)    
         }
-
-        macro.cycle += 1
-
-        print("[BayaMacro(" Format_Msec(A_TickCount - _status._start_script) ")] Synced " macro.cycle)
-
+        
         SendKeyPress("X")
 
         Sleep(250)
