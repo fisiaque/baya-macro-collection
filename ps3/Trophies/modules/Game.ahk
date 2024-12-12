@@ -56,6 +56,10 @@ StartMacro() {
 
         Sleep(250)
 
+        SendKeyPress("Z")
+
+        Sleep(250)
+
         LoopSkip := A_TickCount
 
         print("[BayaMacro(" Format_Msec(A_TickCount - _status._start_script) ")] Waiting for Sync Error..." macro.cycle " Synced")
@@ -75,11 +79,11 @@ StartMacro() {
 
         SendKeyPress("X")
 
-        Sleep(500)
+        Sleep(250)
 
         SendKeyPress("X")
 
-        Sleep(500)
+        Sleep(250)
 
         SendKeyPress("X")
 
