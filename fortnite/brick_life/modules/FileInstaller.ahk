@@ -20,7 +20,7 @@ try {
 }
 
 ; baya macro png
-;if !(FileExist(A_Temp "\???.png")) {
-;    FileInstall ".\images\???.png", A_Temp "\???.png", 1
-;    FileSetAttrib "+H", A_Temp "\???.png"
-;} 
+if !(FileExist(A_Temp "\Unknown.PNG")) {
+    FileInstall ".\images\Unknown.PNG", A_Temp "\Unknown.PNG", 1
+    FileSetAttrib "+H", A_Temp "\Unknown.PNG"
+} 

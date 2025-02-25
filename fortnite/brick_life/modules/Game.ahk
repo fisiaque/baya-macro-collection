@@ -86,7 +86,7 @@ StartMacro() {
                 print("[Game|StartLoop(" Format_Msec(A_TickCount - _status._start_script) ")] Disconnected!")
 
                 ; notify on discord
-                Notify("<@" _ini.DiscordUserId "> You have disconnected from Fortite Brick Life")
+                Notify("<@" _ini.DiscordUserId "> You have disconnected from Fortnite Brick Life!")
 
                 break
             }
