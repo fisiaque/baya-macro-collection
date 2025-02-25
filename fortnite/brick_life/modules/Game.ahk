@@ -29,18 +29,28 @@ SendKeyPress(key, delay := 50) {
 
 movement(N) {
     if N == 1 {
+        print("[Game|movement(" Format_Msec(A_TickCount - _status._start_script) ")] Going Forward!")
+
         SendKeyPress("W", Random(100,300))
     }
     if N == 2 {
+        print("[Game|movement(" Format_Msec(A_TickCount - _status._start_script) ")] Going Left!")
+
         SendKeyPress("A", Random(100,300))
     }
     if N == 3 {
+        print("[Game|movement(" Format_Msec(A_TickCount - _status._start_script) ")] Going Back!")
+
         SendKeyPress("S", Random(100,300))
     }
     if N == 4 {
+        print("[Game|movement(" Format_Msec(A_TickCount - _status._start_script) ")] Going Right!")
+
         SendKeyPress("D", Random(100,300))
     }
     if N == 5 {
+        print("[Game|movement(" Format_Msec(A_TickCount - _status._start_script) ")] Jumping!")
+
         SendKeyPress("Space")
     }
 }
@@ -73,10 +83,10 @@ StartMacro() {
             }
 
             if !PixelSearch(&_, &_, 1738, 88, 1784, 144, 0xAAAFDB, 3) {
-                print("[Game(" Format_Msec(A_TickCount - _status._start_script) ")] Left?")
+                print("[Game|StartLoop(" Format_Msec(A_TickCount - _status._start_script) ")] Disconnected!")
 
                 ; notify on discord
-                Notify("<@" _ini.DiscordUserId "> You have left? Fortite Brick Life")
+                Notify("<@" _ini.DiscordUserId "> You have disconnected from Fortite Brick Life")
 
                 break
             }
