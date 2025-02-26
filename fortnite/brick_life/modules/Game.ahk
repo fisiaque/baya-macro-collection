@@ -74,20 +74,20 @@ StartMacro() {
             break
         }
 
-        if PixelSearch(&_, &_, 1738, 88, 1784, 144, 0xAAAFDB, 3) { ; Searches for Resident color
+        if PixelSearch(&_, &_, 1738, 88, 1784, 144, 0xAAAFDB, 5) { ; Searches for Resident color
             movement(Random(1, 5))
 
             starting := A_TickCount
 
             while A_TickCount - starting < 5000 {
-                if !PixelSearch(&_, &_, 1738, 88, 1784, 144, 0xAAAFDB, 3) {
+                if !PixelSearch(&_, &_, 1738, 88, 1784, 144, 0xAAAFDB, 5) {
                     break
                 }
 
                 Sleep 100
             }
 
-            if !PixelSearch(&_, &_, 1738, 88, 1784, 144, 0xAAAFDB, 3) {
+            if !PixelSearch(&_, &_, 1738, 88, 1784, 144, 0xAAAFDB, 5) {
                 print("[Game|StartLoop(" Format_Msec(A_TickCount - _status._start_script) ")] Disconnected!")
 
                 ; notify on discord
