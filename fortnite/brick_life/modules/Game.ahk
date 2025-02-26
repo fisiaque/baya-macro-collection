@@ -64,6 +64,11 @@ StartMacro() {
     research.time := A_TickCount
     research.notified := 0
 
+    print("[Game|StartLoop(" Format_Msec(A_TickCount - _status._start_script) ")] Macro has started!")
+
+    ; notify on discord
+    Notify("<@" _ini.DiscordUserId "> Macro has started!")
+
     loop {
         if !(macro.running) {
             break
