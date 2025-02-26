@@ -226,6 +226,8 @@ Webhook(URL, _params) {
 }
 
 ; notify
+error_amount := 0
+
 Notify(_string, _file := "") {
     if _ini.DiscordWebhookURL != "" {
         try {
@@ -244,7 +246,18 @@ Notify(_string, _file := "") {
         
             Webhook(_ini.DiscordWebhookURL, objParam) 
         } catch as e {
-            print("[Notify(" Format_Msec(A_TickCount - _status._start_script) ")] Error!")
+            error_amount += 1
+            
+            print("[Notify(" Format_Msec(A_TickCount - _status._start_script) ")] Error #" error_amount "!")
+
+            if error_amount >= 3 {
+                error_amount := 0
+            } else {
+                Notify(_string, _file)
+            }
+
+        } else {
+            error_amount := 0
         }
     }
 }
