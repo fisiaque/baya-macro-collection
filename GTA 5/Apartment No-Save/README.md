@@ -34,7 +34,9 @@ It won't run without admin rights because it needs them to add and remove firewa
 
 ---
 
-## Controls
+## Controls 
+**STILL WORKING IN PROGRESS**
+
 ### **Numpad0**: Start Preparation Phase  
 - Sets up all 10 slots to a value of `$550k` each.  
 - This must be run in **Story Mode**. Start the process and wait until it completes.
