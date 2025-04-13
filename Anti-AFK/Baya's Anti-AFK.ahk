@@ -201,12 +201,18 @@ UpdateOnPoll()
         }
     }
 
-    if script_active_flag
+    if script_active_flag 
+    {
         TrayScriptActive()
-    else if script_idle_flag
+    }  
+    else if script_idle_flag 
+    {
         TrayScriptIdle()
-    else
+    }
+    else 
+    {
         TrayScriptDisabled()
+    }
 }
 
 ;==================================================
