@@ -6,37 +6,49 @@
 ; ||__] |__|  \_/  |__| ' [__     |__| |\ |  |  | __ |__| |___ |_/ |
 ; ||__] |  |   |   |  |   ___]    |  | | \|  |  |    |  | |    | \_|
 ; +================================================================+
-;
-;   Programs --> Executables that the target processes run under (array)
-;   Timeout --> Idle time required for Anti-AFK to start (minutes)
-;   Delay --> Time between Anti-AFK's actions (minutes)
-;   Poll --> Time interval for polling whether the process is running (seconds)
 
-; Option to exit
+;   Programs --> Executables that the target processes run under (array)
+;   Timeout  --> Idle time required for Anti-AFK to start (minutes)
+;   Delay    --> Time between Anti-AFK's actions (minutes)
+;   Poll     --> Time interval for polling whether the process is running (seconds)
+
+;==================================================
+; Hotkey to Exit
+;==================================================
 End::ExitApp
 
+;==================================================
 ; Editable Variables
+;==================================================
 Programs := ["RobloxPlayerBeta.exe"]
-Timeout := 1
-Delay := 15
-Poll := 5
+Timeout  := 1       ; in minutes
+Delay    := 15      ; in minutes
+Poll     := 5       ; in seconds
 
-; Non-Editable variables
+;==================================================
+; Non-Editable Variables
+;==================================================
 Tray := A_TrayMenu
 tray_icon := ""
-Timeout := Timeout * 60
-Delay := Delay * 60
-poll_ms := Poll * 1000
+Timeout   *= 60     ; convert to seconds
+Delay     *= 60
+poll_ms   := Poll * 1000
 
+;==================================================
 ; Tooltip Texts (Customisable)
+;==================================================
 disabled_tooltip := "No Windows Found`nPress END to exit"
-idle_tooltip := "Anti AFK"
-active_tooltip := "Anti-AFK Active`nPress END to exit"
+idle_tooltip     := "Anti AFK"
+active_tooltip   := "Anti-AFK Active`nPress END to exit"
 
+;==================================================
 ; DLL Calls
+;==================================================
 full_command_line := DllCall("GetCommandLine", "str")
 
+;==================================================
 ; Prompt to Run as Admin
+;==================================================
 if not (A_IsAdmin or RegExMatch(full_command_line, " /restart(?!\S)"))
 {
     admin_title := "Run as Admin?"
@@ -50,9 +62,10 @@ if not (A_IsAdmin or RegExMatch(full_command_line, " /restart(?!\S)"))
         whilst Anti-AFK is interacting with it.
     )"
 
-    result := MsgBox(admin_message, admin_title, "Y/N T4") 
+    result := MsgBox(admin_message, admin_title, "Y/N T4")
 
-    if (result = "Yes") {
+    if (result = "Yes")
+    {
         try
         {
             if A_IsCompiled
@@ -64,102 +77,115 @@ if not (A_IsAdmin or RegExMatch(full_command_line, " /restart(?!\S)"))
     }
 }
 
-; Reset AFK Timer (Customisable)
-ResetTimer() {
+;==================================================
+; Function: Reset AFK Timer
+;==================================================
+ResetTimer()
+{
     SendInput("{h Down}")
     Sleep(50)
     SendInput("{h Up}")
 }
 
-; Create Tray Icons
-TrayScriptDisabled() {
+;==================================================
+; Tray Icon Functions
+;==================================================
+TrayScriptDisabled()
+{
     global tray_icon
-
-    if (tray_icon == "ScriptDisabled") {
+    if (tray_icon = "ScriptDisabled")
         return
-    }
 
     tray_icon := "ScriptDisabled"
-
     A_IconTip := disabled_tooltip
     TraySetIcon(A_AhkPath, 4, 1)
 }
 
-TrayScriptIdle(){
+TrayScriptIdle()
+{
     global tray_icon
-
-    if (tray_icon == "ScriptIdle") {
+    if (tray_icon = "ScriptIdle")
         return
-    }
 
     tray_icon := "ScriptIdle"
-
     A_IconTip := idle_tooltip
     TraySetIcon(A_AhkPath, 1, 1)
 }
 
-TrayScriptActive() {
+TrayScriptActive()
+{
     global tray_icon
-
-    if (tray_icon == "ScriptActive") {
+    if (tray_icon = "ScriptActive")
         return
-    }
 
     tray_icon := "ScriptActive"
-
     A_IconTip := active_tooltip
     TraySetIcon(A_AhkPath, 2, 1)
 }
 
-; Update Poll with Frequency
-UpdateOnPoll() {
+;==================================================
+; Main Polling Function
+;==================================================
+UpdateOnPoll()
+{
     loop_timeout_count := Map()
     loop_delay_count := Map()
-
     script_active_flag := False
     script_idle_flag := False
 
-    for _, executable in Programs {
+    for _, executable in Programs
+    {
         window_list := WinGetList("ahk_exe " . executable)
 
-        Loop window_list.Length {
+        Loop window_list.Length
+        {
             window := window_list[A_Index]
-
             loop_timeout_count[window] := Max(1, Round(Timeout / Poll))
             loop_delay_count[window] := 1
 
-            if WinActive("ahk_id " window) {
-                if (A_TimeIdlePhysical > Timeout*1000) {
+            if WinActive("ahk_id " window)
+            {
+                if (A_TimeIdlePhysical > Timeout * 1000)
+                {
                     loop_delay_count[window] -= 1
                     script_active_flag := True
-                } else {
+                }
+                else
+                {
                     loop_timeout_count[window] := Max(1, Round(Timeout / Poll))
                     loop_delay_count[window] := 1
                     script_idle_flag := True
                 }
 
-                if (loop_delay_count[window] == 0) {
+                if (loop_delay_count[window] = 0)
+                {
                     loop_delay_count[window] := Max(1, Round(Delay / Poll))
                     ResetTimer()
                 }
-            } else {
-                if (loop_timeout_count[window] > 0) {
+            }
+            else
+            {
+                if (loop_timeout_count[window] > 0)
                     loop_timeout_count[window] -= 1
-                }
-                if loop_timeout_count[window] == 0 {
+
+                if (loop_timeout_count[window] = 0)
+                {
                     loop_delay_count[window] -= 1
                     script_active_flag := True
-                } else {
+                }
+                else
+                {
                     loop_delay_count[window] := 1
                     script_idle_flag := True
                 }
 
-                if (loop_delay_count[window] == 0) {
+                if (loop_delay_count[window] = 0)
+                {
                     loop_delay_count[window] := Max(1, Round(Delay / Poll))
 
                     BlockInput "On"
                     old_window := WinGetID("A")
-                    
+
                     WinSetTransparent(0, "ahk_id " window)
                     WinActivate("ahk_id " window)
 
@@ -175,15 +201,15 @@ UpdateOnPoll() {
         }
     }
 
-    if script_active_flag {
+    if script_active_flag
         TrayScriptActive()
-
-    } else if script_idle_flag {
+    else if script_idle_flag
         TrayScriptIdle()
-
-    } else {
+    else
         TrayScriptDisabled()
-    }
 }
 
+;==================================================
+; Start the Polling Timer
+;==================================================
 SetTimer(UpdateOnPoll, poll_ms)
