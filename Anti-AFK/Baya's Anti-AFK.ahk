@@ -135,7 +135,7 @@ UpdateOnPoll()
 
     for _, executable in Programs
     {
-        window_list := WinGetList("ahk_exe " . executable)
+        window_list := WinGetList("ahk_exe " executable)
 
         Loop window_list.Length
         {
