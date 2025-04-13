@@ -28,9 +28,6 @@ Timeout := Timeout * 60
 Delay := Delay * 60
 poll_ms := Poll * 1000
 
-; Mode Set
-SendMode("Input")
-
 ; Tooltip Texts (Customisable)
 disabled_tooltip := "No Windows Found`nPress END to exit"
 idle_tooltip := "Anti AFK"
@@ -69,9 +66,9 @@ if not (A_IsAdmin or RegExMatch(full_command_line, " /restart(?!\S)"))
 
 ; Reset AFK Timer (Customisable)
 ResetTimer() {
-    Send("{h Down}")
+    SendInput("{h Down}")
     Sleep(50)
-    Send("{h Up}")
+    SendInput("{h Up}")
 }
 
 ; Create Tray Icons
