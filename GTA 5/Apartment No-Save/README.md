@@ -29,16 +29,16 @@ For this to work, you need:
 ---
 
 ## IF STILL NOT WORKING, TRY MY SETTINGS
-**SETTINGS\DISPLAY**
+**SETTINGS\DISPLAY:**
 ![Display](https://github.com/fisiaque/baya_macros/blob/main/GTA%205/Apartment%20No-Save/SETTINGS/Display.png "Set Display Settings")
-**SETTINGS\GRAPHICS**
+**SETTINGS\GRAPHICS:**
 ![Graphics#1](https://github.com/fisiaque/baya_macros/blob/main/GTA%205/Apartment%20No-Save/SETTINGS/Graphics1.png "Set Graphics Settings")
 ![Graphics#2](https://github.com/fisiaque/baya_macros/blob/main/GTA%205/Apartment%20No-Save/SETTINGS/Graphics2.png "Set Graphics Settings")
 ![Graphics#3](https://github.com/fisiaque/baya_macros/blob/main/GTA%205/Apartment%20No-Save/SETTINGS/Graphics3.png "Set Graphics Settings")
 ![Graphics#4](https://github.com/fisiaque/baya_macros/blob/main/GTA%205/Apartment%20No-Save/SETTINGS/Graphics4.png "Set Graphics Settings")
-**SETTINGS\NOTIFICATIONS**
+**SETTINGS\NOTIFICATIONS:**
 ![Notifications](https://github.com/fisiaque/baya_macros/blob/main/GTA%205/Apartment%20No-Save/SETTINGS/Notifications.png "Set Notifications Settings")
-**PHONE**
+**PHONE:**
 ![Phone](https://github.com/fisiaque/baya_macros/blob/main/GTA%205/Apartment%20No-Save/SETTINGS/Phone.png "Set Phone Settings")
 
 ## IMPORTANT
