@@ -138,12 +138,12 @@ PullUpPhone() {
     Loop 50 {
       PressKey("MButton", 1, 1, 50) ; Try to open the phone
 
-      if (ImageSearch(&FoundX, &FoundY, 0, 0, A_ScreenWidth, A_ScreenHeight, "*100 " A_WorkingDir "\images\quick_actions_title.bmp")) {
+      SleepWithLogging("PullUpPhone()", "Delay before phone quick action search", 100 + extraSleep)
+
+      if (ImageSearch(&FoundX, &FoundY, 923, 645, 963, 689, "*100 " A_WorkingDir "\images\quick_actions_title.bmp")) {
         DebugLog("PullUpPhone() : Successfully opened phone")
         Return ; Exit the function only when the phone is successfully opened
       }
-
-      SleepWithLogging("PullUpPhone()", "Delay in phone search", 100 + extraSleep)
     }
 
      ; If the phone is not open after 5 seconds, reset it using MenuMapChecker
@@ -182,9 +182,19 @@ saveBlockDisable() {
 
 ; Optimized EnterBrowser function with timeout
 EnterBrowser() {
+  global slowMode
+  global slowModeDelay
+  extraSleep := slowMode ? slowModeDelay : 0 ; Use custom delay if slow mode is enabled
+
   DebugLog("EnterBrowser() : Entering Function")
   
   Loop { ; Infinite loop to ensure the browser is entered
+    if (!ImageSearch(&FoundX, &FoundY, 923, 645, 963, 689, "*100 " A_WorkingDir "\images\quick_actions_title.bmp")) {
+      PressKey("MButton", 1, 1, 50) ; Try to open the phone
+
+      SleepWithLogging("PullUpPhone()", "Delay before phone quick action search", 100 + extraSleep)
+    }
+    
     PressKey("Down", 50, 1, 50) ; Navigate down in the phone menu
 
     if (ImageSearch(&FoundX, &FoundY, 0, 0, A_ScreenWidth, A_ScreenHeight, "*100 " A_WorkingDir "\images\browser_title.png")) {
