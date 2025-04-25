@@ -94,7 +94,7 @@ MovingMouse(x, y, type, amount) {
   SendMode "Event"
 
   MouseGetPos &xpos, &ypos 
-  MouseMove x - xpos, y - ypos, (slowMode = 0) ? 1 : 2, "R"  ; 1 = Fast, 2 = Slow
+  MouseMove x - xpos, y - ypos, (slowMode = 0) ? 0 : 2, "R"  ; 1 = Fast, 2 = Slow
   MouseClick type, x, y, amount
 
   SleepWithLogging("MovingMouse()", "Delay after click", 200 + extraSleep)
