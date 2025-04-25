@@ -456,7 +456,7 @@ ApartmentsExchange() {
     if (TradeInChecker() = 0)
       break
 
-    MovingMouse(250, 95, "Left", 1)
+    MovingMouse(262, 101, "Left", 1) 
 
     EnterDynastyEstate()
   }
