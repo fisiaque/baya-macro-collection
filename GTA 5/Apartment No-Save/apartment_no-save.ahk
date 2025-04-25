@@ -137,8 +137,8 @@ PullUpPhone() {
     ; Spam MButton for up to 5 seconds to open the phone
     Loop 50 {
       PressKey("MButton", 1, 1, 50) ; Try to open the phone
-      color := PixelGetColor(1000, 559)
-      if (color = 0x6A86B5) {
+
+      if (ImageSearch(&FoundX, &FoundY, 0, 0, A_ScreenWidth, A_ScreenHeight, "*100 " A_WorkingDir "\images\quick_actions_title.bmp")) {
         DebugLog("PullUpPhone() : Successfully opened phone")
         Return ; Exit the function only when the phone is successfully opened
       }
@@ -187,7 +187,7 @@ EnterBrowser() {
   Loop { ; Infinite loop to ensure the browser is entered
     PressKey("Down", 50, 1, 50) ; Navigate down in the phone menu
 
-    if (ImageSearch(&FoundX, &FoundY, 0, 0, A_ScreenWidth, A_ScreenHeight, "*100 " A_WorkingDir "\images\browser_tile.png")) {
+    if (ImageSearch(&FoundX, &FoundY, 0, 0, A_ScreenWidth, A_ScreenHeight, "*100 " A_WorkingDir "\images\browser_title.png")) {
       SleepWithLogging("EnterBrowser()", "Short delay before Enter", 50)
       PressKey("Enter", 50, 1, 600) ; Enter the browser
       DebugLog("EnterBrowser() : Exiting Function (Browser Entered!)")
