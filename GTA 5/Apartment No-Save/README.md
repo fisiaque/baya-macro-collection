@@ -28,6 +28,8 @@ For this to work, you need:
 
 ---
 
+## IF STILL NOT WORKING, TRY MY SETTINGS
+
 ## IMPORTANT
 The script will ask for **admin rights**.  
 It won't run without admin rights because it needs them to add and remove firewall rules used for NoSave. Without admin rights, NoSave will not work.
@@ -37,7 +39,7 @@ It won't run without admin rights because it needs them to add and remove firewa
 ## Controls 
 **STILL WORKING IN PROGRESS**
 
-### **Numpad0**: Start Preparation Phase  
+### **Numpad0**: Start Preparation Phase  -- WIP
 - Sets up all 10 slots to a value of `$550k` each.  
 - This must be run in **Story Mode**. Start the process and wait until it completes.
 
@@ -57,14 +59,14 @@ It won't run without admin rights because it needs them to add and remove firewa
 ### **Numpad5**: Exit Script ("panic button")  
 - Completely terminates the script and disables No-Save Mode if it is active.
 
-### **Numpad6**: Cycle Slow Mode  
+### **Numpad6**: Cycle Slow Mode  -- WIP  
 - This hotkey cycles through different delay options for Slow Mode.  
 - The delay cycles through `0ms`, `50ms`, `100ms`, ..., up to `300ms`.  
 - Use this if the script frequently fails during tasks like selecting apartments or navigating the web browser, such as accidentally opening Legendary Motorsport instead.  
 - **Tip:** Holding `Numpad6` for more than 500ms will immediately reset the delay to `0ms`, without needing to cycle through all options.
 - **Default:** `0ms` (disabled).
 
-### **Numpad9**: Toggle NoSave Status Display  
+### **Numpad9**: Toggle NoSave Status Display  -- WIP  
 - Toggles the display of the NoSave status.  
 - When enabled, a tooltip will show whether NoSave Mode is active or inactive.
 - Use this to visually monitor the NoSave state.
