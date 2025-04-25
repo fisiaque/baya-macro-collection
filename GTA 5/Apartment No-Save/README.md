@@ -29,6 +29,9 @@ For this to work, you need:
 ---
 
 ## IF STILL NOT WORKING, TRY MY SETTINGS
+# GAME SETTINGS\DISPLAY
+![alt text](https://github.com/fisiaque/baya_macros/blob/main/GTA%205/Apartment%20No-Save/SETTINGS/Display.png "Logo Title Text 1")
+
 
 ## IMPORTANT
 The script will ask for **admin rights**.  
