@@ -15,8 +15,8 @@ global numpad6PressTime := 0
 global currentRun := 0
 global totalRuns := 0
 global debugMode := 1  ; 0 = off, 1 = on
-global slowMode := 1 ; Global variable for slow mode (0 = off, 1 = on)
-global slowModeDelay := 150 ; Default delay in milliseconds for slow mode (0 = no delay)
+global slowMode := 0 ; Global variable for slow mode (0 = off, 1 = on)
+global slowModeDelay := 0 ; Default delay in milliseconds for slow mode (0 = no delay)
 
 ; Local
 
@@ -87,11 +87,17 @@ Click() {
 }
 
 MovingMouse(x, y, type, amount) {
-    SendMode "Event"
+  global slowMode
+  global slowModeDelay
+  extraSleep := slowMode ? slowModeDelay : 0 ; Use custom delay if slow mode is enabled
 
-    MouseGetPos &xpos, &ypos 
-    MouseMove x - xpos, y - ypos, 2, "R"  ; Number = 2
-    MouseClick type, x, y, amount
+  SendMode "Event"
+
+  MouseGetPos &xpos, &ypos 
+  MouseMove x - xpos, y - ypos, (slowMode = 0) ? 1 : 2, "R"  ; 1 = Fast, 2 = Slow
+  MouseClick type, x, y, amount
+
+  SleepWithLogging("MovingMouse()", "Delay after click", 200 + extraSleep)
 }
 
 ;==== KEY FUNCTIONS ====
@@ -121,9 +127,11 @@ PressKey(button, presstime, presses, sleeptime)
 
 ;==== PHONE/WEB FUNCTIONS ====
 PullUpPhone() {
+  global slowMode
+  global slowModeDelay
+  extraSleep := slowMode ? slowModeDelay : 0 ; Use custom delay if slow mode is enabled
+  
   DebugLog("PullUpPhone() : Entering Function")
-
-  SleepWithLogging("PullUpPhone()", "Delay before opening phone", 2500)
 
   Loop { ; Infinite Loop to make sure the phone is actually pulled up
     ; Spam MButton for up to 5 seconds to open the phone
@@ -135,13 +143,13 @@ PullUpPhone() {
         Return ; Exit the function only when the phone is successfully opened
       }
 
-      SleepWithLogging("PullUpPhone()", "Delay in phone search", 100)
+      SleepWithLogging("PullUpPhone()", "Delay in phone search", 100 + extraSleep)
     }
 
      ; If the phone is not open after 5 seconds, reset it using MenuMapChecker
     MenuMapChecker() ; Ensure the pause menu is open
     PressKey("Esc", 50, 1, 370) ; Close the pause menu to reset the phone
-    SleepWithLogging("PullUpPhone()", "Delay after menu map checker", 200)
+    SleepWithLogging("PullUpPhone()", "Delay after menu map checker", 200 + extraSleep)
   }
 
    DebugLog("PullUpPhone() : Exiting Function")
@@ -180,7 +188,7 @@ EnterBrowser() {
     PressKey("Down", 50, 1, 50) ; Navigate down in the phone menu
 
     if (ImageSearch(&FoundX, &FoundY, 0, 0, A_ScreenWidth, A_ScreenHeight, "*100 " A_WorkingDir "\images\browser_tile.png")) {
-      SleepWithLogging("EnterBrowser()", "Short delay before Enter", 30)
+      SleepWithLogging("EnterBrowser()", "Short delay before Enter", 50)
       PressKey("Enter", 50, 1, 600) ; Enter the browser
       DebugLog("EnterBrowser() : Exiting Function (Browser Entered!)")
       Return
@@ -189,9 +197,12 @@ EnterBrowser() {
 } ;function to enter phone's browser
 
 EnterDynastyEstate() {
+  global slowMode
+  global slowModeDelay
+  extraSleep := slowMode ? slowModeDelay : 0 ; Use custom delay if slow mode is enabled
+
   DebugLog("EnterDynastyEstate() : Entering Function")
 
-  extraSleep := slowMode ? slowModeDelay : 0 ; Use custom delay if slow mode is enabled
   SleepWithLogging("EnterDynastyEstate()", "Initial delay", 250 + extraSleep)
 
   MovingMouse(255, 590, "Left", 1)
@@ -201,19 +212,25 @@ EnterDynastyEstate() {
 } ;function to enter dynasty 8 website and then property listings
 
 ExitBrowser(){
+  global slowMode
+  global slowModeDelay
+  extraSleep := slowMode ? slowModeDelay : 0 ; Use custom delay if slow mode is enabled
+
   DebugLog("ExitBrowser() : Entering Function")
 
   MovingMouse(842, 108, "Left", 1)
 
-  SleepWithLogging("ExitBrowser()", "Delay after exit click", 300)
+  SleepWithLogging("ExitBrowser()", "Delay after exit click", 200 + extraSleep)
 
   DebugLog("ExitBrowser() : Exiting Function")
 } ;function to exit phone's browser
 
 TradeInChecker() {  ; Function that checks for 5 seconds if the Trade-In menu is found
-  DebugLog("TradeInChecker() : Entering Function")
-
+  global slowMode
+  global slowModeDelay
   extraSleep := slowMode ? slowModeDelay : 0 ; Use custom delay if slow mode is enabled
+
+  DebugLog("TradeInChecker() : Entering Function")
 
   Loop 50 { ; 50 iterations with 100ms pause each (total 5 seconds)
     if (ImageSearch(&FoundX, &FoundY, 8, 31, 152, 59, "*100 " A_WorkingDir "\images\trade_in_property_menu.bmp")) {
@@ -221,7 +238,7 @@ TradeInChecker() {  ; Function that checks for 5 seconds if the Trade-In menu is
       return 0
     }
 
-    SleepWithLogging("TradeInChecker()", "Delay in trade-in check", 100)
+    SleepWithLogging("TradeInChecker()", "Delay in trade-in check", 100 + extraSleep)
   }
 
   DebugLog("TradeInChecker() : Exiting Function (Timeout)")
@@ -255,9 +272,11 @@ BuyTrashBlocker() {
 
 ; Optimized ReturnToMapChecker function with timeout
 ReturnToMapChecker() {
-  DebugLog("ReturnToMapChecker() : Entering Function")
-
+  global slowMode
+  global slowModeDelay
   extraSleep := slowMode ? slowModeDelay : 0 ; Use custom delay if slow mode is enabled
+
+  DebugLog("ReturnToMapChecker() : Entering Function")
 
   Loop { ; Infinite loop to ensure the "return to map" button is found
     if (ImageSearch(&FoundX, &FoundY, 0, 0, A_ScreenWidth, A_ScreenHeight, "*100 " A_WorkingDir "\images\return_to_map_button.bmp")) {
@@ -265,8 +284,6 @@ ReturnToMapChecker() {
       SleepWithLogging("ReturnToMapChecker()", "Delay confirmation", 100 + extraSleep)
       return 0
     }
-
-    SleepWithLogging("ReturnToMapChecker()", "Delay during return map check", 100)
   }
 
   DebugLog("ReturnToMapChecker() : Exiting Function")
@@ -274,27 +291,35 @@ ReturnToMapChecker() {
 
 ReturnToMapPress()
 {
+  global slowMode
+  global slowModeDelay
+  extraSleep := slowMode ? slowModeDelay : 0 ; Use custom delay if slow mode is enabled
+
   DebugLog("ReturnToMapPress() : Entering Function")
 
   MovingMouse(500, 630, "Left", 1)
 
-  SleepWithLogging("ReturnToMapPress()", "Delay after map press", 300)
+  SleepWithLogging("ReturnToMapPress()", "Delay after map press", 50 + extraSleep)
 
   DebugLog("ReturnToMapPress() : Exiting Function")
 }
 
 UnbreakMenu() {
+  global slowMode
+  global slowModeDelay
+  extraSleep := slowMode ? slowModeDelay : 0 ; Use custom delay if slow mode is enabled
+
   DebugLog("UnbreakMenu() : Entering Function")
   PressKey("Esc", 50, 1, 150)
 
-  SleepWithLogging("UnbreakMenu()", "Delay after Esc", 100)
+  SleepWithLogging("UnbreakMenu()", "Delay after Esc", 100 + extraSleep)
   PressKey("Up", 50, 1, 150)
 
-  SleepWithLogging("UnbreakMenu()", "Delay after Up", 100)
+  SleepWithLogging("UnbreakMenu()", "Delay after Up", 100 + extraSleep)
   
   Loop 5 {
     PressKey("Esc", 50, 1, 150)
-    SleepWithLogging("UnbreakMenu()", "Delay in loop", 100)
+    SleepWithLogging("UnbreakMenu()", "Delay in loop", 100 + extraSleep)
   }
 
   DebugLog("UnbreakMenu() : Exiting Function")
@@ -331,7 +356,7 @@ fromOnlineToSingle() {
   SendInput("{Alt down}")
   PressKey("F6", 500, 1, 0)
   SendInput("{Alt up}")
-  SleepWithLogging("fromOnlineToSingle()", "Initial delay after Alt+F6", 30)
+  SleepWithLogging("fromOnlineToSingle()", "Initial delay after Alt+F6", 50)
 
   Loop {
     color := PixelGetColor(831, 747)
@@ -382,11 +407,21 @@ fromSingleToOnline() {
 forceSave() {
   DebugLog("forceSave() : Entering Function")
 
-  SendInput("{Alt down}")
-  PressKey("F4", 500, 1, 0)
-  SendInput("{Alt up}")
+  Loop { ; Infinite loop to force save
+    SendInput("{Alt down}") 
+    PressKey("F4", 500, 1, 0)
+    SendInput("{Alt up}")
 
-  SleepWithLogging("forceSave()", "Short delay after F4", 30)
+    if (ImageSearch(&FoundX, &FoundY, 0, 0, A_ScreenWidth, A_ScreenHeight, "*100 " A_WorkingDir "\images\quit.png")) {
+      SleepWithLogging("forceSave()", "Short delay before ESC", 50)
+      PressKey("Esc", 50, 1, 600) 
+      DebugLog("forceSave() : Found Quit Screen")
+
+      break
+    }
+  }
+
+  SleepWithLogging("forceSave()", "Short delay after F4", 50)
 
   Loop {
     if !(PixelSearch(&FoundX, &FoundY, 830, 746, 832, 748, 0x000000)) {
@@ -401,12 +436,14 @@ forceSave() {
 }
 
 ApartmentsExchange() {
+  global slowMode
+  global slowModeDelay
+  extraSleep := slowMode ? slowModeDelay : 0 ; Use custom delay if slow mode is enabled
+
   DebugLog("ApartmentsExchange() : Entering Function")
 
   tradebutton_y := 70 ; Selects first property from the list of trades
 
-  PullUpPhone() ; check if character loaded
-  forceSave() ; force save
   PullUpPhone() ; use phone now
 
   EnterBrowser()
@@ -420,7 +457,6 @@ ApartmentsExchange() {
       break
 
     MovingMouse(250, 95, "Left", 1)
-    SleepWithLogging("ApartmentsExchange()", "Delay after click", 200)
 
     EnterDynastyEstate()
   }
@@ -444,7 +480,6 @@ ApartmentsExchange() {
 
       ; Fallback: Return to the homepage and try again
       MovingMouse(260, 110, "Left", 1)
-      SleepWithLogging("ApartmentsExchange()", "Delay after click", 200)
 
       EnterDynastyEstate() ; Return to Dynasty 8 website
     }
@@ -464,9 +499,48 @@ ApartmentsExchange() {
   }
 
   ExitBrowser()
-  SleepWithLogging("ApartmentsExchange()", "Delay after exit browser", 150)
+  SleepWithLogging("ApartmentsExchange()", "Delay after exit browser", 150 + extraSleep)
 
   DebugLog("ApartmentsExchange() : Exiting Function")
+}
+
+WaitForLoading() 
+{
+  DebugLog("WaitForLoading() : Entering Function")
+
+  Loop {
+    if (ImageSearch(&FoundX, &FoundY, 0, 0, A_ScreenWidth, A_ScreenHeight, "*100 " A_WorkingDir "\images\joining_online_button.bmp")) 
+      {
+        DebugLog("WaitForLoading() : Found Quit Screen")
+        break
+      }
+  }
+  DebugLog("WaitForLoading() : Waiting for black screen")
+  Loop {
+    color := PixelGetColor(831, 747)
+    if (color = 0x000000) {
+      DebugLog("WaitForLoading() : Successfully found black screen")
+      break 
+    }
+  }
+  DebugLog("WaitForLoading() : Waiting for Joining Online Button Text")
+  Loop {
+    if (ImageSearch(&FoundX, &FoundY, 0, 0, A_ScreenWidth, A_ScreenHeight, "*100 " A_WorkingDir "\images\joining_online_button.bmp")) 
+      {
+        DebugLog("WaitForLoading() : Joining Online Appeared")
+        break
+      }
+  }
+  DebugLog("WaitForLoading() : Waiting for Joining Online Button Text to GO")
+  Loop {
+    if (!ImageSearch(&FoundX, &FoundY, 0, 0, A_ScreenWidth, A_ScreenHeight, "*100 " A_WorkingDir "\images\joining_online_button.bmp")) 
+      {
+        DebugLog("WaitForLoading() : Joining Online Gone")
+        break
+      }
+  }
+
+  DebugLog("WaitForLoading() : Exiting Function")
 }
 
 ApartmentsRun() {
@@ -510,6 +584,7 @@ ApartmentsRun() {
     DebugLog("ApartmentsRun() : Starting new loop run")
 
     fromSingleToOnline()
+    WaitForLoading() 
     forceSave()
     ApartmentsExchange()
     fromOnlineToSingle()
